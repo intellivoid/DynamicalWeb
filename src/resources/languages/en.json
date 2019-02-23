@@ -7,16 +7,14 @@
         "index": {
             "PAGE_TITLE": "DynamicalWeb",
             "HEADER": "DynamicalWeb Example",
-            "CONTENT": "This example contains various uses for Dynamical Web with Bootstrap",
-            "VIEW_EXAMPLE": "View Example Page"
+            "CONTENT": "This example contains various uses for Dynamical Web with Bootstrap"
         }
     },
     "sections": {
         "navigation": {
             "NAVBAR_BRAND": "DynamicalWeb",
             "NAVBAR_LANGUAGE_DROPDOWN": "Language",
-            "NAVBAR_PAGE_HOME": "Home",
-            "NAVBAR_PAGE_EXAMPLE": "Example"
+            "NAVBAR_PAGE_HOME": "Home"
         },
         "footer": {
             "FOOTER_TEXT": "DynamicalWeb Version 1.0.0.0 | Written by Zi Xing Narrakas"

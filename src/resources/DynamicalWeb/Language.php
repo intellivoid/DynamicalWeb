@@ -54,6 +54,25 @@
         }
 
         /**
+         * Changes the language
+         *
+         * @param string $language
+         * @throws \Exception
+         */
+        public static function changeLanguage(string $language)
+        {
+            $LanguageDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'languages';
+            $FormattedCode = strtolower(stripslashes($language));
+
+            if(file_exists($LanguageDirectory . DIRECTORY_SEPARATOR . $FormattedCode . '.json') == false)
+            {
+                return;
+            }
+
+            setCookie('language', $FormattedCode);
+        }
+
+        /**
          * Defines the language variables
          */
         public static function defineLanguageVariables()
