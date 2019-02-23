@@ -1,0 +1,14 @@
+{
+    "language": {
+        "name": "english",
+        "iso_639-1": "en"
+    },
+    "pages": {
+        "index": {
+            "PAGE_TITLE": "DynamicalWeb"
+        },
+        "example": {
+            "PAGE_TITLE": "DynamicalWeb - Example Page"
+        }
+    }
+}

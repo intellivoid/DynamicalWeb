@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/assets" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/assets/css" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/assets/js" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/assets/bootstrap" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/assets/bootstrap/css" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/assets/bootstrap/js" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/index" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/secondary_page" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/sections" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/index/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/index/html" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example/html" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/languages" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/DynamicalWeb" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/global" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/shared" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/shared/html" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/shared/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/404/html" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/404/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/404" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
