@@ -49,6 +49,17 @@
                     define('APP_SELECTED_LANGUAGE_FILE', $LanguageDirectory . DIRECTORY_SEPARATOR . APP_PRIMARY_LANGUAGE . '.json', false);
                 }
             }
+
+            self::defineLanguageVariables();
+        }
+
+        /**
+         * Defines the language variables
+         */
+        public static function defineLanguageVariables()
+        {
+            $SelectedLanguage = json_decode(file_get_contents(APP_SELECTED_LANGUAGE_FILE), true);
+            define('APP_LANGUAGE_ISO_639', $SelectedLanguage['language']['iso_639-1'], false);
         }
 
         /**
@@ -89,6 +100,53 @@
             }
 
             foreach($FallbackLanguage['pages'][$pageName] as $Variable => $Value)
+            {
+                if(defined("TEXT_$Variable") == false)
+                {
+                    /** @noinspection PhpConstantReassignmentInspection */
+                    define("TEXT_$Variable", $Value, false);
+                }
+            }
+        }
+
+        /**
+         * Defines all language variables for a section rather than a page
+         *
+         * @param string $sectionName
+         */
+        public static function loadSection(string $sectionName)
+        {
+            $SelectedLanguage = json_decode(file_get_contents(APP_SELECTED_LANGUAGE_FILE), true);
+            $FallbackLanguage = json_decode(file_get_contents(APP_FALLBACK_LANGUAGE_FILE), true);
+
+            $SelectedAvailable = true;
+
+            if(isset($SelectedLanguage['sections'][$sectionName]) == false)
+            {
+                if(isset($FallbackLanguage['sections'][$sectionName]) == false)
+                {
+                    return;
+                }
+
+                $SelectedAvailable = false;
+            }
+
+            if($SelectedAvailable == false)
+            {
+                foreach($FallbackLanguage['sections'][$sectionName] as $Variable => $Value)
+                {
+                    define("TEXT_$Variable", $Value, false);
+                }
+
+                return;
+            }
+
+            foreach($SelectedLanguage['sections'][$sectionName] as $Variable => $Value)
+            {
+                define("TEXT_$Variable", $Value, false);
+            }
+
+            foreach($FallbackLanguage['sections'][$sectionName] as $Variable => $Value)
             {
                 if(defined("TEXT_$Variable") == false)
                 {
