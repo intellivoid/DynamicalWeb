@@ -35,4 +35,27 @@
 
             Language::loadLanguage();
         }
+
+        /**
+         * Imports and loads a custom library server-sided
+         *
+         * @param string $libraryName
+         * @param string $libraryDirectory
+         * @param string $libraryLoader
+         * @throws \Exception
+         */
+        public static function loadLibrary(string $libraryName, string $libraryDirectory, string $libraryLoader)
+        {
+            if(file_exists(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $libraryDirectory) == false)
+            {
+                throw new \Exception('The requested library "' . $libraryName . '" cannot be loaded because the directory was not found');
+            }
+
+            if(file_exists(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $libraryDirectory . DIRECTORY_SEPARATOR . $libraryLoader) == false)
+            {
+                throw new \Exception('The requested library "' . $libraryName . '" cannot be loaded because the loader was not found');
+            }
+
+            include_once(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $libraryDirectory . DIRECTORY_SEPARATOR . $libraryLoader);
+        }
     }
