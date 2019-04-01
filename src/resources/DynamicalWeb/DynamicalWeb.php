@@ -58,4 +58,23 @@
 
             include_once(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . $libraryDirectory . DIRECTORY_SEPARATOR . $libraryLoader);
         }
+
+        /**
+         * Returns an existing configuration
+         *
+         * @param string $configuration_name
+         * @return array
+         * @throws \Exception
+         */
+        public static function getConfiguration(string $configuration_name): array
+        {
+            $file = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'shared' . DIRECTORY_SEPARATOR . $configuration_name . '.json';
+
+            if(file_exists($file) == false)
+            {
+                throw new \Exception("The requested configuration '$configuration_name' does not exist in the shared resources folder");
+            }
+
+            return json_decode(file_get_contents($file), true);
+        }
     }

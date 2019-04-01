@@ -47,7 +47,12 @@
             include_once(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'sections' . DIRECTORY_SEPARATOR . $FormattedName . '.php');
         }
 
-
+        /**
+         * Imports a HTML Sections
+         *
+         * @param string $resourceName
+         * @throws \Exception
+         */
         public static function importHTML(string $resourceName)
         {
             $FormattedName = strtolower(stripslashes($resourceName));
