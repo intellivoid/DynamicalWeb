@@ -1,6 +1,10 @@
 <?php
 
+    /** @noinspection PhpConstantReassignmentInspection */
+
     namespace DynamicalWeb;
+
+    use Exception;
 
     /**
      * Functions for handling languages
@@ -14,20 +18,20 @@
         /**
          * Defines the current language configuration for the session
          *
-         * @throws \Exception
+         * @throws Exception
          */
         public static function loadLanguage()
         {
             if(file_exists(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'languages') == false)
             {
-                throw new \Exception('The directory "languages" was not found in resources');
+                throw new Exception('The directory "languages" was not found in resources');
             }
 
             $LanguageDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'languages';
 
             if(file_exists($LanguageDirectory . DIRECTORY_SEPARATOR . APP_PRIMARY_LANGUAGE . '.json') == false)
             {
-                throw new \Exception('The primary language file "' . APP_PRIMARY_LANGUAGE . '" was not found in resources->languages');
+                throw new Exception('The primary language file "' . APP_PRIMARY_LANGUAGE . '" was not found in resources->languages');
             }
 
             define('APP_FALLBACK_LANGUAGE_FILE', $LanguageDirectory . DIRECTORY_SEPARATOR . APP_PRIMARY_LANGUAGE . '.json', false);
@@ -57,7 +61,7 @@
          * Changes the language
          *
          * @param string $language
-         * @throws \Exception
+         * @throws Exception
          */
         public static function changeLanguage(string $language)
         {
@@ -122,7 +126,6 @@
             {
                 if(defined("TEXT_$Variable") == false)
                 {
-                    /** @noinspection PhpConstantReassignmentInspection */
                     define("TEXT_$Variable", $Value, false);
                 }
             }
@@ -169,7 +172,6 @@
             {
                 if(defined("TEXT_$Variable") == false)
                 {
-                    /** @noinspection PhpConstantReassignmentInspection */
                     define("TEXT_$Variable", $Value, false);
                 }
             }

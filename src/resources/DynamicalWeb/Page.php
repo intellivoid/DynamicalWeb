@@ -85,7 +85,7 @@
         {
             ?>
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-            <html>
+            <html lang="en">
                 <head>
                     <title><?PHP HTML::print($title); ?></title>
                 </head>

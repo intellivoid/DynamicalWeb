@@ -2,6 +2,8 @@
 
     namespace DynamicalWeb;
 
+    use Exception;
+
     /**
      * Basic HTML Utilities for rendering
      *
@@ -30,7 +32,7 @@
          * Imports a file from the sections directory in resources
          *
          * @param string $sectionName
-         * @throws \Exception
+         * @throws Exception
          */
         public static function importSection(string $sectionName)
         {
@@ -38,7 +40,7 @@
 
             if(file_exists(APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'sections' . DIRECTORY_SEPARATOR . $FormattedName . '.php') == false)
             {
-                throw new \Exception('The section file "' .  $FormattedName . '.php" was not found');
+                throw new Exception('The section file "' .  $FormattedName . '.php" was not found');
             }
 
             Language::loadSection($sectionName);
@@ -51,7 +53,7 @@
          * Imports a HTML Sections
          *
          * @param string $resourceName
-         * @throws \Exception
+         * @throws Exception
          */
         public static function importHTML(string $resourceName)
         {
@@ -64,7 +66,7 @@
             {
                 if(file_exists($SharedResource) == false)
                 {
-                    throw new \Exception('The resource file "' . $FormattedName . '.php" was not found in either local resources or shared resources');
+                    throw new Exception('The resource file "' . $FormattedName . '.php" was not found in either local resources or shared resources');
                 }
                 else
                 {
@@ -84,7 +86,7 @@
          * Imports a script from local resources or shared resources
          *
          * @param string $sectionName
-         * @throws \Exception
+         * @throws Exception
          */
         public static function importScript(string $sectionName)
         {
@@ -97,7 +99,7 @@
             {
                 if(file_exists($SharedResource) == false)
                 {
-                    throw new \Exception('The resource file "' . $FormattedName . '.php" was not found in either local resources or shared resources');
+                    throw new Exception('The resource file "' . $FormattedName . '.php" was not found in either local resources or shared resources');
                 }
                 else
                 {
