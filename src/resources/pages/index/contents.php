@@ -14,6 +14,9 @@
         <main role="main" class="container">
             <h1 class="mt-5"><?PHP \DynamicalWeb\HTML::print(TEXT_HEADER); ?></h1>
             <p class="lead"><?PHP \DynamicalWeb\HTML::print(TEXT_CONTENT); ?></p>
+
+            <hr/>
+            <?PHP \DynamicalWeb\HTML::importMarkdown('example'); ?>
         </main>
 
         <?PHP \DynamicalWeb\HTML::importSection('footer'); ?>

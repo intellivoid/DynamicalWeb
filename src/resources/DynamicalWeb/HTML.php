@@ -50,6 +50,47 @@
         }
 
         /**
+         * Prints the contents of a markdown file
+         *
+         * @param string $markdownName
+         * @return bool
+         * @throws Exception
+         */
+        public static function importMarkdown(string $markdownName): bool
+        {
+            $FormattedName = strtolower(stripslashes($markdownName));
+            $ResourcesDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'markdown' . DIRECTORY_SEPARATOR . $FormattedName;
+
+            if(file_exists($ResourcesDirectory) == false)
+            {
+                throw new Exception('The markdown resources were not found');
+            }
+
+            $FallbackFile = $ResourcesDirectory . DIRECTORY_SEPARATOR . strtolower(APP_PRIMARY_LANGUAGE) . '.md';
+            $SelectedLanguageFile = $ResourcesDirectory . DIRECTORY_SEPARATOR . strtolower(APP_SELECTED_LANGUAGE) . '.md';
+
+            if(file_exists($SelectedLanguageFile) == false)
+            {
+                if(file_exists($FallbackFile) == false)
+                {
+                    throw new Exception('No selected lanaguage or fallback language for this markdown file has been found');
+                }
+                else
+                {
+                    $MarkdownParser = new MarkdownParser();
+                    print($MarkdownParser->text(file_get_contents($FallbackFile)));
+                    return true;
+                }
+            }
+            else
+            {
+                $MarkdownParser = new MarkdownParser();
+                print($MarkdownParser->text(file_get_contents($SelectedLanguageFile)));
+                return true;
+            }
+        }
+
+        /**
          * Imports a HTML Sections
          *
          * @param string $resourceName

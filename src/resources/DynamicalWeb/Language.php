@@ -39,6 +39,7 @@
             if(isset($_COOKIE['language']) == false)
             {
                 setcookie('language', APP_PRIMARY_LANGUAGE);
+                define('APP_SELECTED_LANGUAGE', APP_PRIMARY_LANGUAGE, false);
                 define('APP_SELECTED_LANGUAGE_FILE', $LanguageDirectory . DIRECTORY_SEPARATOR . APP_PRIMARY_LANGUAGE . '.json', false);
             }
             else
@@ -46,10 +47,12 @@
                 $FormattedCode = strtolower(stripslashes($_COOKIE['language']));
                 if(file_exists($LanguageDirectory . DIRECTORY_SEPARATOR . $FormattedCode . '.json') == true)
                 {
+                    define('APP_SELECTED_LANGUAGE', $FormattedCode, false);
                     define('APP_SELECTED_LANGUAGE_FILE', $LanguageDirectory . DIRECTORY_SEPARATOR . $FormattedCode . '.json', false);
                 }
                 else
                 {
+                    define('APP_SELECTED_LANGUAGE', APP_PRIMARY_LANGUAGE, false);
                     define('APP_SELECTED_LANGUAGE_FILE', $LanguageDirectory . DIRECTORY_SEPARATOR . APP_PRIMARY_LANGUAGE . '.json', false);
                 }
             }
