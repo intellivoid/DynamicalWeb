@@ -36,6 +36,7 @@
          * Loads the content for the requested page
          *
          * @param string $name
+         * @throws \Exception
          */
         public static function load(string $name)
         {

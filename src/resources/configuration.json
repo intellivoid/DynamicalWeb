@@ -12,7 +12,7 @@
     },
     "runtime_scripts": {
         "initialize": [],
-        "page_loaded": [],
+        "page_loaded": ["engine_information.php"],
         "after_request": [],
         "on_request": ["custom_headers.php"],
         "on_import": []
