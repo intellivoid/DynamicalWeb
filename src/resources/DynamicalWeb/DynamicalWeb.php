@@ -26,6 +26,13 @@
         public static $loadedLibraries = [];
 
         /**
+         * An array of objects that are temporarily stored in memory
+         *
+         * @var array
+         */
+        public static $globalObjects = [];
+        
+        /**
          * Loads the application resources
          *
          * @param string $resourcesDirectory
@@ -101,5 +108,34 @@
             }
 
             return json_decode(file_get_contents($file), true);
+        }
+
+        /**
+         * Sets an object to memory, and returns the object that's stored in memory
+         *
+         * @param string $variable_name
+         * @param $object
+         * @return mixed
+         */
+        public static function setMemoryObject(string $variable_name, $object)
+        {
+            DynamicalWeb::$globalObjects[$variable_name] = $object;
+            return DynamicalWeb::$globalObjects[$variable_name];
+        }
+
+        /**
+         * Gets an object from memory, if not set then it will return null
+         *
+         * @param string $variable_name
+         * @return mixed|null
+         */
+        public static function getMemoryObject(string $variable_name)
+        {
+            if(isset(DynamicalWeb::$globalObjects[$variable_name]) == false)
+            {
+                return null;
+            }
+
+            return DynamicalWeb::$globalObjects[$variable_name];
         }
     }
