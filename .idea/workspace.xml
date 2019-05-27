@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="76d7e91a-8352-42b4-9cc4-6c637a337c5d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dictionaries/Netkas.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/Netkas.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/pages/index/contents.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/pages/index/contents.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/resources/sections/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/sections/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +34,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/resources/sections/footer.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="221">
@@ -48,11 +46,20 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="126" column="74" selection-start-line="126" selection-start-column="74" selection-end-line="126" selection-end-column="74" />
+            <state relative-caret-position="10">
+              <caret line="13" column="32" lean-forward="true" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -60,7 +67,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/Runtime.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1649">
+            <state relative-caret-position="316">
               <caret line="97" column="61" selection-start-line="97" selection-start-column="61" selection-end-line="97" selection-end-column="61" />
             </state>
           </provider>
@@ -124,7 +131,6 @@
         <option value="$PROJECT_DIR$/src/resources/sections/navigation.php" />
         <option value="$PROJECT_DIR$/src/resources/shared/web_config.json" />
         <option value="$PROJECT_DIR$/src/resources/DynamicalWeb/HTML.php" />
-        <option value="$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json" />
         <option value="$PROJECT_DIR$/src/resources/libraries/Example/ExampleLibrary.php" />
         <option value="$PROJECT_DIR$/src/resources/libraries/Example/Classes/PrintFunctions.php" />
         <option value="$PROJECT_DIR$/src/resources/DynamicalWeb/Addon.php" />
@@ -139,6 +145,7 @@
         <option value="$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php" />
         <option value="$PROJECT_DIR$/src/resources/pages/index/contents.php" />
         <option value="$PROJECT_DIR$/src/resources/sections/footer.php" />
+        <option value="$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json" />
       </list>
     </option>
   </component>
@@ -285,12 +292,12 @@
       <workItem from="1558965347682" duration="2736000" />
       <workItem from="1558969787936" duration="2851000" />
       <workItem from="1558973333815" duration="2878000" />
-      <workItem from="1558976447656" duration="530000" />
+      <workItem from="1558976447656" duration="609000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30367000" />
+    <option name="totallyTimeSpent" value="30446000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -307,7 +314,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32998326" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32943144" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32943144" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
@@ -441,13 +448,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="377">
@@ -463,13 +463,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="16" column="42" selection-start-line="16" selection-start-column="42" selection-end-line="16" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/Runtime.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1649">
-          <caret line="97" column="61" selection-start-line="97" selection-start-column="61" selection-end-line="97" selection-end-column="61" />
         </state>
       </provider>
     </entry>
@@ -494,13 +487,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="126" column="74" selection-start-line="126" selection-start-column="74" selection-end-line="126" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/pages/index/contents.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
@@ -511,6 +497,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/Runtime.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="97" column="61" selection-start-line="97" selection-start-column="61" selection-end-line="97" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10">
+          <caret line="13" column="32" lean-forward="true" selection-start-line="13" selection-start-column="32" selection-end-line="13" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/sections/footer.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -518,6 +518,13 @@
           <folding>
             <element signature="e#6#36#0#PHP" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/dynamicalweb.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
         </state>
       </provider>
     </entry>
