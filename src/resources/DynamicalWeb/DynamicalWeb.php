@@ -174,9 +174,39 @@
         {
             if(isset(DynamicalWeb::$globalVariables['db 0x77'][$name]) == false)
             {
-                throw new Exception('"' . $name . '" is not defined in globalObjects');
+                throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x77]');
             }
 
             return DynamicalWeb::$globalVariables['db 0x77'][$name];
+        }
+
+        /**
+         * Sets a global integer variable and returns the value from memory
+         *
+         * @param string $name
+         * @param int $value
+         * @return int
+         */
+        public static function setInt32(string $name, int $value): int
+        {
+            DynamicalWeb::$globalVariables['db 0x26'][$name] = $value;
+            return DynamicalWeb::$globalVariables[$name];
+        }
+
+        /**
+         * returns an existing global integer variable
+         *
+         * @param string $name
+         * @return int
+         * @throws Exception
+         */
+        public static function getInt32(string $name): int
+        {
+            if(isset(DynamicalWeb::$globalVariables['db 0x26'][$name]) == false)
+            {
+                throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x26]');
+            }
+
+            return DynamicalWeb::$globalVariables['db 0x26'][$name];
         }
     }

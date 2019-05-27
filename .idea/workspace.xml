@@ -92,7 +92,7 @@
         <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="513">
-              <caret line="179" column="60" selection-start-line="179" selection-start-column="60" selection-end-line="179" selection-end-column="60" />
+              <caret line="197" column="10" lean-forward="true" selection-start-line="197" selection-start-column="10" selection-end-line="197" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -261,18 +261,18 @@
       <workItem from="1558965347682" duration="2736000" />
       <workItem from="1558969787936" duration="2851000" />
       <workItem from="1558973333815" duration="2878000" />
-      <workItem from="1558976447656" duration="1635000" />
+      <workItem from="1558976447656" duration="1998000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31472000" />
+    <option name="totallyTimeSpent" value="31835000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19742814" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19742814" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -507,7 +507,7 @@
     <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
-          <caret line="179" column="60" selection-start-line="179" selection-start-column="60" selection-end-line="179" selection-end-column="60" />
+          <caret line="197" column="10" lean-forward="true" selection-start-line="197" selection-start-column="10" selection-end-line="197" selection-end-column="10" />
         </state>
       </provider>
     </entry>
