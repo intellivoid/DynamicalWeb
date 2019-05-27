@@ -25,9 +25,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/resources/shared" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/resources/shared/html" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/resources/shared/scripts" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example/html" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example/scripts" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/resources/pages/example" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/markdown" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/libraries" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/runtime_scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/resources/extensions/on_request" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

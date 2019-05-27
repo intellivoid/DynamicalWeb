@@ -1,3 +1,4 @@
+<?PHP \DynamicalWeb\Runtime::import('Example'); ?>
 <!doctype html>
 <html lang="<?PHP \DynamicalWeb\HTML::print(APP_LANGUAGE_ISO_639); ?>">
     <head>
@@ -17,6 +18,11 @@
 
             <hr/>
             <?PHP \DynamicalWeb\HTML::importMarkdown('example'); ?>
+            <?PHP
+                $ExampleLibrary = new \Example\ExampleLibrary();
+                $ExampleLibrary->getPrintFunctions()->SayName('John Smith');
+                $ExampleLibrary->getPrintFunctions()->sayAge(12);
+            ?>
         </main>
 
         <?PHP \DynamicalWeb\HTML::importSection('footer'); ?>

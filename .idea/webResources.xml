@@ -6,6 +6,7 @@
         <entryData>
           <resourceRoots>
             <path value="file://$PROJECT_DIR$/src/assets/css/bootstrap" />
+            <path value="file://$PROJECT_DIR$/src/resources/markdown/example" />
           </resourceRoots>
         </entryData>
       </entry>

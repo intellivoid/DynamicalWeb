@@ -8,6 +8,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
 
     /**
      * Main DynamicalWeb Library
@@ -17,6 +18,13 @@
      */
     class DynamicalWeb
     {
+        /**
+         * An array of already loaded libraries
+         *
+         * @var array
+         */
+        public static $loadedLibraries = [];
+
         /**
          * Loads the application resources
          *
@@ -37,6 +45,19 @@
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
+            Runtime::runEventScripts('initialize'); // Run events at initialize
+        }
+
+        /**
+         * Gets the current web configuration
+         *
+         * @return array
+         */
+        public static function getWebConfiguration(): array
+        {
+            $ConfigurationFile = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'configuration.json';
+            $Contents = file_get_contents($ConfigurationFile);
+            return json_decode($Contents, true);
         }
 
         /**
