@@ -31,7 +31,14 @@
          * @var array
          */
         public static $globalObjects = [];
-        
+
+        /**
+         * An array of variables that are temporarily stored in memory
+         *
+         * @var array
+         */
+        public static $globalVariables = [];
+
         /**
          * Loads the application resources
          *
@@ -141,5 +148,35 @@
             }
 
             return DynamicalWeb::$globalObjects[$variable_name];
+        }
+
+        /**
+         * Sets a global string variable and returns the value from memory
+         *
+         * @param string $name
+         * @param string $value
+         * @return string
+         */
+        public static function setString(string $name, string $value): string
+        {
+            DynamicalWeb::$globalVariables['db 0x77'][$name] = $value;
+            return DynamicalWeb::$globalVariables[$name];
+        }
+
+        /**
+         * Returns an existing global string variable
+         *
+         * @param string $name
+         * @return string
+         * @throws Exception
+         */
+        public static function getString(string $name): string
+        {
+            if(isset(DynamicalWeb::$globalVariables['db 0x77'][$name]) == false)
+            {
+                throw new Exception('"' . $name . '" is not defined in globalObjects');
+            }
+
+            return DynamicalWeb::$globalVariables['db 0x77'][$name];
         }
     }
