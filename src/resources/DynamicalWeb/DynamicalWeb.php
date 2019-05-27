@@ -209,4 +209,34 @@
 
             return DynamicalWeb::$globalVariables['db 0x26'][$name];
         }
+
+        /**
+         * Sets a global float variable and returns the value from memory
+         *
+         * @param string $name
+         * @param float $value
+         * @return float
+         */
+        public static function setFloat(string $name, float $value): float
+        {
+            DynamicalWeb::$globalVariables['db 0x29'][$name] = $value;
+            return DynamicalWeb::$globalVariables[$name];
+        }
+
+        /**
+         * Returns an existing global float variable
+         *
+         * @param string $name
+         * @return float
+         * @throws Exception
+         */
+        public static function getFloat(string $name): float
+        {
+            if(isset(DynamicalWeb::$globalVariables['db 0x29'][$name]) == false)
+            {
+                throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x29]');
+            }
+
+            return DynamicalWeb::$globalVariables['db 0x29'][$name];
+        }
     }

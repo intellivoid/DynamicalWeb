@@ -92,7 +92,7 @@
         <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="513">
-              <caret line="197" column="10" lean-forward="true" selection-start-line="197" selection-start-column="10" selection-end-line="197" selection-end-column="10" />
+              <caret line="226" column="52" selection-start-line="226" selection-start-column="52" selection-end-line="226" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -261,12 +261,12 @@
       <workItem from="1558965347682" duration="2736000" />
       <workItem from="1558969787936" duration="2851000" />
       <workItem from="1558973333815" duration="2878000" />
-      <workItem from="1558976447656" duration="1998000" />
+      <workItem from="1558976447656" duration="2419000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="31835000" />
+    <option name="totallyTimeSpent" value="32256000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -507,7 +507,7 @@
     <entry file="file://$PROJECT_DIR$/src/resources/DynamicalWeb/DynamicalWeb.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
-          <caret line="197" column="10" lean-forward="true" selection-start-line="197" selection-start-column="10" selection-end-line="197" selection-end-column="10" />
+          <caret line="226" column="52" selection-start-line="226" selection-start-column="52" selection-end-line="226" selection-end-column="52" />
         </state>
       </provider>
     </entry>
