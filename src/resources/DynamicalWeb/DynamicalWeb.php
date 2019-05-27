@@ -70,9 +70,13 @@
         /**
          * Imports and loads a custom library server-sided
          *
+         * This function will be removed in the future, use
+         * Runtime instead to import runtime scripts/libraries
+         *
          * @param string $libraryName
          * @param string $libraryDirectory
          * @param string $libraryLoader
+         * @deprecated Use Runtime's import function instead
          * @throws Exception
          */
         public static function loadLibrary(string $libraryName, string $libraryDirectory, string $libraryLoader)
