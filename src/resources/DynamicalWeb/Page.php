@@ -68,7 +68,6 @@
                     include_once(APP_CURRENT_PAGE_DIRECTORY . DIRECTORY_SEPARATOR . 'contents.php');
                 }
 
-                Runtime::runEventScripts('page_loaded');
                 return ;
             }
 
