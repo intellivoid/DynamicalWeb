@@ -42,6 +42,9 @@
         {
             $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
             $ServerInformation = json_decode($ServerInformation, true);
+
+            Runtime::runEventScripts('on_page_load');
+
             header('X-Powered-By: DynamicalWeb/' . $ServerInformation['VERSION'] . ' (' . $ServerInformation['COMPANY'] . ')');
             header('X-DynamicalWeb-Version: ' . $ServerInformation['VERSION']);
             header('X-DynamicalWeb-Organization: ' . $ServerInformation['COMPANY']);
