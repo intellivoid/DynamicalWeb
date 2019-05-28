@@ -269,4 +269,34 @@
 
             return (bool)DynamicalWeb::$globalVariables['db 0x43'][$name];
         }
+
+        /**
+         * Sets a global array variable and returns the value from memory
+         *
+         * @param string $name
+         * @param array $value
+         * @return array
+         */
+        public static function setArray(string $name, array $value): array
+        {
+            DynamicalWeb::$globalVariables['db 0x83'][$name] = $value;
+            return DynamicalWeb::$globalVariables['db 0x83'][$name];
+        }
+
+        /**
+         * Returns an existing global array variable
+         *
+         * @param string $name
+         * @return bool
+         * @throws Exception
+         */
+        public static function getArray(string $name): array
+        {
+            if(isset(DynamicalWeb::$globalVariables['db 0x83'][$name]) == false)
+            {
+                throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x83]');
+            }
+
+            return DynamicalWeb::$globalVariables['db 0x83'][$name];
+        }
     }
