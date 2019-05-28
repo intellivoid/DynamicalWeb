@@ -63,9 +63,11 @@
                     define('APP_CURRENT_PAGE', '404', false);
                     define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . '404');
 
+                    Runtime::runEventScripts('on_page_load');
                     Language::loadPage('404');
                     /** @noinspection PhpIncludeInspection */
                     include_once(APP_CURRENT_PAGE_DIRECTORY . DIRECTORY_SEPARATOR . 'contents.php');
+                    Runtime::runEventScripts('page_loaded');
                 }
 
                 return ;
