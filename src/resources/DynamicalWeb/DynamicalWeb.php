@@ -160,7 +160,7 @@
         public static function setString(string $name, string $value): string
         {
             DynamicalWeb::$globalVariables['db 0x77'][$name] = $value;
-            return DynamicalWeb::$globalVariables[$name];
+            return DynamicalWeb::$globalVariables['db 0x77'][$name];
         }
 
         /**
@@ -190,7 +190,7 @@
         public static function setInt32(string $name, int $value): int
         {
             DynamicalWeb::$globalVariables['db 0x26'][$name] = $value;
-            return DynamicalWeb::$globalVariables[$name];
+            return DynamicalWeb::$globalVariables['db 0x26'][$name];
         }
 
         /**
@@ -220,7 +220,7 @@
         public static function setFloat(string $name, float $value): float
         {
             DynamicalWeb::$globalVariables['db 0x29'][$name] = $value;
-            return DynamicalWeb::$globalVariables[$name];
+            return DynamicalWeb::$globalVariables['db 0x29'][$name];
         }
 
         /**
@@ -238,5 +238,35 @@
             }
 
             return DynamicalWeb::$globalVariables['db 0x29'][$name];
+        }
+
+        /**
+         * Sets a global boolean variable and returns the value from memory
+         *
+         * @param string $name
+         * @param bool $value
+         * @return bool
+         */
+        public static function setBoolean(string $name, bool $value): bool
+        {
+            DynamicalWeb::$globalVariables['db 0x43'][$name] = (int)$value;
+            return (bool)DynamicalWeb::$globalVariables['db 0x43'][$name];
+        }
+
+        /**
+         * Returns an existing global boolean variable
+         *
+         * @param string $name
+         * @return bool
+         * @throws Exception
+         */
+        public static function getBoolean(string $name): bool
+        {
+            if(isset(DynamicalWeb::$globalVariables['db 0x43'][$name]) == false)
+            {
+                throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x43]');
+            }
+
+            return (bool)DynamicalWeb::$globalVariables['db 0x43'][$name];
         }
     }
