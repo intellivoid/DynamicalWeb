@@ -43,8 +43,6 @@
             $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
             $ServerInformation = json_decode($ServerInformation, true);
 
-            Runtime::runEventScripts('on_page_load');
-
             header('X-Powered-By: DynamicalWeb/' . $ServerInformation['VERSION'] . ' (' . $ServerInformation['COMPANY'] . ')');
             header('X-DynamicalWeb-Version: ' . $ServerInformation['VERSION']);
             header('X-DynamicalWeb-Organization: ' . $ServerInformation['COMPANY']);
@@ -80,6 +78,8 @@
             define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . $FormattedName);
 
             Language::loadPage($FormattedName);
+
+            Runtime::runEventScripts('on_page_load');
             /** @noinspection PhpIncludeInspection */
             include_once(APP_CURRENT_PAGE_DIRECTORY . DIRECTORY_SEPARATOR . 'contents.php');
 
