@@ -94,6 +94,47 @@
         }
 
         /**
+         * Returns a defined variable, returns null if it doesn't exist
+         *
+         * @param string $var
+         * @return mixed|null
+         */
+        public static function getDefinedVariable(string $var)
+        {
+            if(defined($var))
+            {
+                return constant($var);
+            }
+
+            return null;
+        }
+
+        /**
+         * Returns an array of "system" defined variables created by DynamicalWeb
+         *
+         * @return array
+         */
+        public static function getDefinedVariables()
+        {
+            return array(
+                'CLIENT_REMOTE_HOST' => self::getDefinedVariable('CLIENT_REMOTE_HOST'),
+                'CLIENT_USER_AGENT' => self::getDefinedVariable('CLIENT_USER_AGENT'),
+                'CLIENT_PLATFORM' => self::getDefinedVariable('CLIENT_PLATFORM'),
+                'CLIENT_BROWSER' => self::getDefinedVariable('CLIENT_BROWSER'),
+                'CLIENT_VERSION' => self::getDefinedVariable('CLIENT_VERSION'),
+                'APP_HOME_PAGE' => self::getDefinedVariable('APP_HOME_PAGE'),
+                'APP_PRIMARY_LANGUAGE' => self::getDefinedVariable('APP_PRIMARY_LANGUAGE'),
+                'APP_RESOURCES_DIRECTORY' => self::getDefinedVariable('APP_RESOURCES_DIRECTORY'),
+                'APP_CURRENT_PAGE' => self::getDefinedVariable('APP_CURRENT_PAGE'),
+                'APP_CURRENT_PAGE_DIRECTORY' => self::getDefinedVariable('APP_CURRENT_PAGE_DIRECTORY'),
+                'APP_SELECTED_LANGUAGE' => self::getDefinedVariable('APP_SELECTED_LANGUAGE'),
+                'APP_SELECTED_LANGUAGE_FILE' => self::getDefinedVariable('APP_SELECTED_LANGUAGE_FILE'),
+                'APP_FALLBACK_LANGUAGE_FILE' => self::getDefinedVariable('APP_FALLBACK_LANGUAGE_FILE'),
+                'APP_LANGUAGE_ISO_639' => self::getDefinedVariable('APP_LANGUAGE_ISO_639')
+            );
+        }
+
+        /**
          * Loads the application resources
          *
          * @param string $resourcesDirectory

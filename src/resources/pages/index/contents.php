@@ -35,9 +35,10 @@
             <?PHP HTML::print(CLIENT_PLATFORM); ?><br/>
             <?PHP HTML::print(CLIENT_BROWSER); ?><br/>
             <?PHP HTML::print(CLIENT_VERSION); ?><br/>
-            <?PHP
-                var_dump($_SERVER['HTTP_USER_AGENT']);
-            ?>
+            <br/>
+<pre>
+<?PHP HTML::print(json_encode(DynamicalWeb::getDefinedVariables(), JSON_PRETTY_PRINT)); ?>
+</pre><br/><br/>
         </main>
 
         <?PHP HTML::importSection('footer'); ?>
