@@ -7,8 +7,10 @@
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Language;
     use DynamicalWeb\Page;
+    use DynamicalWeb\Runtime;
 
     require __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'DynamicalWeb' . DIRECTORY_SEPARATOR . 'DynamicalWeb.php';
+
     try
     {
         DynamicalWeb::loadApplication(__DIR__ . DIRECTORY_SEPARATOR . 'resources');
@@ -19,7 +21,8 @@
         exit();
     }
 
-    \DynamicalWeb\Runtime::runEventScripts('on_request');
+    DynamicalWeb::defineVariables();
+    Runtime::runEventScripts('on_request');
 
     if(isset($_GET['set_language']))
     {
@@ -53,4 +56,4 @@
         }
     }
 
-    \DynamicalWeb\Runtime::runEventScripts('after_request');
+    Runtime::runEventScripts('after_request');

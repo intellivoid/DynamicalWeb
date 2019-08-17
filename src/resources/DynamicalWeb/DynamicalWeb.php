@@ -40,6 +40,14 @@
         public static $globalVariables = [];
 
         /**
+         * Defines the important variables for DynamicalWeb
+         */
+        public static function defineVariables()
+        {
+
+        }
+
+        /**
          * Loads the application resources
          *
          * @param string $resourcesDirectory
