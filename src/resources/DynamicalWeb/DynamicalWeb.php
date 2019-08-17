@@ -50,8 +50,9 @@
             {
                 $ClientIP = "127.0.0.1";
             }
-            
+
             define("CLIENT_REMOTE_HOST", $ClientIP);
+            define("CLIENT_USER_AGENT", Client::userAgentRaw());
         }
 
         /**

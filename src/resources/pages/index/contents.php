@@ -32,6 +32,9 @@
                 $ExampleLibrary->getPrintFunctions()->sayAge(12);
             ?>
             <?PHP HTML::print(CLIENT_REMOTE_HOST); ?>
+            <?PHP
+                var_dump($_SERVER['HTTP_USER_AGENT']);
+            ?>
         </main>
 
         <?PHP HTML::importSection('footer'); ?>

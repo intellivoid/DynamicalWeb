@@ -79,4 +79,19 @@
 
             return '127.0.0.1';
         }
+
+        /**
+         * Returns the raw string for the user agent
+         *
+         * @return string
+         */
+        public static function userAgentRaw(): string
+        {
+            if(isset($_SERVER['HTTP_USER_AGENT']))
+            {
+                return $_SERVER['HTTP_USER_AGENT'];
+            }
+
+            return "Unknown (Generic HTTP 1.1 Client)";
+        }
     }
