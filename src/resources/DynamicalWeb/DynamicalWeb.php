@@ -45,7 +45,13 @@
          */
         public static function defineVariables()
         {
-            define("CLIENT_REMOTE_HOST", Client::getClientIP());
+            $ClientIP = Client::getClientIP();
+            if($ClientIP == "::1")
+            {
+                $ClientIP = "127.0.0.1";
+            }
+            
+            define("CLIENT_REMOTE_HOST", $ClientIP);
         }
 
         /**
