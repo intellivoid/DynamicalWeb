@@ -91,6 +91,13 @@
             {
                 define("CLIENT_VERSION", 'Unknown');
             }
+
+            $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
+            $ServerInformation = json_decode($ServerInformation, true);
+
+            define("DYNAMICAL_WEB_AUTHOR", $ServerInformation['AUTHOR']);
+            define("DYNAMICAL_WEB_COMPANY", $ServerInformation['COMPANY']);
+            define("DYNAMICAL_WEB_VERSION", $ServerInformation['VERSION']);
         }
 
         /**
@@ -117,6 +124,9 @@
         public static function getDefinedVariables()
         {
             return array(
+                'DYNAMICAL_WEB_AUTHOR' => self::getDefinedVariable('DYNAMICAL_WEB_AUTHOR'),
+                'DYNAMICAL_WEB_COMPANY' => self::getDefinedVariable('DYNAMICAL_WEB_COMPANY'),
+                'DYNAMICAL_WEB_VERSION' => self::getDefinedVariable('DYNAMICAL_WEB_VERSION'),
                 'CLIENT_REMOTE_HOST' => self::getDefinedVariable('CLIENT_REMOTE_HOST'),
                 'CLIENT_USER_AGENT' => self::getDefinedVariable('CLIENT_USER_AGENT'),
                 'CLIENT_PLATFORM' => self::getDefinedVariable('CLIENT_PLATFORM'),

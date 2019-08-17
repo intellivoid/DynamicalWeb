@@ -97,8 +97,6 @@
          */
         public static function staticResponse(string $title, string $header, string $body)
         {
-            $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
-            $ServerInformation = json_decode($ServerInformation, true);
             ?>
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
             <html lang="en">
@@ -109,7 +107,7 @@
                     <h1><?PHP HTML::print($header); ?></h1>
                     <p><?PHP HTML::print($body); ?></p>
                     <hr>
-                    <address>DynamicalWeb/<?PHP HTML::print($ServerInformation['VERSION']); ?> (<?PHP HTML::print($ServerInformation['COMPANY']); ?>) Written by <?PHP HTML::print($ServerInformation['AUTHOR']); ?></address>
+                    <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?> (<?PHP HTML::print(DYNAMICAL_WEB_COMPANY); ?>) Written by <?PHP HTML::print(DYNAMICAL_WEB_AUTHOR); ?></address>
                 </body>
             </html>
             <?PHP
