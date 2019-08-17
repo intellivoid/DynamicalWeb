@@ -85,7 +85,7 @@
          *
          * @return string
          */
-        public static function userAgentRaw(): string
+        public static function getUserAgentRaw(): string
         {
             if(isset($_SERVER['HTTP_USER_AGENT']))
             {

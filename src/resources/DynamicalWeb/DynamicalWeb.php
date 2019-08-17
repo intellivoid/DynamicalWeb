@@ -53,7 +53,7 @@
             }
 
             define("CLIENT_REMOTE_HOST", $ClientIP);
-            define("CLIENT_USER_AGENT", Client::userAgentRaw());
+            define("CLIENT_USER_AGENT", Client::getUserAgentRaw());
 
             try
             {
