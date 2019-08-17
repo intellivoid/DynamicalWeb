@@ -4,6 +4,7 @@
 
     use Exception;
 
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
@@ -44,7 +45,7 @@
          */
         public static function defineVariables()
         {
-
+            define("CLIENT_REMOTE_HOST", Client::getClientIP());
         }
 
         /**
