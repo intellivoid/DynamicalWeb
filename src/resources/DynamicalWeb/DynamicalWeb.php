@@ -10,6 +10,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
 
     /**
      * Main DynamicalWeb Library
@@ -53,6 +54,42 @@
 
             define("CLIENT_REMOTE_HOST", $ClientIP);
             define("CLIENT_USER_AGENT", Client::userAgentRaw());
+
+            try
+            {
+                $UserAgentParsed = Utilities::parse_user_agent(CLIENT_USER_AGENT);
+            }
+            catch(Exception $exception)
+            {
+                $UserAgentParsed = array();
+            }
+
+            if($UserAgentParsed['platform'])
+            {
+                define("CLIENT_PLATFORM", $UserAgentParsed['platform']);
+            }
+            else
+            {
+                define("CLIENT_PLATFORM", 'Unknown');
+            }
+
+            if($UserAgentParsed['browser'])
+            {
+                define("CLIENT_BROWSER", $UserAgentParsed['browser']);
+            }
+            else
+            {
+                define("CLIENT_BROWSER", 'Unknown');
+            }
+
+            if($UserAgentParsed['version'])
+            {
+                define("CLIENT_VERSION", $UserAgentParsed['version']);
+            }
+            else
+            {
+                define("CLIENT_VERSION", 'Unknown');
+            }
         }
 
         /**
