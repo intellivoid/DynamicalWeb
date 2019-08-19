@@ -17,7 +17,7 @@
          *
          * @param string $location
          */
-        public function redirect(string $location)
+        public static function redirect(string $location)
         {
             header("Location: $location");
             exit();
