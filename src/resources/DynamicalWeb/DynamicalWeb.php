@@ -310,10 +310,10 @@
                 $Body .= print_r(self::getDefinedVariables(), true);
                 $Body .= "</pre>";
 
-                Page::staticResponse(
-                    'Internal Server Error', 'Server Error',
-                    $Body
-                );
+                $Body = str_ireplace('.php', '.bin', $Body);
+                $Body = str_ireplace('.json', '.ziproto', $Body);
+
+                Page::staticResponse('Internal Server Error', 'Server Error', $Body);
             }
             else
             {
