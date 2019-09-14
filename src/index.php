@@ -26,20 +26,7 @@
     DynamicalWeb::defineVariables();
     Runtime::runEventScripts('on_request');
 
-    if(isset($_GET['set_language']))
-    {
-        try
-        {
-            Language::changeLanguage($_GET['set_language']);
-        }
-        catch (Exception $e)
-        {
-            Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
-            exit();
-        }
 
-        Actions::redirect(APP_HOME_PAGE);
-    }
 
     DynamicalWeb::processRequest();
 

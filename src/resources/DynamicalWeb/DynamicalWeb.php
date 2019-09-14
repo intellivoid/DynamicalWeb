@@ -170,7 +170,7 @@
                 throw new Exception('No pages has been defined');
             }
 
-            define('APP_HOME_PAGE', $Configuration['router'][0]['page'], false);
+            define('APP_HOME_PAGE', $Configuration['router'][0]['path'], false);
             define('APP_PRIMARY_LANGUAGE', $Configuration['primary_language'], false);
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
@@ -187,6 +187,23 @@
         public static function mapRoutes()
         {
             self::$router = new Router();
+
+            self::$router->map('GET|POST', '/change_language', function(){
+                if(isset($_GET['language']))
+                {
+                    try
+                    {
+                        Language::changeLanguage($_GET['language']);
+                    }
+                    catch (Exception $e)
+                    {
+                        Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
+                        exit();
+                    }
+
+                    Actions::redirect(APP_HOME_PAGE);
+                }
+            }, 'change_language');
 
             $configuration = self::getWebConfiguration();
             foreach($configuration['router'] as $Route)

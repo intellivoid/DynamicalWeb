@@ -18,9 +18,9 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?PHP \DynamicalWeb\HTML::print(TEXT_NAVBAR_LANGUAGE_DROPDOWN); ?></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="/?set_language=en&cache=<?PHP print(hash('sha256', time())); ?>">English</a>
-                    <a class="dropdown-item" href="/?set_language=es&cache=<?PHP print(hash('sha256', time())); ?>">Español</a>
-                    <a class="dropdown-item" href="/?set_language=zh&cache=<?PHP print(hash('sha256', time())); ?>">中文</a>
+                    <a class="dropdown-item" href="/change_language?language=en&cache=<?PHP print(hash('sha256', time())); ?>">English</a>
+                    <a class="dropdown-item" href="/change_language?language=es&cache=<?PHP print(hash('sha256', time())); ?>">Español</a>
+                    <a class="dropdown-item" href="/change_language?language=zh&cache=<?PHP print(hash('sha256', time())); ?>">中文</a>
                 </div>
             </li>
         </ul>
