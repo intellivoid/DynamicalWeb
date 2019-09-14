@@ -198,7 +198,6 @@
                     catch (Exception $e)
                     {
                         Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
-                        exit();
                     }
 
                     Actions::redirect(APP_HOME_PAGE);
@@ -262,6 +261,8 @@
                     'The page you were looking for was not found'
                 );
             }
+
+            exit();
         }
 
         /**
@@ -321,7 +322,6 @@
                     'Internal Server Error', 'Server Error',
                     $Body
                 );
-                exit();
             }
             else
             {
@@ -336,8 +336,9 @@
                         'There was an unexpected error while trying to handle your request'
                     );
                 }
-                exit();
             }
+
+            exit();
         }
 
         /**
