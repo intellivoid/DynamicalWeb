@@ -10,6 +10,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
 
@@ -41,6 +42,11 @@
          * @var array
          */
         public static $globalVariables = [];
+
+        /**
+         * @var Router
+         */
+        public static $router;
 
         /**
          * Defines the important variables for DynamicalWeb
@@ -159,12 +165,172 @@
 
             $Configuration = json_decode(file_get_contents($resourcesDirectory . DIRECTORY_SEPARATOR . 'configuration.json'), true);
 
-            define('APP_HOME_PAGE', $Configuration['home_page'], false);
+            if(count($Configuration['router']) == 0)
+            {
+                throw new Exception('No pages has been defined');
+            }
+
+            define('APP_HOME_PAGE', $Configuration['router'][0]['path'], false);
             define('APP_PRIMARY_LANGUAGE', $Configuration['primary_language'], false);
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
             Runtime::runEventScripts('initialize'); // Run events at initialize
+            self::mapRoutes();
+        }
+
+        /**
+         * Routes all available routes
+         *
+         * @throws Exception
+         */
+        public static function mapRoutes()
+        {
+            self::$router = new Router();
+
+            self::$router->map('GET|POST', '/change_language', function(){
+                if(isset($_GET['language']))
+                {
+                    try
+                    {
+                        Language::changeLanguage($_GET['language']);
+                    }
+                    catch (Exception $e)
+                    {
+                        Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
+                    }
+
+                    Actions::redirect(APP_HOME_PAGE);
+                }
+            }, 'change_language');
+
+            $configuration = self::getWebConfiguration();
+            foreach($configuration['router'] as $Route)
+            {
+                self::$router->map('GET|POST', $Route['path'], function() use ($Route){
+                    Page::load($Route['page']);
+                }, $Route['page']);
+            }
+        }
+
+        /**
+         * Processes the request
+         *
+         * @throws Exception
+         */
+        public static function processRequest()
+        {
+            $configuration = self::getWebConfiguration();
+            $match = DynamicalWeb::$router->match();
+
+            // call closure or throw 404 status
+            if(is_array($match) && is_callable( $match['target']))
+            {
+                try
+                {
+                    call_user_func_array($match['target'], $match['params']);
+                }
+                catch(Exception $exception)
+                {
+                    self::handleException($exception, (bool)$configuration['debugging_mode']);
+                }
+            }
+            else
+            {
+                self::handleNotFound();
+            }
+        }
+
+        /**
+         * Handles a 404 not found error
+         *
+         * @throws Exception
+         */
+        public static function handleNotFound()
+        {
+            http_response_code(404);
+            if(Page::exists('404') == true)
+            {
+                Page::load('404');
+            }
+            else
+            {
+                Page::staticResponse(
+                    'Not Found',
+                    '404 Not Found',
+                    'The page you were looking for was not found'
+                );
+            }
+
+            exit();
+        }
+
+        /**
+         * Handles the exception
+         *
+         * @param Exception $exception
+         * @param bool $debug
+         * @throws Exception
+         */
+        public static function handleException(Exception $exception, bool $debug = false)
+        {
+            http_response_code(500);
+
+            if($debug == true)
+            {
+                $Body = "Debugging information regarding the exception can be found below<br/><br/><hr/>\n";
+
+                $Body .= "<h2>Exception Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r($exception, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Object Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalObjects, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Variable Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalVariables, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Router Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$router, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Loaded Libraries</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$loadedLibraries, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>DynamicalWeb Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(self::getDefinedVariables(), true);
+                $Body .= "</pre>";
+
+                Page::staticResponse(
+                    'Internal Server Error', 'Server Error',
+                    $Body
+                );
+            }
+            else
+            {
+                if(Page::exists('500') == true)
+                {
+                    Page::load('500');
+                }
+                else
+                {
+                    Page::staticResponse(
+                        'Internal Server Error', 'Server Error',
+                        'There was an unexpected error while trying to handle your request'
+                    );
+                }
+            }
+
+            exit();
         }
 
         /**

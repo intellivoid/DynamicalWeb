@@ -4,10 +4,10 @@
 <meta name="author" content="Zi Xing Narrakas">
 
 <!-- Bootstrap core CSS -->
-<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="assets/css/app.css" rel="stylesheet">
+<link href="/assets/css/app.css" rel="stylesheet">
 
 <!-- Favicon -->
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png?v=Kmnq9jqpb7">
