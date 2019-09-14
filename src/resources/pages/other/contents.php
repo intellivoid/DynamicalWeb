@@ -9,7 +9,7 @@
 <html lang="<?PHP HTML::print(APP_LANGUAGE_ISO_639); ?>">
     <head>
         <?PHP HTML::importSection('header'); ?>
-        <title><?PHP HTML::print(TEXT_PAGE_TITLE); ?></title>
+        <title>Other Page</title>
     </head>
 
     <body>
