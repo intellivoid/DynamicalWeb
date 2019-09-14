@@ -3,7 +3,10 @@
     <img style="max-width:24px; margin-top: 2px; margin-right: 5px;" src="/assets/images/logo.svg">
 
     <a class="navbar-brand" href="index">
-        <?PHP \DynamicalWeb\HTML::print(TEXT_NAVBAR_BRAND); ?>
+        <?PHP use DynamicalWeb\DynamicalWeb;
+        use DynamicalWeb\HTML;
+
+        \DynamicalWeb\HTML::print(TEXT_NAVBAR_BRAND); ?>
     </a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,9 +21,9 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?PHP \DynamicalWeb\HTML::print(TEXT_NAVBAR_LANGUAGE_DROPDOWN); ?></a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                    <a class="dropdown-item" href="/change_language?language=en&cache=<?PHP print(hash('sha256', time())); ?>">English</a>
-                    <a class="dropdown-item" href="/change_language?language=es&cache=<?PHP print(hash('sha256', time())); ?>">Español</a>
-                    <a class="dropdown-item" href="/change_language?language=zh&cache=<?PHP print(hash('sha256', time())); ?>">中文</a>
+                    <a class="dropdown-item" href="<?PHP DynamicalWeb::getRoute('change_language', array('language' => 'en', 'cache' => hash('sha256', time())), true); ?>">English</a>
+                    <a class="dropdown-item" href="<?PHP DynamicalWeb::getRoute('change_language', array('language' => 'es', 'cache' => hash('sha256', time())), true); ?>">Español</a>
+                    <a class="dropdown-item" href="<?PHP DynamicalWeb::getRoute('change_language', array('language' => 'zh', 'cache' => hash('sha256', time())), true); ?>">中文</a>
                 </div>
             </li>
         </ul>

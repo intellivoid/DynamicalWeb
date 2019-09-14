@@ -241,6 +241,32 @@
             }
         }
 
+        /** @noinspection PhpDocMissingThrowsInspection */
+        /**
+         * Generates a route for the requested page
+         *
+         * @param string $page
+         * @param array $parameters
+         * @param bool $print
+         * @return string
+         */
+        public static function getRoute(string $page, array $parameters = [], bool $print = false): string
+        {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $url = self::$router->generate($page);
+            if(count($parameters) > 0)
+            {
+                $url .= '?' . http_build_query($parameters);
+            }
+
+            if($print)
+            {
+                HTML::print($url);
+            }
+
+            return $url;
+        }
+
         /**
          * Handles a 404 not found error
          *
