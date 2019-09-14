@@ -31,6 +31,14 @@
                 $ExampleLibrary->getPrintFunctions()->SayName('John Smith');
                 $ExampleLibrary->getPrintFunctions()->sayAge(12);
             ?>
+            <?PHP HTML::print(CLIENT_REMOTE_HOST); ?><br/>
+            <?PHP HTML::print(CLIENT_PLATFORM); ?><br/>
+            <?PHP HTML::print(CLIENT_BROWSER); ?><br/>
+            <?PHP HTML::print(CLIENT_VERSION); ?><br/>
+            <br/>
+<pre>
+<?PHP HTML::print(json_encode(DynamicalWeb::getDefinedVariables(), JSON_PRETTY_PRINT)); ?>
+</pre><br/><br/>
         </main>
 
         <?PHP HTML::importSection('footer'); ?>

@@ -4,11 +4,16 @@
 
     use Exception;
 
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Actions.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Request.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
 
     /**
      * Main DynamicalWeb Library
@@ -40,6 +45,113 @@
         public static $globalVariables = [];
 
         /**
+         * @var Router
+         */
+        public static $router;
+
+        /**
+         * Defines the important variables for DynamicalWeb
+         */
+        public static function defineVariables()
+        {
+            $ClientIP = Client::getClientIP();
+            if($ClientIP == "::1")
+            {
+                $ClientIP = "127.0.0.1";
+            }
+
+            define("CLIENT_REMOTE_HOST", $ClientIP);
+            define("CLIENT_USER_AGENT", Client::getUserAgentRaw());
+
+            try
+            {
+                $UserAgentParsed = Utilities::parse_user_agent(CLIENT_USER_AGENT);
+            }
+            catch(Exception $exception)
+            {
+                $UserAgentParsed = array();
+            }
+
+            if($UserAgentParsed['platform'])
+            {
+                define("CLIENT_PLATFORM", $UserAgentParsed['platform']);
+            }
+            else
+            {
+                define("CLIENT_PLATFORM", 'Unknown');
+            }
+
+            if($UserAgentParsed['browser'])
+            {
+                define("CLIENT_BROWSER", $UserAgentParsed['browser']);
+            }
+            else
+            {
+                define("CLIENT_BROWSER", 'Unknown');
+            }
+
+            if($UserAgentParsed['version'])
+            {
+                define("CLIENT_VERSION", $UserAgentParsed['version']);
+            }
+            else
+            {
+                define("CLIENT_VERSION", 'Unknown');
+            }
+
+            $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
+            $ServerInformation = json_decode($ServerInformation, true);
+
+            define("DYNAMICAL_WEB_AUTHOR", $ServerInformation['AUTHOR']);
+            define("DYNAMICAL_WEB_COMPANY", $ServerInformation['COMPANY']);
+            define("DYNAMICAL_WEB_VERSION", $ServerInformation['VERSION']);
+        }
+
+        /**
+         * Returns a defined variable, returns null if it doesn't exist
+         *
+         * @param string $var
+         * @return mixed|null
+         */
+        public static function getDefinedVariable(string $var)
+        {
+            if(defined($var))
+            {
+                return constant($var);
+            }
+
+            return null;
+        }
+
+        /**
+         * Returns an array of "system" defined variables created by DynamicalWeb
+         *
+         * @return array
+         */
+        public static function getDefinedVariables()
+        {
+            return array(
+                'DYNAMICAL_WEB_AUTHOR' => self::getDefinedVariable('DYNAMICAL_WEB_AUTHOR'),
+                'DYNAMICAL_WEB_COMPANY' => self::getDefinedVariable('DYNAMICAL_WEB_COMPANY'),
+                'DYNAMICAL_WEB_VERSION' => self::getDefinedVariable('DYNAMICAL_WEB_VERSION'),
+                'CLIENT_REMOTE_HOST' => self::getDefinedVariable('CLIENT_REMOTE_HOST'),
+                'CLIENT_USER_AGENT' => self::getDefinedVariable('CLIENT_USER_AGENT'),
+                'CLIENT_PLATFORM' => self::getDefinedVariable('CLIENT_PLATFORM'),
+                'CLIENT_BROWSER' => self::getDefinedVariable('CLIENT_BROWSER'),
+                'CLIENT_VERSION' => self::getDefinedVariable('CLIENT_VERSION'),
+                'APP_HOME_PAGE' => self::getDefinedVariable('APP_HOME_PAGE'),
+                'APP_PRIMARY_LANGUAGE' => self::getDefinedVariable('APP_PRIMARY_LANGUAGE'),
+                'APP_RESOURCES_DIRECTORY' => self::getDefinedVariable('APP_RESOURCES_DIRECTORY'),
+                'APP_CURRENT_PAGE' => self::getDefinedVariable('APP_CURRENT_PAGE'),
+                'APP_CURRENT_PAGE_DIRECTORY' => self::getDefinedVariable('APP_CURRENT_PAGE_DIRECTORY'),
+                'APP_SELECTED_LANGUAGE' => self::getDefinedVariable('APP_SELECTED_LANGUAGE'),
+                'APP_SELECTED_LANGUAGE_FILE' => self::getDefinedVariable('APP_SELECTED_LANGUAGE_FILE'),
+                'APP_FALLBACK_LANGUAGE_FILE' => self::getDefinedVariable('APP_FALLBACK_LANGUAGE_FILE'),
+                'APP_LANGUAGE_ISO_639' => self::getDefinedVariable('APP_LANGUAGE_ISO_639')
+            );
+        }
+
+        /**
          * Loads the application resources
          *
          * @param string $resourcesDirectory
@@ -54,12 +166,197 @@
 
             $Configuration = json_decode(file_get_contents($resourcesDirectory . DIRECTORY_SEPARATOR . 'configuration.json'), true);
 
-            define('APP_HOME_PAGE', $Configuration['home_page'], false);
+            if(count($Configuration['router']) == 0)
+            {
+                throw new Exception('No pages has been defined');
+            }
+
+            define('APP_HOME_PAGE', $Configuration['router'][0]['path'], false);
             define('APP_PRIMARY_LANGUAGE', $Configuration['primary_language'], false);
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
             Runtime::runEventScripts('initialize'); // Run events at initialize
+            self::mapRoutes();
+        }
+
+        /**
+         * Routes all available routes
+         *
+         * @throws Exception
+         */
+        public static function mapRoutes()
+        {
+            self::$router = new Router();
+
+            self::$router->map('GET|POST', '/change_language', function(){
+                if(isset($_GET['language']))
+                {
+                    try
+                    {
+                        Language::changeLanguage($_GET['language']);
+                    }
+                    catch (Exception $e)
+                    {
+                        Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
+                    }
+                }
+                Actions::redirect(APP_HOME_PAGE);
+            }, 'change_language');
+
+            $configuration = self::getWebConfiguration();
+            foreach($configuration['router'] as $Route)
+            {
+                self::$router->map('GET|POST', $Route['path'], function() use ($Route){
+                    Page::load($Route['page']);
+                }, $Route['page']);
+            }
+        }
+
+        /**
+         * Processes the request
+         *
+         * @throws Exception
+         */
+        public static function processRequest()
+        {
+            $configuration = self::getWebConfiguration();
+            $match = DynamicalWeb::$router->match();
+
+            // call closure or throw 404 status
+            if(is_array($match) && is_callable( $match['target']))
+            {
+                try
+                {
+                    call_user_func_array($match['target'], $match['params']);
+                }
+                catch(Exception $exception)
+                {
+                    self::handleException($exception, (bool)$configuration['debugging_mode']);
+                }
+            }
+            else
+            {
+                self::handleNotFound();
+            }
+        }
+
+        /** @noinspection PhpDocMissingThrowsInspection */
+        /**
+         * Generates a route for the requested page
+         *
+         * @param string $page
+         * @param array $parameters
+         * @param bool $print
+         * @return string
+         */
+        public static function getRoute(string $page, array $parameters = [], bool $print = false): string
+        {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $url = self::$router->generate($page);
+            if(count($parameters) > 0)
+            {
+                $url .= '?' . http_build_query($parameters);
+            }
+
+            if($print)
+            {
+                HTML::print($url);
+            }
+
+            return $url;
+        }
+
+        /**
+         * Handles a 404 not found error
+         *
+         * @throws Exception
+         */
+        public static function handleNotFound()
+        {
+            http_response_code(404);
+            if(Page::exists('404') == true)
+            {
+                Page::load('404');
+            }
+            else
+            {
+                Page::staticResponse(
+                    'Not Found',
+                    '404 Not Found',
+                    'The page you were looking for was not found'
+                );
+            }
+
+            exit();
+        }
+
+        /**
+         * Handles the exception
+         *
+         * @param Exception $exception
+         * @param bool $debug
+         * @throws Exception
+         */
+        public static function handleException(Exception $exception, bool $debug = false)
+        {
+            http_response_code(500);
+
+            if($debug == true)
+            {
+                $Body = "Debugging information regarding the exception can be found below<br/><br/><hr/>\n";
+
+                $Body .= "<h2>Exception Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r($exception, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Object Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalObjects, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Variable Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalVariables, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Router Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$router, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Loaded Libraries</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$loadedLibraries, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>DynamicalWeb Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(self::getDefinedVariables(), true);
+                $Body .= "</pre>";
+
+                $Body = str_ireplace('.php', '.bin', $Body);
+                $Body = str_ireplace('.json', '.ziproto', $Body);
+
+                Page::staticResponse('Internal Server Error', 'Server Error', $Body);
+            }
+            else
+            {
+                if(Page::exists('500') == true)
+                {
+                    Page::load('500');
+                }
+                else
+                {
+                    Page::staticResponse(
+                        'Internal Server Error', 'Server Error',
+                        'There was an unexpected error while trying to handle your request'
+                    );
+                }
+            }
+
+            exit();
         }
 
         /**
