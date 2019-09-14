@@ -10,6 +10,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Request.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
