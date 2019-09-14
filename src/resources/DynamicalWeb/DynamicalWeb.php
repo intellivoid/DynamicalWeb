@@ -44,6 +44,11 @@
         public static $globalVariables = [];
 
         /**
+         * @var Router
+         */
+        public static $router;
+
+        /**
          * Defines the important variables for DynamicalWeb
          */
         public static function defineVariables()
@@ -160,12 +165,95 @@
 
             $Configuration = json_decode(file_get_contents($resourcesDirectory . DIRECTORY_SEPARATOR . 'configuration.json'), true);
 
-            define('APP_HOME_PAGE', $Configuration['home_page'], false);
+            if(count($Configuration['router']) == 0)
+            {
+                throw new Exception('No pages has been defined');
+            }
+
+            define('APP_HOME_PAGE', $Configuration['router'][0]['page'], false);
             define('APP_PRIMARY_LANGUAGE', $Configuration['primary_language'], false);
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
             Runtime::runEventScripts('initialize'); // Run events at initialize
+            self::mapRoutes();
+        }
+
+        /**
+         * Routes all available routes
+         *
+         * @throws Exception
+         */
+        public static function mapRoutes()
+        {
+            self::$router = new Router();
+
+            $configuration = self::getWebConfiguration();
+            foreach($configuration['router'] as $Route)
+            {
+                self::$router->map('GET|POST', $Route['path'], function() use ($Route){
+                    Page::load($Route['page']);
+                }, $Route['page']);
+            }
+        }
+
+        /**
+         * Processes the request
+         *
+         * @throws Exception
+         */
+        public static function processRequest()
+        {
+            $configuration = self::getWebConfiguration();
+            $match = DynamicalWeb::$router->match();
+
+            // call closure or throw 404 status
+            if(is_array($match) && is_callable( $match['target']))
+            {
+                try
+                {
+                    call_user_func_array($match['target'], $match['params']);
+                }
+                catch(Exception $exception)
+                {
+                    if($configuration['debugging_mode'] == true)
+                    {
+                        var_dump($exception);
+                        exit();
+                    }
+                    else
+                    {
+                        if(Page::exists('500') == true)
+                        {
+                            Page::load('500');
+                        }
+                        else
+                        {
+                            Page::staticResponse(
+                                'Internal Server Error', 'Server Error',
+                                'There was an unexpected error while trying to handle your request'
+                            );
+                        }
+                        exit();
+                    }
+                }
+            }
+            else
+            {
+                if(Page::exists('404') == true)
+                {
+                    Page::load('404');
+                }
+                else
+                {
+                    Page::staticResponse(
+                        'Not Found',
+                        '404 Not Found',
+                        'The page you were looking for was not found'
+                    );
+                }
+                exit();
+            }
         }
 
         /**

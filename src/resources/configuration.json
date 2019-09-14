@@ -1,6 +1,10 @@
 {
-    "home_page": "index",
     "primary_language": "en",
+    "debugging_mode": true,
+    "router": [
+        {"path": "/", "page": "index"},
+        {"path": "/other", "page": "other"}
+    ],
     "libraries": {
         "Example": {
             "directory_name": "Example",

@@ -1,13 +1,15 @@
 <?php
     /**
-     * DynamicalWeb Bootstrap v1.0.0.1
+     * DynamicalWeb Bootstrap v2.0.0.0
      */
 
     // Load the application resources
+    use DynamicalWeb\Actions;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Language;
     use DynamicalWeb\Page;
     use DynamicalWeb\Runtime;
+    use DynamicalWeb\Utilities;
 
     require __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'DynamicalWeb' . DIRECTORY_SEPARATOR . 'DynamicalWeb.php';
 
@@ -36,24 +38,9 @@
             exit();
         }
 
-        header('Location: '. APP_HOME_PAGE);
-        exit();
+        Actions::redirect(APP_HOME_PAGE);
     }
 
-    if(isset($_GET['c_view_point']) == false)
-    {
-        Page::load(APP_HOME_PAGE);
-    }
-    else
-    {
-        if(strstr($_GET['c_view_point'], '/'))
-        {
-            Page::load('404');
-        }
-        else
-        {
-            Page::load($_GET['c_view_point']);
-        }
-    }
+    DynamicalWeb::processRequest();
 
     Runtime::runEventScripts('after_request');
