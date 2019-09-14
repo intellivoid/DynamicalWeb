@@ -200,9 +200,8 @@
                     {
                         Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
                     }
-
-                    Actions::redirect(APP_HOME_PAGE);
                 }
+                Actions::redirect(APP_HOME_PAGE);
             }, 'change_language');
 
             $configuration = self::getWebConfiguration();
