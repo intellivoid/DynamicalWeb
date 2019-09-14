@@ -105,7 +105,7 @@
                 </head>
                 <body>
                     <h1><?PHP HTML::print($header); ?></h1>
-                    <p><?PHP HTML::print($body); ?></p>
+                    <p><?PHP HTML::print($body, false); ?></p>
                     <hr>
                     <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?> (<?PHP HTML::print(DYNAMICAL_WEB_COMPANY); ?>) Written by <?PHP HTML::print(DYNAMICAL_WEB_AUTHOR); ?></address>
                 </body>

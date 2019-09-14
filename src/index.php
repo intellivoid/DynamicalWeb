@@ -4,12 +4,9 @@
      */
 
     // Load the application resources
-    use DynamicalWeb\Actions;
     use DynamicalWeb\DynamicalWeb;
-    use DynamicalWeb\Language;
     use DynamicalWeb\Page;
     use DynamicalWeb\Runtime;
-    use DynamicalWeb\Utilities;
 
     require __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'DynamicalWeb' . DIRECTORY_SEPARATOR . 'DynamicalWeb.php';
 
@@ -25,9 +22,5 @@
 
     DynamicalWeb::defineVariables();
     Runtime::runEventScripts('on_request');
-
-
-
     DynamicalWeb::processRequest();
-
     Runtime::runEventScripts('after_request');

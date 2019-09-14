@@ -233,40 +233,107 @@
                 }
                 catch(Exception $exception)
                 {
-                    if($configuration['debugging_mode'] == true)
-                    {
-                        var_dump($exception);
-                        exit();
-                    }
-                    else
-                    {
-                        if(Page::exists('500') == true)
-                        {
-                            Page::load('500');
-                        }
-                        else
-                        {
-                            Page::staticResponse(
-                                'Internal Server Error', 'Server Error',
-                                'There was an unexpected error while trying to handle your request'
-                            );
-                        }
-                        exit();
-                    }
+                    self::handleException($exception, (bool)$configuration['debugging_mode']);
                 }
             }
             else
             {
-                if(Page::exists('404') == true)
+                self::handleNotFound();
+            }
+        }
+
+        /**
+         * Handles a 404 not found error
+         *
+         * @throws Exception
+         */
+        public static function handleNotFound()
+        {
+            http_response_code(404);
+            if(Page::exists('404') == true)
+            {
+                Page::load('404');
+            }
+            else
+            {
+                Page::staticResponse(
+                    'Not Found',
+                    '404 Not Found',
+                    'The page you were looking for was not found'
+                );
+            }
+        }
+
+        /**
+         * Handles the exception
+         *
+         * @param Exception $exception
+         * @param bool $debug
+         * @throws Exception
+         */
+        public static function handleException(Exception $exception, bool $debug = false)
+        {
+            http_response_code(500);
+
+            if($debug == true)
+            {
+                $Body = "Debugging information regarding the exception can be found below<br/><br/><hr/>\n";
+
+                $Body .= "<h2>Exception Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r($exception, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Object Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalObjects, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Variable Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$globalVariables, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Dynamic Router Memory</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$router, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>Loaded Libraries</h2>\n";
+                $Body .= "<pre>";
+                $Body .= print_r(DynamicalWeb::$loadedLibraries, true);
+                $Body .= "</pre>\n<hr/>";
+
+                $Body .= "<h2>DynamicalWeb Details</h2>\n";
+                $Body .= "<pre>";
+                $Body .= "Application Home Page: " . APP_HOME_PAGE . "\r\n";
+                $Body .= "Primary Language: " . APP_PRIMARY_LANGUAGE . "\r\n";
+                $Body .= "Resources Directory: " . APP_RESOURCES_DIRECTORY . "\r\n";
+                $Body .= "Selected Language: " . APP_SELECTED_LANGUAGE . "\r\n";
+                $Body .= "Selected Language File: " . APP_SELECTED_LANGUAGE_FILE . "\r\n";
+                $Body .= "Fallback Language: " . APP_FALLBACK_LANGUAGE_FILE  . "\r\n";
+                $Body .= "ISO 639 Selected Language: " . APP_LANGUAGE_ISO_639 . "\r\n";
+                $Body .= "Current Page: " . APP_CURRENT_PAGE . "\r\n";
+                $Body .= "Current Page Directory: " . APP_CURRENT_PAGE_DIRECTORY . "\r\n";
+                $Body .= "</pre>";
+
+                Page::staticResponse(
+                    'Internal Server Error', 'Server Error',
+                    $Body
+                );
+                exit();
+            }
+            else
+            {
+                if(Page::exists('500') == true)
                 {
-                    Page::load('404');
+                    Page::load('500');
                 }
                 else
                 {
                     Page::staticResponse(
-                        'Not Found',
-                        '404 Not Found',
-                        'The page you were looking for was not found'
+                        'Internal Server Error', 'Server Error',
+                        'There was an unexpected error while trying to handle your request'
                     );
                 }
                 exit();
