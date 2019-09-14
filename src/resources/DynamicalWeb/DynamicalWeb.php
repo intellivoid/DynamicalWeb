@@ -10,6 +10,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Request.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
@@ -241,6 +242,32 @@
             }
         }
 
+        /** @noinspection PhpDocMissingThrowsInspection */
+        /**
+         * Generates a route for the requested page
+         *
+         * @param string $page
+         * @param array $parameters
+         * @param bool $print
+         * @return string
+         */
+        public static function getRoute(string $page, array $parameters = [], bool $print = false): string
+        {
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $url = self::$router->generate($page);
+            if(count($parameters) > 0)
+            {
+                $url .= '?' . http_build_query($parameters);
+            }
+
+            if($print)
+            {
+                HTML::print($url);
+            }
+
+            return $url;
+        }
+
         /**
          * Handles a 404 not found error
          *
@@ -310,10 +337,10 @@
                 $Body .= print_r(self::getDefinedVariables(), true);
                 $Body .= "</pre>";
 
-                Page::staticResponse(
-                    'Internal Server Error', 'Server Error',
-                    $Body
-                );
+                $Body = str_ireplace('.php', '.bin', $Body);
+                $Body = str_ireplace('.json', '.ziproto', $Body);
+
+                Page::staticResponse('Internal Server Error', 'Server Error', $Body);
             }
             else
             {
