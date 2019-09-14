@@ -307,15 +307,7 @@
 
                 $Body .= "<h2>DynamicalWeb Details</h2>\n";
                 $Body .= "<pre>";
-                $Body .= "Application Home Page: " . APP_HOME_PAGE . "\r\n";
-                $Body .= "Primary Language: " . APP_PRIMARY_LANGUAGE . "\r\n";
-                $Body .= "Resources Directory: " . APP_RESOURCES_DIRECTORY . "\r\n";
-                $Body .= "Selected Language: " . APP_SELECTED_LANGUAGE . "\r\n";
-                $Body .= "Selected Language File: " . APP_SELECTED_LANGUAGE_FILE . "\r\n";
-                $Body .= "Fallback Language: " . APP_FALLBACK_LANGUAGE_FILE  . "\r\n";
-                $Body .= "ISO 639 Selected Language: " . APP_LANGUAGE_ISO_639 . "\r\n";
-                $Body .= "Current Page: " . APP_CURRENT_PAGE . "\r\n";
-                $Body .= "Current Page Directory: " . APP_CURRENT_PAGE_DIRECTORY . "\r\n";
+                $Body .= print_r(self::getDefinedVariables(), true);
                 $Body .= "</pre>";
 
                 Page::staticResponse(

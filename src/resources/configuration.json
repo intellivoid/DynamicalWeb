@@ -4,7 +4,8 @@
     "router": [
         {"path": "/", "page": "index"},
         {"path": "/other", "page": "other"},
-        {"path": "/error", "page": "error"}
+        {"path": "/error", "page": "error"},
+        {"path": "/sub/other", "page": "sub_other"}
     ],
     "libraries": {
         "Example": {
