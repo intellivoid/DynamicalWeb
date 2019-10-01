@@ -51,6 +51,17 @@
         public static $router;
 
         /**
+         * @throws Exception
+         */
+        public static function initalize()
+        {
+            DynamicalWeb::defineVariables();
+            Runtime::runEventScripts('on_request');
+            self::processRequest();
+            Runtime::runEventScripts('after_request');
+        }
+
+        /**
          * Defines the important variables for DynamicalWeb
          */
         public static function defineVariables()
