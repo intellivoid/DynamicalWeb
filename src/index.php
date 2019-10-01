@@ -1,6 +1,6 @@
 <?php
     /**
-     * DynamicalWeb Bootstrap v2.0.0.0
+     * DynamicalWeb Bootstrap v2.0.0.1
      */
 
     // Load the application resources
