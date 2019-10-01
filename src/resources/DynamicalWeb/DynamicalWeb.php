@@ -261,7 +261,7 @@
 
             if($print)
             {
-                HTML::print($url);
+                HTML::print($url, false);
             }
 
             return $url;
