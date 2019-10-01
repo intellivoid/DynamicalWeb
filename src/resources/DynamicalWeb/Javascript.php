@@ -25,6 +25,8 @@
         }
 
         /**
+         *
+         *
          * @param string $resource_name
          * @param bool $minified
          * @throws Exception
@@ -52,6 +54,9 @@
             include($JavascriptDirectory . DIRECTORY_SEPARATOR . $resource_name . '.js.php');
             $Contents = ob_get_clean();
 
+            header('Content-Length: ' . strlen($Contents));
+            header('Content-Type: application/javascript');
+
             if($minified)
             {
                 print(self::minify($Contents));
@@ -60,6 +65,41 @@
             {
                 print($Contents);
             }
+        }
 
+        /**
+         * @param string $resource_name
+         * @param array $parameters
+         * @param bool $minified
+         * @param bool $print
+         * @return string
+         * @throws Exception
+         */
+        public static function getResourceRoute(string $resource_name, array $parameters = array(), bool $minified = true, bool $print = false):
+        {
+            $url = null;
+
+            if($minified)
+            {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $url = DynamicalWeb::$router->generate('resources_min.js');
+            }
+            else
+            {
+                /** @noinspection PhpUnhandledExceptionInspection */
+                $url = DynamicalWeb::$router->generate('resources_js');
+            }
+
+            if(count($parameters) > 0)
+            {
+                $url .= '?' . http_build_query($parameters);
+            }
+
+            if($print)
+            {
+                HTML::print($url, false);
+            }
+
+            return $url;
         }
     }
