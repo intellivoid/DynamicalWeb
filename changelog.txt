@@ -1,0 +1,20 @@
+v2.0.0.1
+ - Added the ability to create Dynamic Javascript files.
+    Javascript::importScript('simple', array("foo" => "bar"), false);
+    This prints "<script src="<ROUTE>"></script>" to load the script
+
+    All Dynamic scripts go to /src/resources/javascript and should have the extension ".js.php"
+
+    Example Script
+    ```js
+    <?PHP
+        use DynamicalWeb\HTML;
+    ?>
+
+    function dyn_test()
+    {
+        alert("<?PHP HTML::print("Hello World"); ?>")
+    }
+    ```
+ - Bug fix when getting routes, printing can escape special characters for URL(s), which should not be the case.
+ - Added delayed_redirect() to Actions

@@ -7,6 +7,8 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Actions.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Javascript.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'JSMin.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
@@ -48,6 +50,17 @@
          * @var Router
          */
         public static $router;
+
+        /**
+         * @throws Exception
+         */
+        public static function initalize()
+        {
+            DynamicalWeb::defineVariables();
+            Runtime::runEventScripts('on_request');
+            self::processRequest();
+            Runtime::runEventScripts('after_request');
+        }
 
         /**
          * Defines the important variables for DynamicalWeb
@@ -204,6 +217,14 @@
                 Actions::redirect(APP_HOME_PAGE);
             }, 'change_language');
 
+            self::$router->map('GET', '/compiled_assets/js/[a:resource].js', function($resource){
+                Javascript::loadResource($resource, false);
+            }, 'resources_js');
+
+            self::$router->map('GET', '/compiled_assets/js/[a:resource].min.js', function($resource){
+                Javascript::loadResource($resource, true);
+            }, 'resources_min.js');
+
             $configuration = self::getWebConfiguration();
             foreach($configuration['router'] as $Route)
             {
@@ -261,7 +282,7 @@
 
             if($print)
             {
-                HTML::print($url);
+                HTML::print($url, false);
             }
 
             return $url;

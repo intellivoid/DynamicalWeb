@@ -1,12 +1,11 @@
 <?php
     /**
-     * DynamicalWeb Bootstrap v2.0.0.0
+     * DynamicalWeb Bootstrap v2.0.0.1
      */
 
     // Load the application resources
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Page;
-    use DynamicalWeb\Runtime;
 
     require __DIR__ . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR . 'DynamicalWeb' . DIRECTORY_SEPARATOR . 'DynamicalWeb.php';
 
@@ -20,7 +19,11 @@
         exit();
     }
 
-    DynamicalWeb::defineVariables();
-    Runtime::runEventScripts('on_request');
-    DynamicalWeb::processRequest();
-    Runtime::runEventScripts('after_request');
+    try
+    {
+        DynamicalWeb::initalize();
+    }
+    catch (Exception $e)
+    {
+        Page::staticResponse("DynamicalWeb", "DynamicalWeb Fatal Error", $e->getMessage());
+    }
