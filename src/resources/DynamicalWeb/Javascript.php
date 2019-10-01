@@ -31,7 +31,7 @@
          * @param bool $minified
          * @throws Exception
          */
-        public static function loadResource(string $resource_name, bool $minified)
+        public static function loadResource(string $resource_name, bool $minified = true)
         {
             $JavascriptDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'javascript';
 
@@ -71,23 +71,22 @@
          * @param string $resource_name
          * @param array $parameters
          * @param bool $minified
-         * @param bool $print
          * @return string
          * @throws Exception
          */
-        public static function getResourceRoute(string $resource_name, array $parameters = array(), bool $minified = true, bool $print = false):
+        public static function getResourceRoute(string $resource_name, array $parameters = array(), bool $minified = true): string
         {
             $url = null;
 
             if($minified)
             {
                 /** @noinspection PhpUnhandledExceptionInspection */
-                $url = DynamicalWeb::$router->generate('resources_min.js');
+                $url = DynamicalWeb::$router->generate('resources_min.js', array('resource' => $resource_name));
             }
             else
             {
                 /** @noinspection PhpUnhandledExceptionInspection */
-                $url = DynamicalWeb::$router->generate('resources_js');
+                $url = DynamicalWeb::$router->generate('resources_js', array('resource' => $resource_name));
             }
 
             if(count($parameters) > 0)
@@ -95,11 +94,23 @@
                 $url .= '?' . http_build_query($parameters);
             }
 
-            if($print)
-            {
-                HTML::print($url, false);
-            }
-
             return $url;
+        }
+
+        /**
+         * Prints HTML Script tag for importing the dynamic javascript file
+         *
+         * @param string $resource_name
+         * @param array $parameters
+         * @param bool $minified
+         * @return string
+         * @throws Exception
+         */
+        public static function importScript(string $resource_name, array $parameters = array(), bool $minified = true): string
+        {
+            $Route = self::getResourceRoute($resource_name, $parameters, $minified);
+            $Output = "<script src=\"$Route\" ></script>";
+            HTML::print($Output, false);
+            return $Output;
         }
     }
