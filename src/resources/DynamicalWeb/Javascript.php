@@ -47,6 +47,7 @@
                     "404 Not Found", "Compiled resource not found",
                     "The requests compiled resource was not found"
                 );
+		exit();
             }
 
             ob_start();
