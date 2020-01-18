@@ -221,6 +221,22 @@
                 Javascript::loadResource($resource, false);
             }, 'resources_js');
 
+            if(Page::exists('500'))
+            {
+                self::$router->map('GET|POST', '/error', function(){
+                    Page::load('500');
+                }, '500');
+            }
+            else
+            {
+                self::$router->map('GET|POST', '/error', function(){
+                    Page::staticResponse(
+                        'Internal Server Error', 'Server Error',
+                        'There was an unexpected error while trying to handle your request'
+                    );
+                }, '500');
+            }
+
             self::$router->map('GET', '/compiled_assets/js/[a:resource].min.js', function($resource){
                 Javascript::loadResource($resource, true);
             }, 'resources_min.js');
@@ -364,17 +380,7 @@
             }
             else
             {
-                if(Page::exists('500') == true)
-                {
-                    Page::load('500');
-                }
-                else
-                {
-                    Page::staticResponse(
-                        'Internal Server Error', 'Server Error',
-                        'There was an unexpected error while trying to handle your request'
-                    );
-                }
+                Actions::redirect(DynamicalWeb::getRoute('500'));
             }
 
             exit();
