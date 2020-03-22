@@ -55,7 +55,6 @@
             include($JavascriptDirectory . DIRECTORY_SEPARATOR . $resource_name . '.js.php');
             $Contents = ob_get_clean();
 
-            header('Content-Length: ' . strlen($Contents));
             header('Content-Type: application/javascript');
 
             if($minified)
