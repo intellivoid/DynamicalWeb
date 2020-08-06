@@ -6,6 +6,7 @@ use DynamicalWeb\Runtime;
     use Example\ExampleLibrary;
 
     Runtime::import('Example');
+    Runtime::import('PpmExample');
 
 ?>
 <!doctype html>
