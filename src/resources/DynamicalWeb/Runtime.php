@@ -93,8 +93,12 @@
             if(isset($configuration['libraries'][$library_name]['package_name']))
             {
                 // Import as a PPM package
+                if($configuration['enable_ppm'] == false)
+                {
+                    throw new Exception('The library "' . $library_name . '" cannot be imported because it\'s a PPM package and PPM is not enabled in the configuration');
+                }
 
-                $version = "latest";
+                $version = 'latest';
                 $import_dependencies = true;
                 $throw_error = true;
 
