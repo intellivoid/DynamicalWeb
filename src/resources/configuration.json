@@ -1,6 +1,7 @@
 {
     "primary_language": "en",
     "debugging_mode": true,
+    "enable_ppm": true,
     "router": [
         {"path": "/", "page": "index"},
         {"path": "/other", "page": "other"},
@@ -14,6 +15,12 @@
             "check_class_exists": true,
             "namespace": "Example",
             "main_class": "ExampleLibrary"
+        },
+        "PpmExample": {
+            "package_name": "com.example.super_library",
+            "version": "latest",
+            "import_dependencies": true,
+            "throw_error": true
         }
     },
     "runtime_scripts": {

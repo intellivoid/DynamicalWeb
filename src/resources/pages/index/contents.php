@@ -1,10 +1,12 @@
 <?PHP
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\HTML;
-    use DynamicalWeb\Runtime;
+use DynamicalWeb\Javascript;
+use DynamicalWeb\Runtime;
     use Example\ExampleLibrary;
 
     Runtime::import('Example');
+    Runtime::import('PpmExample');
 
 ?>
 <!doctype html>
@@ -44,6 +46,7 @@
         <?PHP HTML::importSection('footer'); ?>
 
         <?PHP HTML::importSection('js_scripts'); ?>
+        <?PHP Javascript::importScript('simple', array("foo" => "bar"), false); ?>
 
     </body>
 </html>

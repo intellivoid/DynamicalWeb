@@ -22,4 +22,17 @@
             header("Location: $location");
             exit();
         }
+
+        /**
+         * Same as redirect but with a delay, this function will
+         * terminate the process
+         *
+         * @param string $location
+         * @param int $time
+         */
+        public static function delayed_redirect(string $location, int $time)
+        {
+            header('Refresh: ' . $time . ' URL=' . $location);
+            exit();
+        }
     }
