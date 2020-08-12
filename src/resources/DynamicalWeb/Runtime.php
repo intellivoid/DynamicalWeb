@@ -4,6 +4,11 @@
     namespace DynamicalWeb;
 
     use Exception;
+    use ppm\Exceptions\AutoloaderException;
+    use ppm\Exceptions\InvalidComponentException;
+    use ppm\Exceptions\InvalidPackageLockException;
+    use ppm\Exceptions\PackageNotFoundException;
+    use ppm\Exceptions\VersionNotFoundException;
     use ppm\ppm;
     use RuntimeException;
 
@@ -49,6 +54,66 @@
             foreach($configuration['runtime_scripts'][$event] as $script)
             {
                 self::executeScript($script);
+            }
+        }
+
+        /**
+         * Imports all PPM packages
+         *
+         * @throws AutoloaderException
+         * @throws InvalidComponentException
+         * @throws InvalidPackageLockException
+         * @throws PackageNotFoundException
+         * @throws VersionNotFoundException
+         */
+        public static function importPpm()
+        {
+            $configuration =  DynamicalWeb::getWebConfiguration();
+
+            if(self::$PpmLoaded == false)
+            {
+                if($configuration['enable_ppm'] == true)
+                {
+                    /** @noinspection PhpIncludeInspection */
+                    require("ppm");
+
+                    if(defined("PPM"))
+                    {
+                        self::$PpmLoaded = true;
+                    }
+                    else
+                    {
+                        throw new RuntimeException("Cannot start PPM, please make sure that PPM is installed properly.");
+                    }
+                }
+            }
+
+            foreach($configuration['libraries'] as $library => $library_config)
+            {
+                if(isset($library_config['package_name']))
+                {
+                    $version = 'latest';
+                    $import_dependencies = true;
+                    $throw_error = true;
+
+                    if(isset($library_config['version']))
+                    {
+                        $version = $library_config['version'];
+                    }
+
+                    if(isset($library_config['import_dependencies']))
+                    {
+                        $import_dependencies = $library_config['import_dependencies'];
+                    }
+
+                    if(isset($library_config['throw_error']))
+                    {
+                        $throw_error = $library_config['throw_error'];
+                    }
+
+                    ppm::import($library_config['package_name'], $version, $import_dependencies, $throw_error);
+                    DynamicalWeb::$loadedLibraries[] = $library;
+                }
             }
         }
 
