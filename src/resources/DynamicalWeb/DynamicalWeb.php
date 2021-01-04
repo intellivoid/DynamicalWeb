@@ -18,7 +18,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
 
     /**
-     * Main DynamicalWeb Library
+     * DynamicalWeb Library
      *
      * Class DynamicalWeb
      * @package DynamicalWeb
@@ -115,8 +115,6 @@
             $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
             $ServerInformation = json_decode($ServerInformation, true);
 
-            define("DYNAMICAL_WEB_AUTHOR", $ServerInformation['AUTHOR']);
-            define("DYNAMICAL_WEB_COMPANY", $ServerInformation['COMPANY']);
             define("DYNAMICAL_WEB_VERSION", $ServerInformation['VERSION']);
         }
 
@@ -144,8 +142,6 @@
         public static function getDefinedVariables()
         {
             return array(
-                'DYNAMICAL_WEB_AUTHOR' => self::getDefinedVariable('DYNAMICAL_WEB_AUTHOR'),
-                'DYNAMICAL_WEB_COMPANY' => self::getDefinedVariable('DYNAMICAL_WEB_COMPANY'),
                 'DYNAMICAL_WEB_VERSION' => self::getDefinedVariable('DYNAMICAL_WEB_VERSION'),
                 'CLIENT_REMOTE_HOST' => self::getDefinedVariable('CLIENT_REMOTE_HOST'),
                 'CLIENT_USER_AGENT' => self::getDefinedVariable('CLIENT_USER_AGENT'),
@@ -189,9 +185,7 @@
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
-            Runtime::importPpm();
             Runtime::runEventScripts('initialize'); // Run events at initialize
-
             self::mapRoutes();
         }
 
@@ -244,12 +238,50 @@
             }, 'resources_min.js');
 
             $configuration = self::getWebConfiguration();
+            
+            /* START DT DX000000182 kasper.medvedkov      Add dynamical router implementation */
             foreach($configuration['router'] as $Route)
             {
-                self::$router->map('GET|POST', $Route['path'], function() use ($Route){
+                $URI = $Route['path'];
+                preg_match_all("/%.+?/", $URI, $Para, PREG_PATTERN_ORDER);
+                $FinalURI = $URI;
+                
+                if(isset($Route["params"])) {
+                    // DX000000182 kasper.medvedkov     Count matches from CFG to the actual URI/Params, if not matched, return 500 with information about parameter misconfig //
+                    $match = count($Para[0]) == count($Route["params"]);
+                    if (!$match){
+                        self::defineVariables();
+                        Page::staticResponse('Internal Server Error', 'Server Error', "The amount of parameters that should be received doesn't match with the amount of parameters configured on <code>".$Route["page"]."</code>. Check configuration.");
+                        exit();
+                    }
+
+                    $Dx = array_combine($Para[0], $Route["params"]);
+                    foreach($Dx as $ParamTag => $ParamKey) {
+                        // DX000000182 kasper.medvedkov     Transform CFG params into Router parameters //
+                        switch($ParamTag) {
+                            case "%s":
+                                $FinalURI = str_replace("%s", "[*:$ParamKey]", $FinalURI);
+                                break;
+                            case "%i":
+                                $FinalURI = str_replace("%i", "[i:$ParamKey]", $FinalURI);
+                                break;
+                            case "%h":
+                                $FinalURI = str_replace("%h", "[h:$ParamKey]", $FinalURI);
+                                break;
+                            case "%a":
+                                $FinalURI = str_replace("%h", "[**:$ParamKey]", $FinalURI);
+                                break;
+                        }
+                    }
+                }
+                
+                // DX000000182 kasper.medvedkov     Map route with RouterParameters format transcripted from config //
+                self::$router->map(implode("|", $Route["method"]), $FinalURI, function() use ($Route){
                     Page::load($Route['page']);
                 }, $Route['page']);
             }
+            /* END DT DX000000182 kasper.medvedkov      Add dynamical router implementation */
+
         }
 
         /**
@@ -283,12 +315,15 @@
         /** @noinspection PhpDocMissingThrowsInspection */
         /**
          * Generates a route for the requested page
+         * NOTE: This function doesn't properly render dynamical routes. Be cautious.
          *
          * @param string $page
          * @param array $parameters
          * @param bool $print
          * @return string
          */
+        
+        /* DT DX000000183 TODO kasper.medvedkov    This function doesn't properly render dynamical routes. Be cautious. */
         public static function getRoute(string $page, array $parameters = [], bool $print = false): string
         {
             /** @noinspection PhpUnhandledExceptionInspection */
