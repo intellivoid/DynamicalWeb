@@ -3,10 +3,20 @@
     "debugging_mode": true,
     "enable_ppm": true,
     "router": [
-        {"path": "/", "page": "index"},
-        {"path": "/other", "page": "other"},
-        {"path": "/error", "page": "error"},
-        {"path": "/sub/other", "page": "sub_other"}
+        {"method": ["GET"], "path": "/sso/auth", "page": "authn/verify_auth", "params": []},
+        {"method": ["GET"], "path": "/fraudescape/new", "page": "fraudescape/new_campaign", "params": []},
+        {"method": ["GET"], "path": "/fraudescape/list", "page": "fraudescape/list_campaigns", "params": []},
+        {"method": ["GET"], "path": "/fraudescape/edit/%s", "page": "fraudescape/edit", "params": ["campaignUUID"]},
+        {"method": ["POST"], "path": "/fraudescape/api/v1/new_campaign", "page": "fraudescape/api/new_campaign", "params": []},
+        {"method": ["POST"], "path": "/fraudescape/api/v1/%s/metrics", "page": "fraudescape/api/metrics", "params": ["campaignUUID"]},
+        {"method": ["POST"], "path": "/fraudescape/api/v1/%s/setStatus/%i", "page": "fraudescape/api/set_status", "params": ["campaignUUID", "status"]},
+        {"method": ["GET"], "path": "/", "page": "index", "params": []}
+    ]
+    "router": [
+        {"method": ["GET"], "path": "/", "page": "index", "params": []},
+        {"method": ["GET"], "path": "/other", "page": "other", "params": []},
+        {"method": ["GET"], "path": "/error", "page": "error", "params": []},
+        {"method": ["GET"], "path": "/sub/other", "page": "sub/other", "params": []}
     ],
     "libraries": {
         "Example": {
