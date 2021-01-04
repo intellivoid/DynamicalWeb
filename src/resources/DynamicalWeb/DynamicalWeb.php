@@ -185,6 +185,7 @@
             define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
 
             Language::loadLanguage();
+            Runtime::importPpm();
             Runtime::runEventScripts('initialize'); // Run events at initialize
             self::mapRoutes();
         }
