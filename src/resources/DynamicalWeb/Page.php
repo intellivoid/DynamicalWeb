@@ -16,7 +16,10 @@
          */
         public static function exists(string $name): bool
         {
-            $FormattedName = strtolower(stripslashes($name));
+            /* START DT P1 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
+            $FormattedName = stripslashes($name);
+            /* END DT P1 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
+
             $PageDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . $FormattedName;
 
             if(file_exists($PageDirectory) == false)
@@ -43,10 +46,10 @@
             $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
             $ServerInformation = json_decode($ServerInformation, true);
 
-            header('X-Powered-By: DynamicalWeb/' . $ServerInformation['VERSION'] . ' (' . $ServerInformation['COMPANY'] . ')');
+            /* START DT P1 DX000000181  kasper.medvedkov    Remove branding. */
+            header('X-Powered-By: DynamicalWeb/' . $ServerInformation['VERSION'] . '');
             header('X-DynamicalWeb-Version: ' . $ServerInformation['VERSION']);
-            header('X-DynamicalWeb-Organization: ' . $ServerInformation['COMPANY']);
-            header('X-DynamicalWeb-Author: ' . $ServerInformation['AUTHOR']);
+            /* END DT P1 DX000000181  kasper.medvedkov    Remove branding. */
 
             if(self::exists($name) == false)
             {
@@ -72,8 +75,10 @@
 
                 return ;
             }
-
-            $FormattedName = strtolower(stripslashes($name));
+            
+            /* START DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
+            $FormattedName = stripslashes($name);
+            /* END DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
 
             define('APP_CURRENT_PAGE', $FormattedName, false);
             define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . $FormattedName);
@@ -97,6 +102,7 @@
          */
         public static function staticResponse(string $title, string $header, string $body)
         {
+            /* START DT P2 DX000000181  kasper.medvedkov    Remove branding. */
             ?>
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
             <html lang="en">
@@ -107,9 +113,11 @@
                     <h1><?PHP HTML::print($header); ?></h1>
                     <p><?PHP HTML::print($body, false); ?></p>
                     <hr>
-                    <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?> (<?PHP HTML::print(DYNAMICAL_WEB_COMPANY); ?>) Written by <?PHP HTML::print(DYNAMICAL_WEB_AUTHOR); ?></address>
+                    <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?></address>
                 </body>
             </html>
             <?PHP
+            /* END DT P2 DX000000181  kasper.medvedkov    Remove branding. */
+
         }
     }
