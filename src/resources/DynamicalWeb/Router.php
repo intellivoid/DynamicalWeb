@@ -237,8 +237,8 @@
 
             foreach($this->routes as $handler)
             {
-                list($methods, $route, $target, $name) = $handler;
 
+                list($methods, $route, $target, $name) = $handler;
                 $method_match = (stripos($methods, $requestMethod) !== false);
 
                 // Method did not match, continue to next route.
@@ -281,6 +281,7 @@
                             if(is_numeric($key)) unset($params[$key]);
                         }
                     }
+                    define("APP_REQUEST_PARAMETERS", $params, false);
 
                     return array(
                         'target' => $target,
@@ -334,7 +335,7 @@
                 }
 
             }
-            return "`^$route$`u";
+            return "`^(?J)$route$`u";
         }
 
     }
