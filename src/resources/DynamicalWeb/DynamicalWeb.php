@@ -8,6 +8,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'BufferStream.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HtmlMin.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Javascript.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'JSMin.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');

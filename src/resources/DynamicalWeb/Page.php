@@ -106,6 +106,7 @@
         {
             /* START DT P2 DX000000181  kasper.medvedkov    Remove branding. */
             Response::startRequest();
+            Response::setResponseType("text/html; charset=UTF-8");
 
             ?>
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">

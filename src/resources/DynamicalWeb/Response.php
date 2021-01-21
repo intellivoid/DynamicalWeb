@@ -74,7 +74,32 @@
             {
                 BufferStream::endStream();
                 self::connectionSetHeaders();
-                print(BufferStream::getContent());
+
+
+                switch(strtolower(self::getHeaders()["Content-Type"]))
+                {
+                    case "text/html; charset=utf-8":
+                    case "text/html":
+                        $configuration = DynamicalWeb::getWebConfiguration();
+
+                        if(isset($configuration["configuration"]["compression"]["compress_html"]))
+                        {
+                            if((bool)$configuration["configuration"]["compression"]["compress_html"])
+                            {
+                                print(HTML::minifyHtml(BufferStream::getContent()));
+                                break;
+                            }
+                        }
+
+                        print(BufferStream::getContent());
+                        break;
+
+                    default:
+                        print(BufferStream::getContent());
+                        break;
+
+                }
+
                 return BufferStream::getContent();
             }
 
