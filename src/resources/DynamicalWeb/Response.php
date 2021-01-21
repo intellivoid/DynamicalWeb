@@ -30,7 +30,6 @@
          */
         public static function connectionSetHeaders(): bool
         {
-            $sapi_type = php_sapi_name();
             http_response_code(self::$ResponseCode);
 
             foreach(self::$Headers as $name => $value)

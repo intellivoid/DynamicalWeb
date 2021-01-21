@@ -37,7 +37,7 @@ use DynamicalWeb\Runtime;
         <?PHP HTML::importSection('footer'); ?>
 
         <?PHP HTML::importSection('js_scripts'); ?>
-        <?PHP Javascript::importScript("simple", [], false); ?>
+        <?PHP Javascript::importScript("simple", []); ?>
 
     </body>
 </html>

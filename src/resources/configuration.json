@@ -5,7 +5,8 @@
         "enable_ppm": true,
         "buffer_output": true,
         "compression": {
-            "compress_html": true
+            "compress_html": true,
+            "compress_javascript": true
         }
     },
     "router": [
