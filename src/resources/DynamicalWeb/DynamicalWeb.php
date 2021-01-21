@@ -5,6 +5,7 @@
     use Exception;
 
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Actions.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'BufferStream.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Javascript.php');
@@ -13,6 +14,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Request.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Response.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
@@ -180,13 +182,14 @@
                 throw new Exception('No pages has been defined');
             }
 
-            define('APP_HOME_PAGE', $Configuration['router'][0]['path'], false);
-            define('APP_PRIMARY_LANGUAGE', $Configuration['primary_language'], false);
-            define('APP_RESOURCES_DIRECTORY', $resourcesDirectory, false);
+            define('APP_HOME_PAGE', $Configuration['router'][0]['path']);
+            define('APP_PRIMARY_LANGUAGE', $Configuration["configuration"]['primary_language']);
+            define('APP_RESOURCES_DIRECTORY', $resourcesDirectory);
 
             Language::loadLanguage();
             Runtime::importPpm();
             Runtime::runEventScripts('initialize'); // Run events at initialize
+
             self::mapRoutes();
         }
 
@@ -204,7 +207,7 @@
                 {
                     try
                     {
-                        Language::changeLanguage($_GET['language']);
+                        Language::changeLanguage($_GET["configuration"]['language']);
                     }
                     catch (Exception $e)
                     {
@@ -250,29 +253,22 @@
                 if(isset($Route["params"])) {
                     // DX000000182 kasper.medvedkov     Count matches from CFG to the actual URI/Params, if not matched, return 500 with information about parameter misconfig //
                     $match = count($Para[0]) == count($Route["params"]);
-                    if (!$match){
+                    if (!$match)
+                    {
                         self::defineVariables();
-                        Page::staticResponse('Internal Server Error', 'Server Error', "The amount of parameters that should be received doesn't match with the amount of parameters configured on <code>".$Route["page"]."</code>. Check configuration.");
+                        Page::staticResponse('Internal Server Error', 'Server Error', "The amount of parameters that should be received doesn't match with the amount of parameters configured on <code>" . $Route["page"] . "</code>. Check configuration.");
                         exit();
                     }
 
                     $Dx = array_combine($Para[0], $Route["params"]);
                     foreach($Dx as $ParamTag => $ParamKey) {
                         // DX000000182 kasper.medvedkov     Transform CFG params into Router parameters //
-                        switch($ParamTag) {
-                            case "%s":
-                                $FinalURI = str_replace("%s", "[*:$ParamKey]", $FinalURI);
-                                break;
-                            case "%i":
-                                $FinalURI = str_replace("%i", "[i:$ParamKey]", $FinalURI);
-                                break;
-                            case "%h":
-                                $FinalURI = str_replace("%h", "[h:$ParamKey]", $FinalURI);
-                                break;
-                            case "%a":
-                                $FinalURI = str_replace("%h", "[**:$ParamKey]", $FinalURI);
-                                break;
-                        }
+                        $FinalURI = match ($ParamTag) {
+                            "%s" => str_replace("%s", "[*:$ParamKey]", $FinalURI),
+                            "%i" => str_replace("%i", "[i:$ParamKey]", $FinalURI),
+                            "%h" => str_replace("%h", "[h:$ParamKey]", $FinalURI),
+                            "%a" => str_replace("%h", "[**:$ParamKey]", $FinalURI),
+                        };
                     }
                 }
                 
@@ -292,11 +288,17 @@
          */
         public static function processRequest()
         {
+            $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
+            $ServerInformation = json_decode($ServerInformation, true);
+
+            Response::setHeader('X-Powered-By', 'DynamicalWeb/' . $ServerInformation['VERSION']);
+            Response::setHeader('X-DynamicalWeb-Version', $ServerInformation['VERSION']);
+
             $configuration = self::getWebConfiguration();
             $match = DynamicalWeb::$router->match();
 
             // call closure or throw 404 status
-            if(is_array($match) && is_callable( $match['target']))
+            if(is_array($match) && is_callable($match['target']))
             {
                 try
                 {
@@ -304,7 +306,7 @@
                 }
                 catch(Exception $exception)
                 {
-                    self::handleException($exception, (bool)$configuration['debugging_mode']);
+                    self::handleException($exception, (bool)$configuration["configuration"]['debugging_mode']);
                 }
             }
             else
@@ -350,6 +352,7 @@
         public static function handleNotFound()
         {
             http_response_code(404);
+
             if(Page::exists('404') == true)
             {
                 Page::load('404');
@@ -373,9 +376,12 @@
          * @param bool $debug
          * @throws Exception
          */
-        public static function handleException(Exception $exception, bool $debug = false)
+        public static function handleException(Exception $exception, bool $debug=false)
         {
             http_response_code(500);
+
+            $buffer_enabled = BufferStream::bufferOutputEnabled();
+            if($buffer_enabled) BufferStream::endStream(); // End the stream
 
             if($debug == true)
             {
@@ -521,8 +527,8 @@
          */
         public static function setString(string $name, string $value): string
         {
-            DynamicalWeb::$globalVariables['db 0x77'][$name] = $value;
-            return DynamicalWeb::$globalVariables['db 0x77'][$name];
+            DynamicalWeb::$globalVariables[0x77][$name] = $value;
+            return DynamicalWeb::$globalVariables[0x77][$name];
         }
 
         /**
@@ -534,12 +540,12 @@
          */
         public static function getString(string $name): string
         {
-            if(isset(DynamicalWeb::$globalVariables['db 0x77'][$name]) == false)
+            if(isset(DynamicalWeb::$globalVariables[0x77][$name]) == false)
             {
                 throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x77]');
             }
 
-            return DynamicalWeb::$globalVariables['db 0x77'][$name];
+            return DynamicalWeb::$globalVariables[0x77][$name];
         }
 
         /**
@@ -551,8 +557,8 @@
          */
         public static function setInt32(string $name, int $value): int
         {
-            DynamicalWeb::$globalVariables['db 0x26'][$name] = $value;
-            return DynamicalWeb::$globalVariables['db 0x26'][$name];
+            DynamicalWeb::$globalVariables[0x26][$name] = $value;
+            return DynamicalWeb::$globalVariables[0x26][$name];
         }
 
         /**
@@ -564,12 +570,12 @@
          */
         public static function getInt32(string $name): int
         {
-            if(isset(DynamicalWeb::$globalVariables['db 0x26'][$name]) == false)
+            if(isset(DynamicalWeb::$globalVariables[0x26][$name]) == false)
             {
                 throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x26]');
             }
 
-            return DynamicalWeb::$globalVariables['db 0x26'][$name];
+            return DynamicalWeb::$globalVariables[0x26][$name];
         }
 
         /**
@@ -581,8 +587,8 @@
          */
         public static function setFloat(string $name, float $value): float
         {
-            DynamicalWeb::$globalVariables['db 0x29'][$name] = $value;
-            return DynamicalWeb::$globalVariables['db 0x29'][$name];
+            DynamicalWeb::$globalVariables[0x29][$name] = $value;
+            return DynamicalWeb::$globalVariables[0x29][$name];
         }
 
         /**
@@ -594,12 +600,12 @@
          */
         public static function getFloat(string $name): float
         {
-            if(isset(DynamicalWeb::$globalVariables['db 0x29'][$name]) == false)
+            if(isset(DynamicalWeb::$globalVariables[0x29][$name]) == false)
             {
                 throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x29]');
             }
 
-            return DynamicalWeb::$globalVariables['db 0x29'][$name];
+            return DynamicalWeb::$globalVariables[0x29][$name];
         }
 
         /**
@@ -611,8 +617,8 @@
          */
         public static function setBoolean(string $name, bool $value): bool
         {
-            DynamicalWeb::$globalVariables['db 0x43'][$name] = (int)$value;
-            return (bool)DynamicalWeb::$globalVariables['db 0x43'][$name];
+            DynamicalWeb::$globalVariables[0x43][$name] = (int)$value;
+            return (bool)DynamicalWeb::$globalVariables[0x43][$name];
         }
 
         /**
@@ -624,12 +630,12 @@
          */
         public static function getBoolean(string $name): bool
         {
-            if(isset(DynamicalWeb::$globalVariables['db 0x43'][$name]) == false)
+            if(isset(DynamicalWeb::$globalVariables[0x43][$name]) == false)
             {
                 throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x43]');
             }
 
-            return (bool)DynamicalWeb::$globalVariables['db 0x43'][$name];
+            return (bool)DynamicalWeb::$globalVariables[0x43][$name];
         }
 
         /**
@@ -641,8 +647,8 @@
          */
         public static function setArray(string $name, array $value): array
         {
-            DynamicalWeb::$globalVariables['db 0x83'][$name] = $value;
-            return DynamicalWeb::$globalVariables['db 0x83'][$name];
+            DynamicalWeb::$globalVariables[0x83][$name] = $value;
+            return DynamicalWeb::$globalVariables[0x83][$name];
         }
 
         /**
@@ -654,11 +660,11 @@
          */
         public static function getArray(string $name): array
         {
-            if(isset(DynamicalWeb::$globalVariables['db 0x83'][$name]) == false)
+            if(isset(DynamicalWeb::$globalVariables[0x83][$name]) == false)
             {
                 throw new Exception('"' . $name . '" is not defined in globalObjects[db 0x83]');
             }
 
-            return DynamicalWeb::$globalVariables['db 0x83'][$name];
+            return DynamicalWeb::$globalVariables[0x83][$name];
         }
     }

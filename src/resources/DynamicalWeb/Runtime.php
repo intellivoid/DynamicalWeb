@@ -72,7 +72,7 @@
 
             if(self::$PpmLoaded == false)
             {
-                if($configuration['enable_ppm'] == true)
+                if($configuration['configuration']['enable_ppm'] == true)
                 {
                     /** @noinspection PhpIncludeInspection */
                     require("ppm");
@@ -134,7 +134,7 @@
 
             if(self::$PpmLoaded == false)
             {
-                if($configuration['enable_ppm'] == true)
+                if($configuration['configuration']['enable_ppm'] == true)
                 {
                     /** @noinspection PhpIncludeInspection */
                     require("ppm");
@@ -158,7 +158,7 @@
             if(isset($configuration['libraries'][$library_name]['package_name']))
             {
                 // Import as a PPM package
-                if($configuration['enable_ppm'] == false)
+                if($configuration['configuration']['enable_ppm'] == false)
                 {
                     throw new Exception('The library "' . $library_name . '" cannot be imported because it\'s a PPM package and PPM is not enabled in the configuration');
                 }

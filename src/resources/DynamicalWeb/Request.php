@@ -26,7 +26,7 @@
          * @param string $value
          * @return string
          */
-        public static function getPostParameter(string $value): string
+        public static function getPostParameter(string $value): ?string
         {
             if(isset($_POST[$value]))
             {
@@ -42,7 +42,7 @@
          * @param string $value
          * @return string
          */
-        public static function getGetParameter(string $value): string
+        public static function getGetParameter(string $value): ?string
         {
             if(isset($_GET[$value]))
             {
@@ -58,7 +58,7 @@
          * @param string $value
          * @return string
          */
-        public static function getParameter(string $value): string
+        public static function getParameter(string $value): ?string
         {
             if(self::getGetParameter($value) !== null)
             {

@@ -2,6 +2,9 @@
 
     namespace DynamicalWeb;
 
+    use Exception;
+    use RuntimeException;
+
     /**
      * Class Page
      * @package DynamicalWeb
@@ -39,17 +42,12 @@
          * Loads the content for the requested page
          *
          * @param string $name
-         * @throws \Exception
+         * @throws Exception
+         * @return string|null Returns the output if buffer_output is enabled
          */
-        public static function load(string $name)
+        public static function load(string $name): ?string
         {
-            $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
-            $ServerInformation = json_decode($ServerInformation, true);
-
-            /* START DT P1 DX000000181  kasper.medvedkov    Remove branding. */
-            header('X-Powered-By: DynamicalWeb/' . $ServerInformation['VERSION'] . '');
-            header('X-DynamicalWeb-Version: ' . $ServerInformation['VERSION']);
-            /* END DT P1 DX000000181  kasper.medvedkov    Remove branding. */
+            Response::startRequest();
 
             if(self::exists($name) == false)
             {
@@ -73,24 +71,25 @@
                     Runtime::runEventScripts('page_loaded');
                 }
 
-                return ;
+                return Response::finishRequest();
             }
-            
+
             /* START DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
             $FormattedName = stripslashes($name);
             /* END DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
+
 
             define('APP_CURRENT_PAGE', $FormattedName, false);
             define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . $FormattedName);
 
             Language::loadPage($FormattedName);
-
             Runtime::runEventScripts('on_page_load');
+
             /** @noinspection PhpIncludeInspection */
             include_once(APP_CURRENT_PAGE_DIRECTORY . DIRECTORY_SEPARATOR . 'contents.php');
-
             Runtime::runEventScripts('page_loaded');
-            return;
+
+            return Response::finishRequest();
         }
 
         /**
@@ -99,10 +98,13 @@
          * @param string $title
          * @param string $header
          * @param string $body
+         * @return string|null Returns the output if buffer_output is enabled
          */
-        public static function staticResponse(string $title, string $header, string $body)
+        public static function staticResponse(string $title, string $header, string $body): ?string
         {
             /* START DT P2 DX000000181  kasper.medvedkov    Remove branding. */
+            Response::startRequest();
+
             ?>
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
             <html lang="en">
@@ -119,5 +121,6 @@
             <?PHP
             /* END DT P2 DX000000181  kasper.medvedkov    Remove branding. */
 
+            return Response::finishRequest();
         }
     }

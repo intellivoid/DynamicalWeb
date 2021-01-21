@@ -4,10 +4,6 @@
 use DynamicalWeb\Javascript;
 use DynamicalWeb\Runtime;
     use Example\ExampleLibrary;
-
-    Runtime::import('Example');
-    Runtime::import('PpmExample');
-
 ?>
 <!doctype html>
 <html lang="<?PHP HTML::print(APP_LANGUAGE_ISO_639); ?>">
@@ -19,6 +15,7 @@ use DynamicalWeb\Runtime;
     <body>
 
         <header>
+            <?PHP throw new Exception("hello"); ?>
             <?PHP HTML::importSection('navigation'); ?>
         </header>
 
@@ -28,11 +25,6 @@ use DynamicalWeb\Runtime;
 
             <hr/>
             <?PHP HTML::importMarkdown('example'); ?>
-            <?PHP
-                $ExampleLibrary = DynamicalWeb::setMemoryObject('example_library', new ExampleLibrary());
-                $ExampleLibrary->getPrintFunctions()->SayName('John Smith');
-                $ExampleLibrary->getPrintFunctions()->sayAge(12);
-            ?>
             <?PHP HTML::print(CLIENT_REMOTE_HOST); ?><br/>
             <?PHP HTML::print(CLIENT_PLATFORM); ?><br/>
             <?PHP HTML::print(CLIENT_BROWSER); ?><br/>
@@ -46,7 +38,6 @@ use DynamicalWeb\Runtime;
         <?PHP HTML::importSection('footer'); ?>
 
         <?PHP HTML::importSection('js_scripts'); ?>
-        <?PHP Javascript::importScript('simple', array("foo" => "bar"), false); ?>
 
     </body>
 </html>

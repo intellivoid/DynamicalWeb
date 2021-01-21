@@ -1,44 +1,23 @@
 {
-    "primary_language": "en",
-    "debugging_mode": true,
-    "enable_ppm": true,
-    "router": [
-        {"method": ["GET"], "path": "/sso/auth", "page": "authn/verify_auth", "params": []},
-        {"method": ["GET"], "path": "/fraudescape/new", "page": "fraudescape/new_campaign", "params": []},
-        {"method": ["GET"], "path": "/fraudescape/list", "page": "fraudescape/list_campaigns", "params": []},
-        {"method": ["GET"], "path": "/fraudescape/edit/%s", "page": "fraudescape/edit", "params": ["campaignUUID"]},
-        {"method": ["POST"], "path": "/fraudescape/api/v1/new_campaign", "page": "fraudescape/api/new_campaign", "params": []},
-        {"method": ["POST"], "path": "/fraudescape/api/v1/%s/metrics", "page": "fraudescape/api/metrics", "params": ["campaignUUID"]},
-        {"method": ["POST"], "path": "/fraudescape/api/v1/%s/setStatus/%i", "page": "fraudescape/api/set_status", "params": ["campaignUUID", "status"]},
-        {"method": ["GET"], "path": "/", "page": "index", "params": []}
-    ]
+    "configuration": {
+        "primary_language": "en",
+        "debugging_mode": true,
+        "enable_ppm": true,
+        "buffer_output": true
+    },
     "router": [
         {"method": ["GET"], "path": "/", "page": "index", "params": []},
         {"method": ["GET"], "path": "/other", "page": "other", "params": []},
-        {"method": ["GET"], "path": "/error", "page": "error", "params": []},
         {"method": ["GET"], "path": "/sub/other", "page": "sub/other", "params": []}
     ],
     "libraries": {
-        "Example": {
-            "directory_name": "Example",
-            "autoloader": "ExampleLibrary.php",
-            "check_class_exists": true,
-            "namespace": "Example",
-            "main_class": "ExampleLibrary"
-        },
-        "PpmExample": {
-            "package_name": "com.example.super_library",
-            "version": "latest",
-            "import_dependencies": true,
-            "throw_error": true
-        }
     },
     "runtime_scripts": {
         "initialize": [],
         "on_page_load": [],
-        "page_loaded": ["engine_information.php"],
+        "page_loaded": [],
         "after_request": [],
-        "on_request": ["custom_headers.php"],
+        "on_request": [],
         "on_import": []
     }
 }
