@@ -48,9 +48,12 @@
         public static function load(string $name): ?string
         {
             Response::startRequest();
+            Response::setResponseType("text/html; charset=UTF-8");
 
             if(self::exists($name) == false)
             {
+                Response::setResponseCode(404);
+
                 if(self::exists('404') == false)
                 {
                     self::staticResponse(
@@ -61,7 +64,7 @@
                 }
                 else
                 {
-                    define('APP_CURRENT_PAGE', '404', false);
+                    define('APP_CURRENT_PAGE', '404');
                     define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . '404');
 
                     Runtime::runEventScripts('on_page_load');
@@ -77,7 +80,6 @@
             /* START DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
             $FormattedName = stripslashes($name);
             /* END DT P2 DX000000184  kasper.medvedkov    Prevent getting the page name lowercased. */
-
 
             define('APP_CURRENT_PAGE', $FormattedName, false);
             define('APP_CURRENT_PAGE_DIRECTORY', APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'pages'. DIRECTORY_SEPARATOR . $FormattedName);

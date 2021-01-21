@@ -8,10 +8,10 @@
     "router": [
         {"method": ["GET"], "path": "/", "page": "index", "params": []},
         {"method": ["GET"], "path": "/other", "page": "other", "params": []},
-        {"method": ["GET"], "path": "/sub/other", "page": "sub/other", "params": []}
+        {"method": ["GET"], "path": "/sub/other", "page": "sub/other", "params": []},
+        {"method": ["GET"], "path": "/tests/error_code/%s", "page": "tests/error_code", "params": ["code"]}
     ],
-    "libraries": {
-    },
+    "libraries": {},
     "runtime_scripts": {
         "initialize": [],
         "on_page_load": [],

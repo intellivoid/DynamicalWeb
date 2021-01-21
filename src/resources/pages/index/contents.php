@@ -15,7 +15,6 @@ use DynamicalWeb\Runtime;
     <body>
 
         <header>
-            <?PHP throw new Exception("hello"); ?>
             <?PHP HTML::importSection('navigation'); ?>
         </header>
 
@@ -38,6 +37,7 @@ use DynamicalWeb\Runtime;
         <?PHP HTML::importSection('footer'); ?>
 
         <?PHP HTML::importSection('js_scripts'); ?>
+        <?PHP Javascript::importScript("simple", [], false); ?>
 
     </body>
 </html>

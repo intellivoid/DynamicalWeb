@@ -18,7 +18,6 @@
         Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
         exit();
     }
-
     try
     {
         DynamicalWeb::initalize();

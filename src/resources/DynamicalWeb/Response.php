@@ -75,7 +75,6 @@
                 BufferStream::endStream();
                 self::connectionSetHeaders();
                 print(BufferStream::getContent());
-
                 return BufferStream::getContent();
             }
 
@@ -124,6 +123,10 @@
         public static function setResponseCode(int $response_code): bool
         {
             self::$ResponseCode = $response_code;
+            if(BufferStream::bufferOutputEnabled() == false)
+            {
+                http_response_code($response_code);
+            }
             return true;
         }
 

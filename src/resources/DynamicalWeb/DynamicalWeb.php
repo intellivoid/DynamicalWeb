@@ -224,12 +224,14 @@
             if(Page::exists('500'))
             {
                 self::$router->map('GET|POST', '/error', function(){
+                    Response::setResponseCode(500);
                     Page::load('500');
                 }, '500');
             }
             else
             {
                 self::$router->map('GET|POST', '/error', function(){
+                    Response::setResponseCode(500);
                     Page::staticResponse(
                         'Internal Server Error', 'Server Error',
                         'There was an unexpected error while trying to handle your request'
@@ -253,6 +255,7 @@
                 if(isset($Route["params"])) {
                     // DX000000182 kasper.medvedkov     Count matches from CFG to the actual URI/Params, if not matched, return 500 with information about parameter misconfig //
                     $match = count($Para[0]) == count($Route["params"]);
+
                     if (!$match)
                     {
                         self::defineVariables();
@@ -302,7 +305,7 @@
             {
                 try
                 {
-                    call_user_func_array($match['target'], $match['params']);
+                    call_user_func_array($match['target'], array_values($match['params']));
                 }
                 catch(Exception $exception)
                 {
@@ -351,7 +354,7 @@
          */
         public static function handleNotFound()
         {
-            http_response_code(404);
+            Response::setResponseCode(404);
 
             if(Page::exists('404') == true)
             {
@@ -378,10 +381,7 @@
          */
         public static function handleException(Exception $exception, bool $debug=false)
         {
-            http_response_code(500);
-
-            $buffer_enabled = BufferStream::bufferOutputEnabled();
-            if($buffer_enabled) BufferStream::endStream(); // End the stream
+            Response::setResponseCode(500);
 
             if($debug == true)
             {

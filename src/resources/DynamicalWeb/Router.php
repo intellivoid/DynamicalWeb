@@ -281,7 +281,8 @@
                             if(is_numeric($key)) unset($params[$key]);
                         }
                     }
-                    define("APP_REQUEST_PARAMETERS", $params, false);
+
+                    Request::setDefinedDynamicParameters($params);
 
                     return array(
                         'target' => $target,
