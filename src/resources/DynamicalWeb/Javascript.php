@@ -13,7 +13,7 @@
     class Javascript
     {
         /**
-         * Compresses the Javascript Souce code and returns the compressed output
+         * Compresses the Javascript Source code and returns the compressed output
          *
          * @param string $src
          * @return string
@@ -25,13 +25,13 @@
         }
 
         /**
-         *
+         * Loads an existing Javascript resource
          *
          * @param string $resource_name
-         * @param bool $minified
+         * @param bool Deprecated $minified
          * @throws Exception
          */
-        public static function loadResource(string $resource_name, bool $minified = true)
+        public static function loadResource(string $resource_name)
         {
             $JavascriptDirectory = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . 'javascript';
 
@@ -42,12 +42,12 @@
 
             if(file_exists($JavascriptDirectory . DIRECTORY_SEPARATOR . $resource_name . '.js.php') == false)
             {
-                http_response_code(404);
+                Response::setResponseCode(404);
                 Page::staticResponse(
                     "404 Not Found", "Compiled resource not found",
-                    "The requests compiled resource was not found"
+                    "The requested compiled resource was not found"
                 );
-		exit();
+                exit();
             }
 
             ob_start();
@@ -57,37 +57,31 @@
 
             header('Content-Type: application/javascript');
 
-            if($minified)
+            $configuration = DynamicalWeb::getWebConfiguration();
+            if(isset($configuration["configuration"]["compression"]["compress_javascript"]))
             {
-                print(self::minify($Contents));
+                if((bool)$configuration["configuration"]["compression"]["compress_javascript"])
+                {
+                    print(self::minify($Contents));
+                    return;
+                }
             }
-            else
-            {
-                print($Contents);
-            }
+
+            print($Contents);
         }
 
         /**
          * @param string $resource_name
          * @param array $parameters
-         * @param bool $minified
          * @return string
          * @throws Exception
          */
-        public static function getResourceRoute(string $resource_name, array $parameters = array(), bool $minified = true): string
+        public static function getResourceRoute(string $resource_name, array $parameters = array()): string
         {
             $url = null;
 
-            if($minified)
-            {
-                /** @noinspection PhpUnhandledExceptionInspection */
-                $url = DynamicalWeb::$router->generate('resources_min.js', array('resource' => $resource_name));
-            }
-            else
-            {
-                /** @noinspection PhpUnhandledExceptionInspection */
-                $url = DynamicalWeb::$router->generate('resources_js', array('resource' => $resource_name));
-            }
+            /** @noinspection PhpUnhandledExceptionInspection */
+            $url = DynamicalWeb::$router->generate('resources_js', array('resource' => $resource_name));
 
             if(count($parameters) > 0)
             {
@@ -102,13 +96,12 @@
          *
          * @param string $resource_name
          * @param array $parameters
-         * @param bool $minified
          * @return string
          * @throws Exception
          */
-        public static function importScript(string $resource_name, array $parameters = array(), bool $minified = true): string
+        public static function importScript(string $resource_name, array $parameters = array()): string
         {
-            $Route = self::getResourceRoute($resource_name, $parameters, $minified);
+            $Route = self::getResourceRoute($resource_name, $parameters);
             $Output = "<script src=\"$Route\" ></script>";
             HTML::print($Output, false);
             return $Output;

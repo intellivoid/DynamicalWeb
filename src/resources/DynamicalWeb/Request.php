@@ -11,6 +11,11 @@
     class Request
     {
         /**
+         * @var array|null
+         */
+        private static $definedDynamicParameters;
+
+        /**
          * Returns the request method that was used
          *
          * @return string
@@ -26,7 +31,7 @@
          * @param string $value
          * @return string
          */
-        public static function getPostParameter(string $value): string
+        public static function getPostParameter(string $value): ?string
         {
             if(isset($_POST[$value]))
             {
@@ -42,7 +47,7 @@
          * @param string $value
          * @return string
          */
-        public static function getGetParameter(string $value): string
+        public static function getGetParameter(string $value): ?string
         {
             if(isset($_GET[$value]))
             {
@@ -58,7 +63,7 @@
          * @param string $value
          * @return string
          */
-        public static function getParameter(string $value): string
+        public static function getParameter(string $value): ?string
         {
             if(self::getGetParameter($value) !== null)
             {
@@ -71,5 +76,21 @@
             }
 
             return null;
+        }
+
+        /**
+         * @return array|null
+         */
+        public static function getDefinedDynamicParameters(): ?array
+        {
+            return self::$definedDynamicParameters;
+        }
+
+        /**
+         * @param array|null $definedDynamicParameters
+         */
+        public static function setDefinedDynamicParameters(?array $definedDynamicParameters): void
+        {
+            self::$definedDynamicParameters = $definedDynamicParameters;
         }
     }

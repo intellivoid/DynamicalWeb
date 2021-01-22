@@ -155,4 +155,17 @@
                 include_once($LocalResource);
             }
         }
+
+        /**
+         * Minifies HTML content
+         *
+         * @param string $html
+         * @param array $options
+         * @return string
+         */
+        public static function minifyHtml(string $html, array $options = []) : string
+        {
+            $minifier = new HtmlMin($options);
+            return $minifier->minify($html);
+        }
     }

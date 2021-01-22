@@ -1,6 +1,6 @@
 <?php
     /**
-     * DynamicalWeb Bootstrap v2.0.0.1
+     * DynamicalWeb Bootstrap v2.1
      */
 
     // Load the application resources
@@ -18,7 +18,6 @@
         Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
         exit();
     }
-
     try
     {
         DynamicalWeb::initalize();

@@ -3,6 +3,7 @@
 
     namespace DynamicalWeb;
 
+    use Exception;
     use InvalidArgumentException;
 
     /**
@@ -241,4 +242,27 @@
             return array( 'platform' => $platform ?: null, 'browser' => $browser ?: null, 'version' => $version ?: null );
         }
 
+        /**
+         * Converts an exception to a array representation
+         *
+         * @param Exception $e
+         * @return array
+         */
+        public static function exceptionToArray(Exception $e): array
+        {
+            $return_results = [
+                "file_path" => $e->getFile(),
+                "line" => $e->getLine(),
+                "code" => $e->getCode(),
+                "message" => $e->getMessage(),
+                "trace" => $e->getTrace()
+            ];
+
+            if($e->getPrevious() !== null)
+            {
+                $return_results["previous"] = self::exceptionToArray($e->getPrevious());
+            }
+
+            return $return_results;
+        }
     }
