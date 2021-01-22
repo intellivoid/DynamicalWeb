@@ -323,6 +323,7 @@
             $ServerInformation = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'dynamicalweb.json');
             $ServerInformation = json_decode($ServerInformation, true);
 
+            Response::setHeader('Server', 'DynamicalWeb/' . $ServerInformation['VERSION'] . ' (PPM)');
             Response::setHeader('X-Powered-By', 'DynamicalWeb/' . $ServerInformation['VERSION']);
             Response::setHeader('X-DynamicalWeb-Version', $ServerInformation['VERSION']);
 
