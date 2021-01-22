@@ -222,6 +222,22 @@
                 Actions::redirect(APP_HOME_PAGE);
             }, 'change_language');
 
+            self::$router->map('GET|POST', '/dynamical', function()
+            {
+                Page::staticResponse(
+                    "DynamicalWeb", "DynamicalWeb",
+                    "This page proves that DynamicalWeb is operating correctly, to verify if your browser is ".
+                    "rendering this correctly, refresh the page and hash should be different each time.<br/><br/>".
+                    "<code>" . hash("sha256", "DYNAMICAL_WEB" . time()) . "</code><br/><br/>".
+                    "<i>DynamicalWeb is a proprietary Web Application framework created by Intellivoid that renders all ".
+                    "the content server-side so that web browsers can efficiently load websites written in DynamicalWeb ".
+                    "without being bombarded with bloated JavaScript.</i><br/><br/>".
+                    "<img height=\"156\" width=\"256\" class=\"center\" src=\"" . file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . "nojs.b64") . "\"/><br/><br/>".
+                    "Say no to Javascript kids!"
+                );
+
+            }, 'about_dynamical');
+
             self::$router->map('GET', '/compiled_assets/js/[a:resource].js', function($resource)
             {
                 Javascript::loadResource($resource);

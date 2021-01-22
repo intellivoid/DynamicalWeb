@@ -19,6 +19,11 @@ body {
     line-height:1.5
 }
 
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
 #main_wrapper {
     width:100%;
