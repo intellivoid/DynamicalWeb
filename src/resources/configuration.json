@@ -3,7 +3,7 @@
         "primary_language": "en",
         "debugging_mode": true,
         "enable_ppm": true,
-        "buffer_output": true,
+        "buffer_output": false,
         "compression": {
             "compress_html": true,
             "compress_javascript": true,

@@ -85,7 +85,7 @@
         public static function defineLanguageVariables()
         {
             $SelectedLanguage = json_decode(file_get_contents(APP_SELECTED_LANGUAGE_FILE), true);
-            define('APP_LANGUAGE_ISO_639', $SelectedLanguage['language']['iso_639-1'], false);
+            define('APP_LANGUAGE_ISO_639', $SelectedLanguage['language']['iso_639-1']);
         }
 
         /**

@@ -211,13 +211,14 @@
                 {
                     try
                     {
-                        Language::changeLanguage($_GET["configuration"]['language']);
+                        Language::changeLanguage($_GET['language']);
                     }
                     catch (Exception $e)
                     {
                         Page::staticResponse('DynamicalWeb Error', 'DynamicalWeb Internal Server Error', $e->getMessage());
                     }
                 }
+
                 Actions::redirect(APP_HOME_PAGE);
             }, 'change_language');
 
