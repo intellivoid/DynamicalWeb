@@ -6,7 +6,8 @@
         "buffer_output": true,
         "compression": {
             "compress_html": true,
-            "compress_javascript": true
+            "compress_javascript": true,
+            "compress_css": true
         }
     },
     "router": [

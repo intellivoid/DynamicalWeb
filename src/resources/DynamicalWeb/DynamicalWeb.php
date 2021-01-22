@@ -7,6 +7,7 @@
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Actions.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'BufferStream.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
+    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'CSS.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HtmlMin.php');
     include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Javascript.php');
@@ -203,7 +204,8 @@
         {
             self::$router = new Router();
 
-            self::$router->map('GET|POST', '/change_language', function(){
+            self::$router->map('GET|POST', '/change_language', function()
+            {
                 if(isset($_GET['language']))
                 {
                     try
@@ -218,9 +220,15 @@
                 Actions::redirect(APP_HOME_PAGE);
             }, 'change_language');
 
-            self::$router->map('GET', '/compiled_assets/js/[a:resource].js', function($resource){
-                Javascript::loadResource($resource, false);
+            self::$router->map('GET', '/compiled_assets/js/[a:resource].js', function($resource)
+            {
+                Javascript::loadResource($resource);
             }, 'resources_js');
+
+            self::$router->map('GET', '/compiled_assets/css/[a:resource].css', function($resource)
+            {
+                CSS::loadResource($resource);
+            }, 'resources_css');
 
             if(Page::exists('500'))
             {
@@ -239,10 +247,6 @@
                     );
                 }, '500');
             }
-
-            self::$router->map('GET', '/compiled_assets/js/[a:resource].min.js', function($resource){
-                Javascript::loadResource($resource, true);
-            }, 'resources_min.js');
 
             $configuration = self::getWebConfiguration();
             

@@ -25,7 +25,7 @@
         }
 
         /**
-         *
+         * Loads an existing Javascript resource
          *
          * @param string $resource_name
          * @param bool Deprecated $minified
@@ -45,7 +45,7 @@
                 Response::setResponseCode(404);
                 Page::staticResponse(
                     "404 Not Found", "Compiled resource not found",
-                    "The requests compiled resource was not found"
+                    "The requested compiled resource was not found"
                 );
                 exit();
             }
