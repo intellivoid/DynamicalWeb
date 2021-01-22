@@ -203,6 +203,7 @@
         public static function mapRoutes()
         {
             self::$router = new Router();
+            $configuration = self::getWebConfiguration();
 
             self::$router->map('GET|POST', '/change_language', function()
             {
@@ -230,6 +231,29 @@
                 CSS::loadResource($resource);
             }, 'resources_css');
 
+            if(isset($configuration["configuration"]["favicon"]))
+            {
+                $favicon_path = APP_RESOURCES_DIRECTORY . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . $configuration["configuration"]["favicon"];
+
+                if(file_exists($favicon_path) == false)
+                {
+                    Page::staticResponse(
+                        "Misconfiguration", "Server Misconfiguration",
+                        "The defined 'favicon' cannot be found at $favicon_path"
+                    );
+
+                    exit(1);
+                }
+
+                self::$router->map('GET|POST', '/favicon.ico', function() use($favicon_path){
+                    Response::startRequest();
+                    Response::setResponseCode(200);
+                    Response::setResponseType("image/vnd.microsoft.icon");
+                    print(file_get_contents($favicon_path));
+                    Response::finishRequest();
+                }, 'favicon');
+            }
+
             if(Page::exists('500'))
             {
                 self::$router->map('GET|POST', '/error', function(){
@@ -248,7 +272,6 @@
                 }, '500');
             }
 
-            $configuration = self::getWebConfiguration();
             
             /* START DT DX000000182 kasper.medvedkov      Add dynamical router implementation */
             foreach($configuration['router'] as $Route)
@@ -390,42 +413,40 @@
 
             if($debug == true)
             {
-                $Body = "Debugging information regarding the exception can be found below<br/><br/><hr/>\n";
-
-                $Body .= "<h2>Exception Details</h2>\n";
+                $Body = "<h2>Exception Details</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r($exception, true);
-                $Body .= "</pre>\n<hr/>";
+                $Body .= json_encode(Utilities::exceptionToArray($exception), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $Body .= "</pre>\n<hr/><br/>";
 
                 $Body .= "<h2>Dynamic Object Memory</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r(DynamicalWeb::$globalObjects, true);
-                $Body .= "</pre>\n<hr/>";
+                $Body .= json_encode(DynamicalWeb::$globalObjects, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $Body .= "</pre>\n<hr/><br/>";
 
                 $Body .= "<h2>Dynamic Variable Memory</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r(DynamicalWeb::$globalVariables, true);
-                $Body .= "</pre>\n<hr/>";
+                $Body .= json_encode(DynamicalWeb::$globalVariables, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $Body .= "</pre>\n<hr/><br/>";
 
                 $Body .= "<h2>Dynamic Router Memory</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r(DynamicalWeb::$router, true);
-                $Body .= "</pre>\n<hr/>";
+                $Body .= json_encode(DynamicalWeb::$router, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $Body .= "</pre>\n<hr/><br/>";
 
                 $Body .= "<h2>Loaded Libraries</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r(DynamicalWeb::$loadedLibraries, true);
-                $Body .= "</pre>\n<hr/>";
+                $Body .= json_encode(DynamicalWeb::$loadedLibraries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                $Body .= "</pre>\n<hr/><br/>";
 
                 $Body .= "<h2>DynamicalWeb Details</h2>\n";
                 $Body .= "<pre>";
-                $Body .= print_r(self::getDefinedVariables(), true);
+                $Body .= json_encode(self::getDefinedVariables(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
                 $Body .= "</pre>";
 
                 $Body = str_ireplace('.php', '.bin', $Body);
                 $Body = str_ireplace('.json', '.ziproto', $Body);
 
-                Page::staticResponse('Internal Server Error', 'Server Error', $Body);
+                Page::staticErrorResponse('Internal Server Error', 'Server Error', $Body);
             }
             else
             {

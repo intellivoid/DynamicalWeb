@@ -101,6 +101,7 @@
          * @param string $header
          * @param string $body
          * @return string|null Returns the output if buffer_output is enabled
+         * @throws Exception
          */
         public static function staticResponse(string $title, string $header, string $body): ?string
         {
@@ -112,18 +113,63 @@
             <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
             <html lang="en">
                 <head>
+                    <meta charset="UTF-8"/>
+                    <?PHP CSS::importStyle("generic"); ?>
                     <title><?PHP HTML::print($title); ?></title>
                 </head>
                 <body>
-                    <h1><?PHP HTML::print($header); ?></h1>
-                    <p><?PHP HTML::print($body, false); ?></p>
-                    <hr>
-                    <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?></address>
+                    <div id="main_wrapper">
+                        <h1><?PHP HTML::print($header); ?></h1>
+                        <p><?PHP HTML::print($body, false); ?></p>
+                        <hr/>
+                        <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?></address>
+                    </div>
                 </body>
             </html>
             <?PHP
             /* END DT P2 DX000000181  kasper.medvedkov    Remove branding. */
 
             return Response::finishRequest();
+        }
+
+        /**
+         * Returns a static response page but with error details
+         *
+         * @param string $title
+         * @param string $header
+         * @param string $body
+         * @return string|null
+         * @throws Exception
+         */
+        public static function staticErrorResponse(string $title, string $header, string $body): ?string
+        {
+            Response::startRequest();
+            Response::setResponseType("text/html; charset=UTF-8");
+
+            ?>
+            <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8"/>
+                <?PHP CSS::importStyle("generic"); ?>
+                <title><?PHP HTML::print($title); ?></title>
+            </head>
+            <body>
+            <div id="main_wrapper">
+                <h1><?PHP HTML::print($header); ?></h1>
+                <p>Debugging information regarding the exception can be found below</p>
+                <div class="content">
+                    <hr/>
+                    <?PHP HTML::print($body, false); ?>
+                    <hr/>
+                </div>
+                <hr/>
+                <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_WEB_VERSION); ?></address>
+            </div>
+            </body>
+            </html>
+            <?PHP
+
+            return Response::finishRequest(true);
         }
     }

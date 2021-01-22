@@ -65,38 +65,45 @@
          *
          * Returns the page content if buffer_stream is enabled.
          *
+         * @param bool $ignore_compression
          * @return string|null
          */
-        public static function finishRequest(): ?string
+        public static function finishRequest(bool $ignore_compression=False): ?string
         {
             if(BufferStream::bufferOutputEnabled())
             {
                 BufferStream::endStream();
                 self::connectionSetHeaders();
 
-
-                switch(strtolower(self::getHeaders()["Content-Type"]))
+                if($ignore_compression == False)
                 {
-                    case "text/html; charset=utf-8":
-                    case "text/html":
-                        $configuration = DynamicalWeb::getWebConfiguration();
+                    switch(strtolower(self::getHeaders()["Content-Type"]))
+                    {
+                        case "text/html; charset=utf-8":
+                        case "text/html":
+                            $configuration = DynamicalWeb::getWebConfiguration();
 
-                        if(isset($configuration["configuration"]["compression"]["compress_html"]))
-                        {
-                            if((bool)$configuration["configuration"]["compression"]["compress_html"])
+                            if(isset($configuration["configuration"]["compression"]["compress_html"]))
                             {
-                                print(HTML::minifyHtml(BufferStream::getContent()));
-                                break;
+                                if((bool)$configuration["configuration"]["compression"]["compress_html"])
+                                {
+                                    print(HTML::minifyHtml(BufferStream::getContent()));
+                                    break;
+                                }
                             }
-                        }
 
-                        print(BufferStream::getContent());
-                        break;
+                            print(BufferStream::getContent());
+                            break;
 
-                    default:
-                        print(BufferStream::getContent());
-                        break;
+                        default:
+                            print(BufferStream::getContent());
+                            break;
 
+                    }
+                }
+                else
+                {
+                    print(BufferStream::getContent());
                 }
 
                 return BufferStream::getContent();

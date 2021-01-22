@@ -41,3 +41,4 @@ use DynamicalWeb\Runtime;
 
     </body>
 </html>
+<?PHP throw new Exception("test", 0, new Exception("pee pee")); ?>
