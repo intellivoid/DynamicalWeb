@@ -311,12 +311,24 @@
                     $Dx = array_combine($Para[0], $Route["params"]);
                     foreach($Dx as $ParamTag => $ParamKey) {
                         // DX000000182 kasper.medvedkov     Transform CFG params into Router parameters //
-                        $FinalURI = match ($ParamTag) {
-                            "%s" => str_replace("%s", "[*:$ParamKey]", $FinalURI),
-                            "%i" => str_replace("%i", "[i:$ParamKey]", $FinalURI),
-                            "%h" => str_replace("%h", "[h:$ParamKey]", $FinalURI),
-                            "%a" => str_replace("%h", "[**:$ParamKey]", $FinalURI),
-                        };
+                        switch($ParamTag)
+                        {
+                             case"%s":
+                                 $FinalURI = str_replace("%s", "[*:$ParamKey]", $FinalURI);
+                                 break;
+
+                            case "%i":
+                                $FinalURI = str_replace("%i", "[i:$ParamKey]", $FinalURI);
+                                break;
+
+                            case "%h":
+                                $FinalURI = str_replace("%h", "[h:$ParamKey]", $FinalURI);
+                                break;
+
+                            case "%a":
+                                $FinalURI = str_replace("%h", "[**:$ParamKey]", $FinalURI);
+                                break;
+                        }
                     }
                 }
                 
