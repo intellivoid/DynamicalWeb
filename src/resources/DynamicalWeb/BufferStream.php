@@ -61,21 +61,30 @@
         /**
          * Returns the stream buffer output
          *
-         * @return string
+         * @return string|null
          */
-        public static function endStream(): string
+        public static function endStream(): ?string
         {
-            $results = ob_get_contents();
-            ob_get_clean();
-            ob_end_flush();
-
-            if($results == false)
+            if (ob_get_contents())
             {
-                throw new RuntimeException("There was an error while trying to obtain the buffer output.");
+                $results = ob_get_contents();
+                ob_get_clean();
+
+                if($results == false)
+                {
+                    throw new RuntimeException("There was an error while trying to obtain the buffer output.");
+                }
+
+                self::$CurrentlyStreaming = false;
+                self::$Content = $results;
+            }
+            else
+            {
+                self::$CurrentlyStreaming = false;
+                self::$Content = null;
+                $results = null;
             }
 
-            self::$CurrentlyStreaming = false;
-            self::$Content = $results;
             return $results;
         }
 
