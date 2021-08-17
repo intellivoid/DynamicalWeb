@@ -4,23 +4,6 @@
 
     use Exception;
 
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Actions.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'BufferStream.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Client.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'CSS.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HTML.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'HtmlMin.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Javascript.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'JSMin.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Language.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'MarkdownParser.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Page.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Request.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Response.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Router.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Runtime.php');
-    include_once(__DIR__ . DIRECTORY_SEPARATOR . 'Utilities.php');
-
     /**
      * DynamicalWeb Library
      *

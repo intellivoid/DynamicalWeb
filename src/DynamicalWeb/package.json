@@ -1,0 +1,92 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.dynamical_web",
+        "name": "DynamicalWeb",
+        "version": "3.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid Technologies",
+        "description": "A server-side web application framework",
+        "url": "https://github.com/intellivoid/DynamicalWeb",
+        "dependencies": [],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "HtmlMin.php"
+        },
+        {
+            "required": true,
+            "file": "DynamicalWeb.php"
+        },
+        {
+            "required": true,
+            "file": "CSS.php"
+        },
+        {
+            "required": true,
+            "file": "Response.php"
+        },
+        {
+            "required": true,
+            "file": "Javascript.php"
+        },
+        {
+            "required": true,
+            "file": "Utilities.php"
+        },
+        {
+            "required": true,
+            "file": "Language.php"
+        },
+        {
+            "required": true,
+            "file": "BufferStream.php"
+        },
+        {
+            "required": true,
+            "file": "Router.php"
+        },
+        {
+            "required": true,
+            "file": "Runtime.php"
+        },
+        {
+            "required": true,
+            "file": "Request.php"
+        },
+        {
+            "required": true,
+            "file": "Client.php"
+        },
+        {
+            "required": true,
+            "file": "Actions.php"
+        },
+        {
+            "required": true,
+            "file": "MarkdownParser.php"
+        },
+        {
+            "required": true,
+            "file": "JSMin.php"
+        },
+        {
+            "required": true,
+            "file": "Page.php"
+        },
+        {
+            "required": true,
+            "file": "HTML.php"
+        }
+    ],
+    "files": [
+        "dynamicalweb.json",
+        "nojs.b64"
+    ]
+}
