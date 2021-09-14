@@ -1,0 +1,13 @@
+{
+  "name": "DynamicalWeb Application",
+  "configuration": {
+    "primary_language": "en",
+    "localization_enabled": true,
+    "debugging_mode": true,
+    "framework_signature": true,
+    "calculate_content_size": true
+  },
+  "router": [
+    {"method": ["GET"], "path": "/", "page": "index", "params": []}
+  ]
+}

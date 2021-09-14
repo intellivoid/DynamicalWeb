@@ -18,7 +18,27 @@
     "components": [
         {
             "required": true,
-            "file": "HtmlMin.php"
+            "file": "Abstracts/RequestMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractSoftware.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractParser.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractClient.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractVersionedSoftware.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/LocalizationSection.php"
         },
         {
             "required": true,
@@ -26,67 +46,136 @@
         },
         {
             "required": true,
-            "file": "CSS.php"
+            "file": "Classes/Converter.php"
         },
         {
             "required": true,
-            "file": "Response.php"
+            "file": "Classes/UserAgentParser.php"
         },
         {
             "required": true,
-            "file": "Javascript.php"
+            "file": "Classes/WebApplication.php"
         },
         {
             "required": true,
-            "file": "Utilities.php"
+            "file": "Classes/Javascript.php"
         },
         {
             "required": true,
-            "file": "Language.php"
+            "file": "Classes/Utilities.php"
         },
         {
             "required": true,
-            "file": "BufferStream.php"
+            "file": "Classes/Router.php"
         },
         {
             "required": true,
-            "file": "Router.php"
+            "file": "Classes/Request.php"
         },
         {
             "required": true,
-            "file": "Runtime.php"
+            "file": "Classes/Client.php"
         },
         {
             "required": true,
-            "file": "Request.php"
+            "file": "Classes/Actions.php"
         },
         {
             "required": true,
-            "file": "Client.php"
+            "file": "Classes/Localization.php"
         },
         {
             "required": true,
-            "file": "Actions.php"
+            "file": "Classes/PageIndexes.php"
         },
         {
             "required": true,
-            "file": "MarkdownParser.php"
+            "file": "Classes/UserAgentParser/DeviceParser.php"
         },
         {
             "required": true,
-            "file": "JSMin.php"
+            "file": "Classes/UserAgentParser/OperatingSystemParser.php"
         },
         {
             "required": true,
-            "file": "Page.php"
+            "file": "Classes/UserAgentParser/Parser.php"
         },
         {
             "required": true,
-            "file": "HTML.php"
+            "file": "Exceptions/UserAgentParserException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/JavascriptException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/FileNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/WebApplicationException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/RouterException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/WebApplicationConfigurationException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/PageNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/LocalizationException.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentDevice.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgent.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentClient.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/Configuration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/Route.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/PathIndex.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentOperatingSystem.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/ClientRequest.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Localization/LocalizationText.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Localization.php"
         }
     ],
     "files": [
-        "dynamicalweb.json",
-        "nojs.b64"
+        "package.json",
+        "Data/favicon.ico",
+        "Data/regexes.json"
     ]
 }

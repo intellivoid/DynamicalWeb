@@ -1,0 +1,13 @@
+{
+  "language": {
+    "name": "english",
+    "iso_639-1": "en"
+  },
+  "pages": {
+    "index": {
+      "PAGE_TITLE": "DynamicalWeb - Web Application",
+      "HEADER": "All is good!",
+      "FOOTER": "Copyright goes here"
+    }
+  }
+}
