@@ -101,6 +101,7 @@
          * Initializes the page index for the web application
          *
          * @param array $routes
+         * @param Router $router
          * @throws RouterException
          * @throws WebApplicationException
          * @author Kasper Medvedkov <@AntiEngineer>
