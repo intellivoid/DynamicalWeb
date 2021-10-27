@@ -484,7 +484,7 @@
         },
         {
             "regex": "@(SznProhlizec)/(\\d+)\\.(\\d+)(?:\\.(\\d+)|)@",
-            "family_replacement": "Seznam prohle"
+            "family_replacement": "Seznam prohl\u00ed\u017ee\u010d"
         },
         {
             "regex": "@(coc_coc_browser)/(\\d+)\\.(\\d+)(?:\\.(\\d+)|)@",
@@ -1191,10 +1191,25 @@
             "regex": "@(Java)[/ ]?\\d+\\.(\\d+)\\.(\\d+)[_-]*([a-zA-Z0-9]+|)@"
         },
         {
+            "regex": "@(minio-go)/v(\\d+)\\.(\\d+)\\.(\\d+)@"
+        },
+        {
+            "regex": "@^(ureq)[/ ](\\d+)\\.(\\d+).(\\d+)@"
+        },
+        {
+            "regex": "@^(http\\.rb)/(\\d+)\\.(\\d+).(\\d+)@"
+        },
+        {
+            "regex": "@^(GuzzleHttp)/(\\d+)\\.(\\d+).(\\d+)@"
+        },
+        {
+            "regex": "@^(grab)\\b@"
+        },
+        {
             "regex": "@^(Cyberduck)/(\\d+)\\.(\\d+)\\.(\\d+)(?:\\.\\d+|)@"
         },
         {
-            "regex": "@^(S3 Browser) (\\d+)-(\\d+)-(\\d+)(?:\\s*http://s3browser\\.com|)@"
+            "regex": "@^(S3 Browser) (\\d+)[.-](\\d+)[.-](\\d+)(?:\\s*https?://s3browser\\.com|)@"
         },
         {
             "regex": "@(S3Gof3r)@"
@@ -1221,6 +1236,15 @@
         {
             "regex": "@^(ViaFree|Viafree)-(?:tvOS-)?[A-Z]{2}/(\\d+)\\.(\\d+)\\.(\\d+)@",
             "family_replacement": "ViaFree"
+        },
+        {
+            "regex": "@(Transmit)/(\\d+)\\.(\\d+)\\.(\\d+)@"
+        },
+        {
+            "regex": "@(Download Master)@"
+        },
+        {
+            "regex": "@\\b(HTTrack) (\\d+)\\.(\\d+)(?:[\\.\\-](\\d+)|)@"
         }
     ],
     "os_parsers": [
@@ -1351,6 +1375,11 @@
             "regex": "@(Windows 10)@",
             "os_replacement": "Windows",
             "os_v1_replacement": "10"
+        },
+        {
+            "regex": "@(Windows 11)@",
+            "os_replacement": "Windows",
+            "os_v1_replacement": "11"
         },
         {
             "regex": "@(Windows (?:NT 5\\.2|NT 5\\.1))@",
