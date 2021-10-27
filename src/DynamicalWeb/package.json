@@ -7,7 +7,20 @@
         "organization": "Intellivoid Technologies",
         "description": "A server-side web application framework",
         "url": "https://github.com/intellivoid/DynamicalWeb",
-        "dependencies": [],
+        "dependencies": [
+            {
+                "package": "net.intellivoid.http_stream",
+                "version": "latest",
+                "source": "default@github/intellivoid/HttpStream",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.mimelib",
+                "version": "latest",
+                "source": "default@github/intellivoid/MimeLib",
+                "required": true
+            }
+        ],
         "configuration": {
             "autoload_method": "generated_spl",
             "main": null,
