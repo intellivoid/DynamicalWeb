@@ -55,7 +55,7 @@
         },
         {
             "required": true,
-            "file": "Abstracts/ResponseContentSource.php"
+            "file": "Abstracts/ResourceSource.php"
         },
         {
             "required": true,
@@ -115,7 +115,15 @@
         },
         {
             "required": true,
+            "file": "Classes/WebAssets.php"
+        },
+        {
+            "required": true,
             "file": "DynamicalWeb.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/DirectoryNotFoundException.php"
         },
         {
             "required": true,
@@ -135,6 +143,10 @@
         },
         {
             "required": true,
+            "file": "Exceptions/RequestHandlerException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/RouterException.php"
         },
         {
@@ -151,7 +163,7 @@
         },
         {
             "required": true,
-            "file": "Objects/ClientRequest.php"
+            "file": "Exceptions/WebAssetsConfigurationException.php"
         },
         {
             "required": true,
@@ -167,7 +179,7 @@
         },
         {
             "required": true,
-            "file": "Objects/ServerResponse.php"
+            "file": "Objects/RequestHandler.php"
         },
         {
             "required": true,
@@ -192,9 +204,21 @@
         {
             "required": true,
             "file": "Objects/WebApplication/Route.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebAssets/Configuration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebAssets.php"
         }
     ],
     "files": [
+        "BuiltinAssets/assets/css/generic.css",
+        "BuiltinAssets/configuration.json",
+        "BuiltinAssets/favicon.ico",
+        "BuiltinPages/404.dyn",
         "Data/favicon.ico",
         "Data/regexes.json",
         "package.json"

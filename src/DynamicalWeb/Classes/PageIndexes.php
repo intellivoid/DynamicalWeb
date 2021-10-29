@@ -5,13 +5,14 @@
     namespace DynamicalWeb\Classes;
 
     use DynamicalWeb\Abstracts\LocalizationSection;
+    use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\LocalizationException;
     use DynamicalWeb\Exceptions\PageNotFoundException;
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Objects\ClientRequest;
+    use DynamicalWeb\Objects\RequestHandler;
     use DynamicalWeb\Objects\PathIndex;
     use DynamicalWeb\Objects\WebApplication\Route;
 
@@ -105,6 +106,7 @@
          * @throws RouterException
          * @throws WebApplicationException
          * @author Kasper Medvedkov <@AntiEngineer>
+         * @noinspection DuplicatedCode
          */
         public function initialize(array $routes, Router &$router)
         {
@@ -159,14 +161,12 @@
 
                 $router->map(implode("|", $Route->RequestMethods), $FinalURI, function() use ($Route)
                 {
-                    $client_request = new ClientRequest();
-                    $client_request->RequestMethod = Request::getRequestMethod();
-                    $client_request->GetParameters = Request::getGetParameters();
-                    $client_request->PostParameters = Request::getPostParameters();
-                    $client_request->DynamicParameters = Request::getDefinedDynamicParameters();
-                    $client_request->Parameters = Request::getParameters();
-                    $client_request->PostBody = Request::getPostBody();
-                    $client_request->Page = $Route->Page;
+                    $client_request = DynamicalWeb::constructRequestHandler();
+
+                    $client_request->ResourceSource = ResourceSource::Page;
+                    $client_request->Source = $Route->Page;
+                    $client_request->ResponseCode = 200;
+                    $client_request->ResponseContentType = 'text/html';
 
                     return $client_request;
                 }, $Route->Page);
@@ -206,17 +206,15 @@
         public static function load(string $page)
         {
             if(defined('DYNAMICAL_INITIALIZED') == false)
-                throw new WebApplicationException('The function PageIndexes::exists() cannot be invoked without a initialized web application');
+                throw new WebApplicationException('The function PageIndexes::load() cannot be invoked without a initialized web application');
 
             $page_index = self::get($page);
 
-            // TODO: Handle 404's
             if($page_index == null)
                 throw new PageNotFoundException('The requested page \'' . $page . '\' was not found');
 
             // Load the localization for the page
             Localization::loadLocalization(LocalizationSection::Page, $page);
-
             require_once($page_index->PageExecutionPoint);
         }
 

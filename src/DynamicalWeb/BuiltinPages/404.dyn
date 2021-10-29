@@ -1,0 +1,14 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>404</title>
+    </head>
+    <body>
+        <div id="main_wrapper">
+            <h1>404 Not Found</h1>
+            <p>The resource you requested does not exist</p>
+            <hr/>
+            <address>DynamicalWeb/<?PHP print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "DynamicalWeb Builtin Assets",
+  "configuration": {
+    "path": "assets",
+    "route": "/assets/dynamical_web",
+    "compress_css": true,
+    "compress_js": true
+  }
+}

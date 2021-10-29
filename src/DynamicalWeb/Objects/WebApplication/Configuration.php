@@ -28,11 +28,25 @@
         public $DebuggingMode;
 
         /**
-         * Indicates if the framework signature should be included in the request or not
+         * Indicates if the framework signature should be included in the response or not
          *
          * @var bool
          */
         public $FrameworkSignature;
+
+        /**
+         * Indicates if the web application signature should be included in the response or not
+         *
+         * @var bool
+         */
+        public $ApplicationSignature;
+
+        /**
+         * A list of hard-coded configured headers
+         *
+         * @var array
+         */
+        public $Headers;
 
         public function __construct()
         {
@@ -40,6 +54,8 @@
             $this->LocalizationEnabled = false;
             $this->DebuggingMode = true;
             $this->FrameworkSignature = true;
+            $this->ApplicationSignature = true;
+            $this->Headers = [];
         }
 
         /**
@@ -54,7 +70,9 @@
                 'primary_language' => $this->PrimaryLanguage,
                 'localization_enabled' => $this->LocalizationEnabled,
                 'debugging_mode' => $this->DebuggingMode,
-                'framework_signature' => $this->FrameworkSignature
+                'framework_signature' => $this->FrameworkSignature,
+                'application_signature' => $this->ApplicationSignature,
+                'headers' => $this->Headers
             ];
         }
 
@@ -80,6 +98,12 @@
 
             if(isset($data['framework_signature']))
                 $configurationObject->FrameworkSignature = $data['framework_signature'];
+
+            if(isset($data['application_signature']))
+                $configurationObject->ApplicationSignature = $data['application_signature'];
+
+            if(isset($data['headers']))
+                $configurationObject->Headers = $data['headers'];
 
             return $configurationObject;
         }

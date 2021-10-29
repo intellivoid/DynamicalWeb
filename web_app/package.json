@@ -1,0 +1,32 @@
+{
+    "package": {
+        "package_name": "com.example.web_application",
+        "name": "Example DynamicalWeb Web Application",
+        "version": "1.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid Technologies",
+        "description": "A example web application written under the DynamicalWeb framework",
+        "url": "https://github.com/Intellivoid/DynamicalWeb",
+        "dependencies": [],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "main.php"
+        }
+    ],
+    "files": [
+        "package.json",
+        "resources/configuration.json",
+        "resources/localization/en.json",
+        "resources/pages/index/css/style.css.dyn",
+        "resources/pages/index/index.dyn",
+        "resources/pages/index/javascript/script.js.dyn"
+    ]
+}

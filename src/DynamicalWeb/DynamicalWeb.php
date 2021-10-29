@@ -4,11 +4,12 @@
 
     namespace DynamicalWeb;
 
+    use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\Classes\Request;
     use DynamicalWeb\Classes\Router;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Objects\ClientRequest;
-    use DynamicalWeb\Objects\ServerResponse;
+    use DynamicalWeb\Objects\RequestHandler;
+    use Exception;
 
     /**
      * DynamicalWeb Library
@@ -26,38 +27,64 @@
         public static $globalObjects = [];
 
         /**
+         * Constructs a request handler with all the pre-defined properties
+         *
+         * @return RequestHandler
+         */
+        public static function constructRequestHandler(): RequestHandler
+        {
+            $request_handler = new RequestHandler();
+            $request_handler->RequestMethod = Request::getRequestMethod();
+            $request_handler->GetParameters = Request::getGetParameters();
+            $request_handler->PostParameters = Request::getPostParameters();
+            $request_handler->DynamicParameters = Request::getDefinedDynamicParameters();
+            $request_handler->Parameters = Request::getParameters();
+            $request_handler->PostBody = Request::getPostBody();
+
+            return $request_handler;
+        }
+
+        /**
          * Handles the request but doesn't complete the request
          *
          * @param string|null $requestUrl
          * @param string|null $requestMethod
-         * @return ClientRequest
+         * @return RequestHandler
+         * @noinspection DuplicatedCode
          */
-        public static function getClientRequest(?string $requestUrl=null, string $requestMethod = null): ClientRequest
+        public static function getRequestHandler(?string $requestUrl=null, string $requestMethod = null): RequestHandler
         {
             /** @var Router $router */
             $router = DynamicalWeb::getMemoryObject('app_router');
             $match = $router->match($requestUrl, $requestMethod);
+            $request_handler = new RequestHandler();
 
             // call closure or throw 404 status
             if(is_array($match) && is_callable($match['target']))
             {
-                $client_request = call_user_func_array($match['target'], array_values($match['params']));
+                try
+                {
+                    $request_handler = call_user_func_array($match['target'], array_values($match['params']));
+                }
+                catch(Exception)
+                {
+                    // TODO: Pass on error details
+                    $request_handler->ResourceSource = ResourceSource::Page;
+                    $request_handler->Source = '500';
+                    $request_handler->ResponseCode = 500;
+                    $request_handler->ResponseContentType = 'text/html';
+                }
             }
             else
             {
-                $client_request = new ClientRequest();
-                $client_request->RequestMethod = Request::getRequestMethod();
-                $client_request->GetParameters = Request::getGetParameters();
-                $client_request->PostParameters = Request::getPostParameters();
-                $client_request->DynamicParameters = Request::getDefinedDynamicParameters();
-                $client_request->Parameters = Request::getParameters();
-                $client_request->PostBody = Request::getPostBody();
-                $client_request->Page = '404';
+                $request_handler->ResourceSource = ResourceSource::Page;
+                $request_handler->Source = '404';
+                $request_handler->ResponseCode = 404;
+                $request_handler->ResponseContentType = 'text/html';
             }
 
-            DynamicalWeb::setMemoryObject('client_request', $client_request);
-
-            return $client_request;
+            DynamicalWeb::setMemoryObject('request_handler', $request_handler);
+            return $request_handler;
         }
 
         /**
@@ -76,6 +103,9 @@
                 'DYNAMICAL_APP_RESOURCES_PATH' => self::getDefinition('DYNAMICAL_APP_RESOURCES_PATH'),
                 'DYNAMICAL_APP_CONFIGURATION_PATH' => self::getDefinition('DYNAMICAL_APP_CONFIGURATION_PATH'),
                 'DYNAMICAL_APP_NAME' => self::getDefinition('DYNAMICAL_APP_NAME'),
+                'DYNAMICAL_APP_VERSION' => self::getDefinition('DYNAMICAL_APP_VERSION'),
+                'DYNAMICAL_APP_AUTHOR' => self::getDefinition('DYNAMICAL_APP_AUTHOR'),
+                'DYNAMICAL_APP_ORGANIZATION' => self::getDefinition('DYNAMICAL_APP_ORGANIZATION'),
                 'DYNAMICAL_FRAMEWORK_VERSION' => self::getDefinition('DYNAMICAL_FRAMEWORK_VERSION'),
                 'DYNAMICAL_FRAMEWORK_AUTHOR' => self::getDefinition('DYNAMICAL_FRAMEWORK_AUTHOR'),
                 'DYNAMICAL_FRAMEWORK_ORGANIZATION' => self::getDefinition('DYNAMICAL_FRAMEWORK_ORGANIZATION'),
@@ -108,17 +138,26 @@
          * @param string $definition
          * @return string|null
          */
-        private static function getDefinition(string $definition): ?string
+        public static function getDefinition(string $definition): ?string
         {
             if(defined($definition))
                 return constant($definition);
             return null;
         }
 
-        public static function handleResponse(ServerResponse $serverResponse)
+        /**
+         * Returns an array of default headers created by the server
+         *
+         * @return array
+         * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
+         * @noinspection PhpPureAttributeCanBeAddedInspection
+         */
+        public static function getServerHeaders(): array
         {
-            $request = self::getClientRequest();
-
+            return [
+                'X-Powered-By' => 'DynamicalWeb/' . self::getDefinition('DYNAMICAL_FRAMEWORK_VERSION'),
+                'X-Organization' => self::getDefinition('DYNAMICAL_FRAMEWORK_ORGANIZATION')
+            ];
         }
 
         /**
@@ -127,6 +166,7 @@
          * @param string $variable_name
          * @param $object
          * @return mixed
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public static function setMemoryObject(string $variable_name, $object)
         {
@@ -139,6 +179,7 @@
          *
          * @param string $variable_name
          * @return mixed|null
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public static function getMemoryObject(string $variable_name)
         {
@@ -149,4 +190,19 @@
 
             return DynamicalWeb::$globalObjects[$variable_name];
         }
+
+        /**
+         * Sets or gets the active request handler, this is usually available during the execution process
+         * of a request, allowing the request handler to be modified during runtime
+         *
+         * @param RequestHandler|null $requestHandler
+         * @return RequestHandler|null
+         */
+        public static function activeRequestHandler(?RequestHandler $requestHandler=null): ?RequestHandler
+        {
+            if($requestHandler !== null)
+                self::setMemoryObject('app_request_handler', $requestHandler);
+            return self::getMemoryObject('app_request_handler');
+        }
+
     }
