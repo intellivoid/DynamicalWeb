@@ -118,6 +118,7 @@
         public function __construct()
         {
             $this->ResponseHeaders = [];
+            $this->ResponseCode = 200;
             $this->CacheResponse = false;
             $this->PrivateCache = false;
             $this->CacheTtl = 86400;

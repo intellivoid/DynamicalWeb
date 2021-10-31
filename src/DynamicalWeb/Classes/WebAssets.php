@@ -1,22 +1,18 @@
-<?php /** @noinspection PhpMissingFieldTypeInspection */
+<?php
 
-namespace DynamicalWeb\Classes;
+    /** @noinspection PhpMissingFieldTypeInspection */
+
+    namespace DynamicalWeb\Classes;
 
     use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebAssetsConfigurationException;
-    use DynamicalWeb\Objects\RequestHandler;
     use MimeLib\MimeLib;
 
     class WebAssets
     {
-        /**
-         * @var string
-         */
-        private $Name;
-
         /**
          * @var string
          */
@@ -33,7 +29,6 @@ namespace DynamicalWeb\Classes;
          */
         public function __construct(string $assets_path, string $route_path)
         {
-            $this->Name = "Generic Assets";
             $this->AssetsPath = $assets_path;
             $this->RoutePath = $route_path;
         }
@@ -76,18 +71,29 @@ namespace DynamicalWeb\Classes;
                 }
 
                 $client_request->Source = $requested_path;
-                $client_request->ResponseContentType = MimeLib::detectFileType($requested_path);
+
+                /** @noinspection PhpSwitchCanBeReplacedWithMatchExpressionInspection PHP 7.1+ Compatibility */
+                switch(strtolower(pathinfo($requested_path)['extension']))
+                {
+                    case 'css':
+                        $client_request->ResponseContentType = BuiltinMimes::Css;
+                        break;
+
+                    case 'js':
+                        $client_request->ResponseContentType = BuiltinMimes::Javascript;
+                        break;
+
+                    case 'ico':
+                        $client_request->ResponseContentType = BuiltinMimes::Icon;
+                        break;
+
+                    default:
+                        $client_request->ResponseContentType = MimeLib::detectFileType($requested_path)->getMime();
+                        break;
+                }
                 return $client_request;
 
-            }, $this->Name);
-        }
-
-        /**
-         * @return string
-         */
-        public function getName(): string
-        {
-            return $this->Name;
+            }, $this->AssetsPath);
         }
 
         /**
@@ -104,5 +110,21 @@ namespace DynamicalWeb\Classes;
         public function setRoutePath(string $RoutePath): void
         {
             $this->RoutePath = $RoutePath;
+        }
+
+        /**
+         * @return string
+         */
+        public function getAssetsPath(): string
+        {
+            return $this->AssetsPath;
+        }
+
+        /**
+         * @param string $AssetsPath
+         */
+        public function setAssetsPath(string $AssetsPath): void
+        {
+            $this->AssetsPath = $AssetsPath;
         }
     }

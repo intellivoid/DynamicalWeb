@@ -93,7 +93,7 @@
             if($file_path !== null && file_exists($file_path))
             {
                 $eTag = hash_file('crc32', $file_path);
-                $returnHeaders['ETag'] = "\'$eTag\'";
+                $returnHeaders['ETag'] = "\"$eTag\"";
             }
 
             return $returnHeaders;
@@ -134,9 +134,9 @@
                 if(strlen($handler->Source) <= 256 && file_exists($handler->Source))
                     $FilePath = $handler->Source;
 
-                $FinalHeaders = array_merge(Utilities::getCacheControl(true, $Public,  $handler->getCacheTtl(), $FilePath));
+                $FinalHeaders = array_merge($FinalHeaders, Utilities::getCacheControl(true, $Public,  $handler->getCacheTtl(), $FilePath));
 
-                if(isset($FinalHeaders['ETag']) && $_SERVER['HTTP_IF_NONE_MATCH'] && $_SERVER['HTTP_IF_NONE_MATCH'] == $FinalHeaders['ETag'])
+                if(isset($FinalHeaders['ETag']) && isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $FinalHeaders['ETag'])
                     $handler->ResponseCode = 304;
             }
 

@@ -185,7 +185,7 @@
             $this->WebAssets = [];
 
             // Load the builtin DynamicalWeb Web Assets
-            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets', '/assets/dyn');
+            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets', '/dyn/assets');
 
             if(isset($DecodedConfiguration['web_assets']))
             {
@@ -210,17 +210,16 @@
          * Loads a local web asset
          *
          * @param string $path
+         * @param string $route_path
          * @throws DirectoryNotFoundException
-         * @throws RouterException
          * @throws WebAssetsConfigurationException
          */
         public function loadLocalWebAsset(string $path, string $route_path)
         {
             if(file_exists($path) == false || is_dir($path) == false)
                 throw new DirectoryNotFoundException('The web assets directory \'' . $path . '\' was not found');
-
             $WebAsset = new WebAssets(realpath($path), $route_path);
-            $this->WebAssets[$WebAsset->getName()] = $WebAsset;
+            $this->WebAssets[$WebAsset->getAssetsPath()] = $WebAsset;
         }
 
         /**
