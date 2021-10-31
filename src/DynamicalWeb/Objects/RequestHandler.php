@@ -4,6 +4,7 @@
 
     namespace DynamicalWeb\Objects;
 
+    use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\Abstracts\RequestMethod;
     use DynamicalWeb\Classes\PageIndexes;
@@ -93,9 +94,33 @@
          */
         public $ResponseContentType;
 
+        /**
+         * Indicates if the response should be cached by the client
+         *
+         * @var bool
+         */
+        public $CacheResponse;
+
+        /**
+         * The TTL of the cache control
+         *
+         * @var int
+         */
+        public $CacheTtl;
+
+        /**
+         * Indicates if the cache is a private cache just for the user
+         *
+         * @var bool
+         */
+        public $PrivateCache;
+
         public function __construct()
         {
             $this->ResponseHeaders = [];
+            $this->CacheResponse = false;
+            $this->PrivateCache = false;
+            $this->CacheTtl = 86400;
         }
 
         /**
@@ -116,7 +141,10 @@
                 'post_body' => $this->PostBody,
                 'response_headers' => $this->ResponseHeaders,
                 'response_code' => $this->ResponseCode,
-                'response_content_type' => $this->ResponseContentType
+                'response_content_type' => $this->ResponseContentType,
+                'cache_response' => $this->CacheResponse,
+                'cache_ttl' => $this->CacheTtl,
+                'private_cache' => $this->PrivateCache
             ];
         }
 
@@ -164,6 +192,15 @@
             if(isset($data['response_content_type']))
                 $ClientRequestObject->ResponseContentType = $data['response_content_type'];
 
+            if(isset($data['cache_response']))
+                $ClientRequestObject->CacheResponse = $data['cache_response'];
+
+            if(isset($data['cache_ttl']))
+                $ClientRequestObject->CacheTtl = $data['cache_ttl'];
+
+            if(isset($data['private_cache']))
+                $ClientRequestObject->PrivateCache = $data['private_cache'];
+
             return $ClientRequestObject;
         }
 
@@ -186,6 +223,7 @@
 
         /**
          * @return array
+         * @noinspection PhpUnused
          */
         public function getParameters(): array
         {
@@ -292,6 +330,60 @@
         }
 
         /**
+         * @return bool
+         * @noinspection PhpUnused
+         */
+        public function isCacheResponse(): bool
+        {
+            return $this->CacheResponse;
+        }
+
+        /**
+         * @param bool $CacheResponse
+         * @noinspection PhpUnused
+         */
+        public function setCacheResponse(bool $CacheResponse): void
+        {
+            $this->CacheResponse = $CacheResponse;
+        }
+
+        /**
+         * @return bool
+         * @noinspection PhpUnused
+         */
+        public function isPrivateCache(): bool
+        {
+            return $this->PrivateCache;
+        }
+
+        /**
+         * @param bool $PrivateCache
+         * @noinspection PhpUnused
+         */
+        public function setPrivateCache(bool $PrivateCache): void
+        {
+            $this->PrivateCache = $PrivateCache;
+        }
+
+        /**
+         * @return int
+         * @noinspection PhpUnused
+         */
+        public function getCacheTtl(): int
+        {
+            return $this->CacheTtl;
+        }
+
+        /**
+         * @param int $CacheTtl
+         * @noinspection PhpUnused
+         */
+        public function setCacheTtl(int $CacheTtl): void
+        {
+            $this->CacheTtl = $CacheTtl;
+        }
+
+        /**
          * @throws UnsupportedStreamException
          * @throws RequestRangeNotSatisfiableException
          * @throws RequestHandlerException
@@ -318,6 +410,9 @@
                     HttpStream::streamToHttp($this->Source);
                     break;
 
+                case ResourceSource::CompiledWebAsset:
+
+
                 case ResourceSource::Page:
                     try
                     {
@@ -337,7 +432,7 @@
                             $request_handler->ResourceSource = ResourceSource::Page;
                             $request_handler->Source = '500';
                             $request_handler->ResponseCode = 500;
-                            $request_handler->ResponseContentType = 'text/html';
+                            $request_handler->ResponseContentType = BuiltinMimes::Html;
                             $request_handler->execute(false);
                         }
                     }

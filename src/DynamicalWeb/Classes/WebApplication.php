@@ -4,10 +4,13 @@
 
     namespace DynamicalWeb\Classes;
 
+    use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
+    use DynamicalWeb\Abstracts\WebAssetType;
     use DynamicalWeb\Classes\UserAgentParser\Parser;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\DirectoryNotFoundException;
+    use DynamicalWeb\Exceptions\FileNotFoundException;
     use DynamicalWeb\Exceptions\LocalizationException;
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
@@ -15,6 +18,7 @@
     use DynamicalWeb\Exceptions\WebAssetsConfigurationException;
     use DynamicalWeb\Objects\WebApplication\Configuration;
     use DynamicalWeb\Objects\WebApplication\Route;
+    use DynamicalWeb\Objects\WebApplication\WebAssetConfiguration;
     use ppm\Exceptions\AutoloaderException;
     use ppm\Exceptions\InvalidComponentException;
     use ppm\Exceptions\InvalidPackageLockException;
@@ -99,10 +103,23 @@
         private $Organization;
 
         /**
+         * The path for the Favicon file
+         *
+         * @var string
+         */
+        private $FaviconPath;
+
+        /**
          * @param string $resources_path
+         * @throws AutoloaderException
          * @throws DirectoryNotFoundException
+         * @throws FileNotFoundException
+         * @throws InvalidComponentException
+         * @throws InvalidPackageLockException
          * @throws LocalizationException
+         * @throws PackageNotFoundException
          * @throws RouterException
+         * @throws VersionNotFoundException
          * @throws WebApplicationConfigurationException
          * @throws WebApplicationException
          * @throws WebAssetsConfigurationException
@@ -143,6 +160,20 @@
             if(isset($DecodedConfiguration['organization']))
                 $this->Organization = (string)$DecodedConfiguration['organization'];
 
+            $this->FaviconPath = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR. 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'favicon.ico';
+
+            if($this->Configuration->Favicon !== null)
+            {
+                if(file_exists($this->ResourcesPath . DIRECTORY_SEPARATOR . $this->Configuration->Favicon))
+                {
+                    $this->FaviconPath = $this->ResourcesPath . DIRECTORY_SEPARATOR . $this->Configuration->Favicon;
+                }
+                else
+                {
+                    throw new FileNotFoundException('The file \'' . $this->ResourcesPath . DIRECTORY_SEPARATOR . $this->Configuration->Favicon . '\' was not found');
+                }
+            }
+
 
             $this->Routes = [];
             foreach($DecodedConfiguration['router'] as $datum)
@@ -154,7 +185,25 @@
             $this->WebAssets = [];
 
             // Load the builtin DynamicalWeb Web Assets
-            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets');
+            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets', '/assets/dyn');
+
+            if(isset($DecodedConfiguration['web_assets']))
+            {
+                foreach($DecodedConfiguration['web_assets'] as $asset)
+                {
+                    $webAssetConfiguration = WebAssetConfiguration::fromArray($asset);
+                    switch($webAssetConfiguration->Type)
+                    {
+                        case WebAssetType::Local:
+                            $this->loadLocalWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Path);
+                            break;
+
+                        case WebAssetType::PPM:
+                            $this->loadPpmWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Path);
+                            break;
+                    }
+                }
+            }
         }
 
         /**
@@ -165,14 +214,12 @@
          * @throws RouterException
          * @throws WebAssetsConfigurationException
          */
-        public function loadLocalWebAsset(string $path)
+        public function loadLocalWebAsset(string $path, string $route_path)
         {
             if(file_exists($path) == false || is_dir($path) == false)
                 throw new DirectoryNotFoundException('The web assets directory \'' . $path . '\' was not found');
 
-            $WebAsset = new WebAssets(realpath($path));
-            $WebAsset->initialize($this);
-
+            $WebAsset = new WebAssets(realpath($path), $route_path);
             $this->WebAssets[$WebAsset->getName()] = $WebAsset;
         }
 
@@ -180,21 +227,22 @@
          * Loads a web asset from PPM
          *
          * @param string $package
-         * @param string $version
-         * @throws DirectoryNotFoundException
-         * @throws RouterException
-         * @throws WebAssetsConfigurationException
+         * @param string $route_path
          * @throws AutoloaderException
+         * @throws DirectoryNotFoundException
          * @throws InvalidComponentException
          * @throws InvalidPackageLockException
          * @throws PackageNotFoundException
+         * @throws RouterException
          * @throws VersionNotFoundException
+         * @throws WebAssetsConfigurationException
          */
-        public function loadPpmWebAsset(string $package, string $version='latest')
+        public function loadPpmWebAsset(string $package, string $route_path)
         {
-            $path = ppm::getPackageLock()->getPackage($package)->getPackagePath($version); // Find the package path
-            ppm::import($package, $version); // Import dependencies
-            $this->loadLocalWebAsset($path); // Load it as a local web asset
+            $decoded = explode('==', $package);
+            $path = ppm::getPackageLock()->getPackage($decoded[0])->getPackagePath($decoded[1]); // Find the package path
+            ppm::import($decoded[0], $decoded[1]); // Import dependencies
+            $this->loadLocalWebAsset($path, $route_path); // Load it as a local web asset
         }
 
         /**
@@ -218,18 +266,23 @@
             // Detect and define the framework (ServerLand)
             $this->defineFrameworkDefinitions();
 
+            $favicon_path = $this->FaviconPath;
             /// Make favicon configurable
-            $this->Router->map("GET", '/favicon.ico', function()
+            $this->Router->map("GET", '/favicon.ico', function() use ($favicon_path)
             {
                 $client_request = DynamicalWeb::constructRequestHandler();
 
                 $client_request->ResourceSource = ResourceSource::WebAsset;
-                $client_request->Source = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'favicon.ico';
+                $client_request->Source = $favicon_path;
                 $client_request->ResponseCode = 200;
-                $client_request->ResponseContentType = 'image/x-icon';
+                $client_request->CacheResponse = true;
+                $client_request->ResponseContentType = BuiltinMimes::Icon;
 
                 return $client_request;
             }, 'favicon');
+
+            foreach($this->WebAssets as $webAsset)
+                $webAsset->initialize($this);
 
             // Define the router
             DynamicalWeb::setMemoryObject('app_router', $this->Router);
@@ -374,5 +427,13 @@
         public function getWebAssets(): array
         {
             return $this->WebAssets;
+        }
+
+        /**
+         * @return string
+         */
+        public function getFaviconPath(): string
+        {
+            return $this->FaviconPath;
         }
     }

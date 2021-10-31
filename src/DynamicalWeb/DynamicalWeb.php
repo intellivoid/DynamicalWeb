@@ -4,6 +4,7 @@
 
     namespace DynamicalWeb;
 
+    use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\Classes\Request;
     use DynamicalWeb\Classes\Router;
@@ -72,7 +73,7 @@
                     $request_handler->ResourceSource = ResourceSource::Page;
                     $request_handler->Source = '500';
                     $request_handler->ResponseCode = 500;
-                    $request_handler->ResponseContentType = 'text/html';
+                    $request_handler->ResponseContentType = BuiltinMimes::Html;
                 }
             }
             else
@@ -80,7 +81,7 @@
                 $request_handler->ResourceSource = ResourceSource::Page;
                 $request_handler->Source = '404';
                 $request_handler->ResponseCode = 404;
-                $request_handler->ResponseContentType = 'text/html';
+                $request_handler->ResponseContentType = BuiltinMimes::Html;
             }
 
             DynamicalWeb::setMemoryObject('request_handler', $request_handler);
@@ -157,6 +158,21 @@
             return [
                 'X-Powered-By' => 'DynamicalWeb/' . self::getDefinition('DYNAMICAL_FRAMEWORK_VERSION'),
                 'X-Organization' => self::getDefinition('DYNAMICAL_FRAMEWORK_ORGANIZATION')
+            ];
+        }
+
+        /**
+         * Returns an array of optional security headers created by the server
+         *
+         * @return string[]
+         */
+        public static function getSecurityHeaders(): array
+        {
+            return [
+                'X-XSS-Protection' => '1; mode=block',
+                'X-Content-Type-Options' => 'nosniff',
+                'X-Frame-Options' => 'sameorigin',
+                'Referrer-Policy' => 'no-referrer'
             ];
         }
 

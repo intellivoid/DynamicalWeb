@@ -47,6 +47,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/BuiltinMimes.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/LocalizationSection.php"
         },
         {
@@ -56,6 +60,10 @@
         {
             "required": true,
             "file": "Abstracts/ResourceSource.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/WebAssetType.php"
         },
         {
             "required": true,
@@ -207,18 +215,17 @@
         },
         {
             "required": true,
-            "file": "Objects/WebAssets/Configuration.php"
+            "file": "Objects/WebApplication/WebAssetConfiguration.php"
         },
         {
             "required": true,
-            "file": "Objects/WebAssets.php"
+            "file": "Objects/WebAssets/Configuration.php"
         }
     ],
     "files": [
         "BuiltinAssets/assets/css/generic.css",
-        "BuiltinAssets/configuration.json",
         "BuiltinAssets/favicon.ico",
-        "BuiltinPages/404.dyn",
+        "BuiltinPages/404/contents.dyn",
         "Data/favicon.ico",
         "Data/regexes.json",
         "package.json"

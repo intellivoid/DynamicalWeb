@@ -5,14 +5,17 @@
   "organization": "Intellivoid Technologies",
   "configuration": {
     "primary_language": "en",
+    "favicon": null,
     "localization_enabled": true,
     "debugging_mode": true,
     "framework_signature": true,
     "application_signature": true,
+    "security_headers": true,
     "headers": {}
   },
-  "local_web_assets": [],
-  "ppm_web_assets": [],
+  "web_assets": [
+    {"type": "local", "source": "assets", "path": "/assets"}
+  ],
   "router": [
     {"method": ["GET"], "path": "/", "page": "index", "params": []}
   ]

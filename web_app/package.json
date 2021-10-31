@@ -23,10 +23,11 @@
     ],
     "files": [
         "package.json",
+        "resources/assets/css/file.txt",
         "resources/configuration.json",
         "resources/localization/en.json",
+        "resources/pages/index/contents.dyn",
         "resources/pages/index/css/style.css.dyn",
-        "resources/pages/index/index.dyn",
         "resources/pages/index/javascript/script.js.dyn"
     ]
 }

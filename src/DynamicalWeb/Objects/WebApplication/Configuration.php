@@ -42,19 +42,33 @@
         public $ApplicationSignature;
 
         /**
+         * Indicates if the web server should return security headers
+         *
+         * @var bool
+         */
+        public $SecurityHeaders;
+
+        /**
          * A list of hard-coded configured headers
          *
          * @var array
          */
         public $Headers;
 
+        /**
+         * @var string|null
+         */
+        public $Favicon;
+
         public function __construct()
         {
             $this->PrimaryLanguage = 'en';
+            $this->Favicon = null;
             $this->LocalizationEnabled = false;
             $this->DebuggingMode = true;
             $this->FrameworkSignature = true;
             $this->ApplicationSignature = true;
+            $this->SecurityHeaders = true;
             $this->Headers = [];
         }
 
@@ -68,10 +82,12 @@
         {
             return [
                 'primary_language' => $this->PrimaryLanguage,
+                'favicon' => $this->Favicon,
                 'localization_enabled' => $this->LocalizationEnabled,
                 'debugging_mode' => $this->DebuggingMode,
                 'framework_signature' => $this->FrameworkSignature,
                 'application_signature' => $this->ApplicationSignature,
+                'security_headers' => $this->SecurityHeaders,
                 'headers' => $this->Headers
             ];
         }
@@ -90,6 +106,9 @@
             if(isset($data['primary_language']))
                 $configurationObject->PrimaryLanguage = $data['primary_language'];
 
+            if(isset($data['favicon']))
+                $configurationObject->Favicon = $data['favicon'];
+
             if(isset($data['localization_enabled']))
                 $configurationObject->LocalizationEnabled = $data['localization_enabled'];
 
@@ -101,6 +120,9 @@
 
             if(isset($data['application_signature']))
                 $configurationObject->ApplicationSignature = $data['application_signature'];
+
+            if(isset($data['security_headers']))
+                $configurationObject->SecurityHeaders = $data['security_headers'];
 
             if(isset($data['headers']))
                 $configurationObject->Headers = $data['headers'];

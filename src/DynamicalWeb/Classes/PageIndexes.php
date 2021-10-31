@@ -4,6 +4,7 @@
 
     namespace DynamicalWeb\Classes;
 
+    use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\LocalizationSection;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\DynamicalWeb;
@@ -65,6 +66,10 @@
                 'main.php.dyn'
             ];
 
+            $builtin_pages = [
+                '404'
+            ];
+
             foreach($routes as $route)
             {
                 if(in_array($route->Page, $ProcessedPages))
@@ -79,7 +84,7 @@
                 {
                     if(file_exists($route_path . DIRECTORY_SEPARATOR . $file))
                     {
-                        $execution_point = $route_path . DIRECTORY_SEPARATOR . $file;
+                        $execution_point = realpath($route_path . DIRECTORY_SEPARATOR . $file);
                         break;
                     }
                 }
@@ -95,6 +100,25 @@
 
                 $this->Index[] = $PathIndex;
                 $ProcessedPages[] = $route->Page;
+            }
+
+            // Add builtin pages
+            foreach($builtin_pages as $page)
+            {
+                if(in_array($page, $ProcessedPages))
+                    continue; // Skip, don't overwrite app apges with builtin pages.
+
+                $PathIndex = new PathIndex();
+                $PathIndex->Route = new Route();
+                $PathIndex->Route->RequestMethods = ['GET'];
+                $PathIndex->Route->Path = '/404';
+                $PathIndex->Route->Page = '404';
+                $PathIndex->Route->InlineParameters = [];
+                $PathIndex->PagePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinPages' . DIRECTORY_SEPARATOR . $page);
+                $PathIndex->PageExecutionPoint = realpath($PathIndex->PagePath . DIRECTORY_SEPARATOR . 'contents.dyn');
+
+                $this->Index[] = $PathIndex;
+                $ProcessedPages[] = $page;
             }
         }
 
@@ -166,7 +190,7 @@
                     $client_request->ResourceSource = ResourceSource::Page;
                     $client_request->Source = $Route->Page;
                     $client_request->ResponseCode = 200;
-                    $client_request->ResponseContentType = 'text/html';
+                    $client_request->ResponseContentType = BuiltinMimes::Html;
 
                     return $client_request;
                 }, $Route->Page);
@@ -183,7 +207,7 @@
         public static function get(string $page): ?PathIndex
         {
             if(defined('DYNAMICAL_INITIALIZED') == false)
-                throw new WebApplicationException('The function PageIndexes::exists() cannot be invoked without a initialized web application');
+                throw new WebApplicationException('The function PageIndexes::get() cannot be invoked without a initialized web application');
 
             /** @var PathIndex $page_index */
             foreach(DynamicalWeb::getMemoryObject('app_pages_index') as $page_index)
@@ -209,13 +233,12 @@
                 throw new WebApplicationException('The function PageIndexes::load() cannot be invoked without a initialized web application');
 
             $page_index = self::get($page);
-
             if($page_index == null)
                 throw new PageNotFoundException('The requested page \'' . $page . '\' was not found');
 
             // Load the localization for the page
-            Localization::loadLocalization(LocalizationSection::Page, $page);
-            require_once($page_index->PageExecutionPoint);
+            Localization::loadLocalization(LocalizationSection::Page, $page, false);
+            include($page_index->PageExecutionPoint);
         }
 
     }
