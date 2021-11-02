@@ -1,0 +1,13 @@
+{
+  "language": {
+    "name": "chinese",
+    "iso_639-1": "zh"
+  },
+  "pages": {
+    "index": {
+      "PAGE_TITLE": "DynamicalWeb - Web 应用程序",
+      "HEADER": "一切都很好！",
+      "FOOTER": "版权在这里"
+    }
+  }
+}

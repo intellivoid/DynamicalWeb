@@ -31,6 +31,7 @@
          *
          * @param $path
          * @return string
+         * @noinspection PhpMissingReturnTypeInspection
          */
         public static function getAbsolutePath($path)
         {
@@ -103,6 +104,7 @@
          * Transmits all the headers from the request handler
          *
          * @param RequestHandler $handler
+         * @throws \DynamicalWeb\Exceptions\WebApplicationException
          */
         public static function processHeaders(RequestHandler $handler)
         {
@@ -124,7 +126,7 @@
                 $FinalHeaders = array_merge($FinalHeaders, DynamicalWeb::getSecurityHeaders());
 
             // Process cache headers and modify response code if Etag is a match or not
-            if($handler->CacheResponse)
+            if($handler->CacheResponse && ($handler->ResourceSource !== ResourceSource::Page || $handler->ResourceSource !== ResourceSource::Memory || $handler->ResourceSource !== ResourceSource::CompiledWebAsset))
             {
                 $Public = true;
                 if($handler->PrivateCache)
@@ -140,6 +142,27 @@
                     $handler->ResponseCode = 304;
             }
 
+            if($handler->ResourceSource == ResourceSource::Page || $handler->ResourceSource == ResourceSource::Memory)
+            {
+                $FinalHeaders = array_merge($FinalHeaders, Utilities::getCacheControl(false));
+
+                if($handler->Redirect)
+                {
+                    if($handler->RedirectTime > 0)
+                    {
+                        $FinalHeaders['Refresh'] = $handler->RedirectTime . ' URL=' . $handler->RedirectLocation;
+                    }
+                    else
+                    {
+                        $FinalHeaders['Location'] = $handler->RedirectLocation;
+                    }
+
+                    $handler->setResponseCode(301);
+                }
+            }
+
+            Localization::setCookie();
+
             // Process and overwrite any headers set by the web application's configuration file
             $FinalHeaders = array_merge($FinalHeaders, $WebAppConfiguration->Headers);
 
@@ -149,6 +172,9 @@
             // Return all the headers
             foreach($FinalHeaders as $header => $value)
                 header("$header: $value");
+
+            foreach($handler->CookiesToSet as $cookie)
+                setcookie($cookie->Name, $cookie->Value, $cookie->ExpiryTime, $cookie->Path, $cookie->Domain, $cookie->SecureOnly, $cookie->HttpOnly);
         }
 
         /**

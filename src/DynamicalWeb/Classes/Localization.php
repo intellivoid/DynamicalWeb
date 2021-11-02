@@ -4,11 +4,15 @@
 
     namespace DynamicalWeb\Classes;
 
+    use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\LocalizationSection;
+    use DynamicalWeb\Abstracts\ResourceSource;
+    use DynamicalWeb\Cookies;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\LocalizationException;
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationException;
+    use DynamicalWeb\Objects\Cookie;
     use DynamicalWeb\Objects\Localization\LocalizationText;
     use DynamicalWeb\Objects\WebApplication;
 
@@ -64,16 +68,16 @@
          */
         public function __construct(string $web_application_name, string $resources_path, WebApplication\Configuration $configuration)
         {
-            if($configuration->LocalizationEnabled == false)
+            if($configuration->Localization->Enabled == false)
                 return;
 
-            $this->LocalizationPath = $resources_path . DIRECTORY_SEPARATOR . 'localization';
+            $this->LocalizationPath = $resources_path . DIRECTORY_SEPARATOR . str_ireplace('/', DIRECTORY_SEPARATOR, $configuration->Localization->LocalizationPath);
             if(is_dir($this->LocalizationPath) == false)
-                throw new LocalizationException('The localization directory does not exist in the resources path');
+                throw new LocalizationException('The localization \'' . $this->LocalizationPath . '\' directory does not exist in the resources path');
 
-            $primary_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $configuration->PrimaryLanguage . '.json';
+            $primary_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $configuration->Localization->PirmaryLanguage . '.json';
             if(file_exists($primary_localization) == false)
-                throw new LocalizationException('The primary localization file \'' . $configuration->PrimaryLanguage . '.json\' was not found');
+                throw new LocalizationException('The primary localization file \'' . $configuration->Localization->PirmaryLanguage. '.json\' was not found in \'' . $this->LocalizationPath . '\'');
 
             $this->WebApplicationName = $web_application_name;
             $this->WebApplicationNameSafe = Converter::toSafeName($web_application_name);
@@ -85,7 +89,7 @@
                 $selected_language = strtolower(stripslashes($_COOKIE['language_' . $this->WebApplicationNameSafe]));
                 $selected_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $selected_language . '.json';
 
-                if(file_exists($selected_language))
+                if(file_exists($selected_localization))
                 {
                     $this->SelectedLanguage = \DynamicalWeb\Objects\Localization::fromFile($selected_localization);
                 }
@@ -137,15 +141,37 @@
             DynamicalWeb::setMemoryObject('app_localization_primary', $this->PrimaryLanguage);
             DynamicalWeb::setMemoryObject('app_localization_selected', $this->SelectedLanguage);
 
-            setcookie('language_' . $this->WebApplicationNameSafe, $this->SelectedLanguage->Language);
-
-            $router->map('GET|POST', '/change_language', function()
+            $router->map('GET|POST', '/dyn/lang', function()
             {
-                if(Request::getParameter('language') !== null)
+                $client_request = DynamicalWeb::constructRequestHandler();
+
+                $client_request->ResourceSource = ResourceSource::Memory;
+                $client_request->Source = 'Loading...';
+                $client_request->ResponseContentType = BuiltinMimes::Html;
+                DynamicalWeb::activeRequestHandler($client_request);
+
+                if(Request::getParameter('value') !== null)
                 {
-                    Localization::changeLanguage(Request::getParameter('language'), false);
+                    Localization::changeLanguage(Request::getParameter('value'), false);
                 }
+
+                return DynamicalWeb::activeRequestHandler();
             }, 'change_language');
+        }
+
+        /**
+         * Sets the language cookie
+         *
+         * @throws WebApplicationException
+         */
+        public static function setCookie()
+        {
+            if(DYNAMICAL_LOCALIZATION_ENABLED)
+            {
+                /** @var \DynamicalWeb\Objects\Localization $Localization */
+                $Localization = DynamicalWeb::getMemoryObject('app_localization_selected');
+                Cookies::setCookie(new Cookie('language_' . DYNAMICAL_APP_NAME_SAFE, $Localization->IsoCode));
+            }
         }
 
         /**
@@ -175,8 +201,10 @@
                     throw new LocalizationException('The requested localization \'' . $selected_language . '\' does not exist');
             }
 
-            setcookie(DYNAMICAL_LOCALIZATION_COOKIE, $selected_language);
-            Actions::redirect(DYNAMICAL_HOME_PAGE);
+            DynamicalWeb::setMemoryObject('app_localization_selected', \DynamicalWeb\Objects\Localization::fromFile($selected_localization));
+
+            self::setCookie();
+            Actions::redirect('/');
         }
 
         /**

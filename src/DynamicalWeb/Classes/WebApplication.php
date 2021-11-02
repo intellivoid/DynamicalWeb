@@ -36,6 +36,13 @@
         public $Name;
 
         /**
+         * The safe name presentation of the web application
+         *
+         * @var string
+         */
+        public $NameSafe;
+
+        /**
          * The path of the resources' path for the web application
          *
          * @var string
@@ -183,6 +190,7 @@
             $this->Localization = new Localization($this->Name, $this->ResourcesPath, $this->Configuration);
             $this->PageIndexes = new PageIndexes($this->Name, $this->ResourcesPath, $this->Routes);
             $this->WebAssets = [];
+            $this->NameSafe = Converter::toSafeName($this->Name);
 
             // Load the builtin DynamicalWeb Web Assets
             $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets', '/dyn/assets');
@@ -291,6 +299,7 @@
             define('DYNAMICAL_APP_RESOURCES_PATH', $this->ResourcesPath);
             define('DYNAMICAL_APP_CONFIGURATION_PATH', $this->ConfigurationFilePath);
             define('DYNAMICAL_APP_NAME', $this->Name);
+            define('DYNAMICAL_APP_NAME_SAFE', $this->NameSafe);
             define('DYNAMICAL_APP_VERSION', $this->Version);
             define('DYNAMICAL_APP_AUTHOR', $this->Author);
             define('DYNAMICAL_APP_ORGANIZATION', $this->Organization);

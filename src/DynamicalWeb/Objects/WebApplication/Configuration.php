@@ -7,18 +7,11 @@
     class Configuration
     {
         /**
-         * The primary language of the web application
+         * The configuration for the localization
          *
-         * @var string
+         * @var LocalizationConfiguration
          */
-        public $PrimaryLanguage;
-
-        /**
-         * Indicates if localization is enabled
-         *
-         * @var bool
-         */
-        public $LocalizationEnabled;
+        public $Localization;
 
         /**
          * Indicates if the web application is in debugging mode
@@ -60,11 +53,11 @@
          */
         public $Favicon;
 
+        /** @noinspection PhpPureAttributeCanBeAddedInspection */
         public function __construct()
         {
-            $this->PrimaryLanguage = 'en';
+            $this->Localization = new LocalizationConfiguration();
             $this->Favicon = null;
-            $this->LocalizationEnabled = false;
             $this->DebuggingMode = true;
             $this->FrameworkSignature = true;
             $this->ApplicationSignature = true;
@@ -77,13 +70,13 @@
          *
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
+         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public function toArray(): array
         {
             return [
-                'primary_language' => $this->PrimaryLanguage,
+                'localization' => $this->Localization->toArray(),
                 'favicon' => $this->Favicon,
-                'localization_enabled' => $this->LocalizationEnabled,
                 'debugging_mode' => $this->DebuggingMode,
                 'framework_signature' => $this->FrameworkSignature,
                 'application_signature' => $this->ApplicationSignature,
@@ -97,20 +90,16 @@
          *
          * @param array $data
          * @return Configuration
-         * @noinspection PhpPureAttributeCanBeAddedInspection
          */
         public static function fromArray(array $data): Configuration
         {
             $configurationObject = new Configuration();
 
-            if(isset($data['primary_language']))
-                $configurationObject->PrimaryLanguage = $data['primary_language'];
+            if(isset($data['localization']))
+                $configurationObject->Localization = LocalizationConfiguration::fromArray($data['localization']);
 
             if(isset($data['favicon']))
                 $configurationObject->Favicon = $data['favicon'];
-
-            if(isset($data['localization_enabled']))
-                $configurationObject->LocalizationEnabled = $data['localization_enabled'];
 
             if(isset($data['debugging_mode']))
                 $configurationObject->DebuggingMode = $data['debugging_mode'];

@@ -6,5 +6,8 @@
         <h1><?PHP print(TEXT_HEADER); ?></h1>
         <hr/>
         <p><?PHP print(TEXT_FOOTER); ?></p>
+        <hr/>
+        <a href="/dyn/lang?value=zh">Chinese</a>
+        <a href="/dyn/lang?value=en">English</a>
     </body>
 </html>

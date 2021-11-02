@@ -183,6 +183,8 @@
                     }
                 }
 
+                if(in_array('HEAD', $Route->RequestMethods) == false)
+                    $Route->RequestMethods[] = 'HEAD';
                 $router->map(implode("|", $Route->RequestMethods), $FinalURI, function() use ($Route)
                 {
                     $client_request = DynamicalWeb::constructRequestHandler();

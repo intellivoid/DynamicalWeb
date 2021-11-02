@@ -26,6 +26,8 @@
         "resources/assets/css/file.txt",
         "resources/configuration.json",
         "resources/localization/en.json",
+        "resources/localization/zh.json",
+        "resources/pages/debug/contents.dyn",
         "resources/pages/index/contents.dyn",
         "resources/pages/index/css/style.css.dyn",
         "resources/pages/index/javascript/script.js.dyn"

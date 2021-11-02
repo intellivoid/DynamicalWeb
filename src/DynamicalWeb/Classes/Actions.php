@@ -3,6 +3,10 @@
 
     namespace DynamicalWeb\Classes;
 
+    use DynamicalWeb\Abstracts\ResourceSource;
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Exceptions\WebApplicationException;
+
     /**
      * Class Actions
      * @package DynamicalWeb
@@ -16,11 +20,15 @@
          * Using this function will terminate the process
          *
          * @param string $location
+         * @throws WebApplicationException
          */
         public static function redirect(string $location)
         {
-            header("Location: $location");
-            exit();
+            $requestHandler = DynamicalWeb::activeRequestHandler();
+            $requestHandler->Redirect = true;
+            $requestHandler->RedirectLocation = $location;
+            $requestHandler->RedirectTime = 0;
+            DynamicalWeb::activeRequestHandler($requestHandler);
         }
 
         /**
@@ -29,10 +37,14 @@
          *
          * @param string $location
          * @param int $time
+         * @throws WebApplicationException
          */
         public static function delayedRedirect(string $location, int $time)
         {
-            header('Refresh: ' . $time . ' URL=' . $location);
-            exit();
+            $requestHandler = DynamicalWeb::activeRequestHandler();
+            $requestHandler->Redirect = true;
+            $requestHandler->RedirectLocation = $location;
+            $requestHandler->RedirectTime = $time;
+            DynamicalWeb::activeRequestHandler($requestHandler);
         }
     }

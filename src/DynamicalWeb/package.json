@@ -63,6 +63,10 @@
         },
         {
             "required": true,
+            "file": "Abstracts/SameSiteRestriction.php"
+        },
+        {
+            "required": true,
             "file": "Abstracts/WebAssetType.php"
         },
         {
@@ -119,11 +123,19 @@
         },
         {
             "required": true,
+            "file": "Classes/Validate.php"
+        },
+        {
+            "required": true,
             "file": "Classes/WebApplication.php"
         },
         {
             "required": true,
             "file": "Classes/WebAssets.php"
+        },
+        {
+            "required": true,
+            "file": "Cookies.php"
         },
         {
             "required": true,
@@ -136,6 +148,10 @@
         {
             "required": true,
             "file": "Exceptions/FileNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/InvalidCookieException.php"
         },
         {
             "required": true,
@@ -175,6 +191,14 @@
         },
         {
             "required": true,
+            "file": "HTML.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Cookie.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Localization/LocalizationText.php"
         },
         {
@@ -208,6 +232,10 @@
         {
             "required": true,
             "file": "Objects/WebApplication/Configuration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/LocalizationConfiguration.php"
         },
         {
             "required": true,
@@ -265,9 +293,9 @@
         "BuiltinAssets/assets/favicon/safari-pinned-tab.svg",
         "BuiltinAssets/assets/favicon/site.webmanifest",
         "BuiltinAssets/favicon.ico",
+        "BuiltinLocalization/en.json",
         "BuiltinPages/404/contents.dyn",
         "BuiltinSections/favicon.dyn",
-        "Data/favicon.ico",
         "Data/regexes.json",
         "package.json"
     ]

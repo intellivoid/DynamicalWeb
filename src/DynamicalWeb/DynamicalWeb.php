@@ -6,6 +6,7 @@
 
     use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
+    use DynamicalWeb\Classes\Localization;
     use DynamicalWeb\Classes\Request;
     use DynamicalWeb\Classes\Router;
     use DynamicalWeb\Exceptions\WebApplicationException;
@@ -34,6 +35,9 @@
          */
         public static function constructRequestHandler(): RequestHandler
         {
+            if(defined('DYNAMICAL_INITIALIZED') == false)
+                throw new WebApplicationException('DynamicalWeb::constructRequestHandler() can only execute if the Web Application is initialized');
+
             $request_handler = new RequestHandler();
             $request_handler->RequestMethod = Request::getRequestMethod();
             $request_handler->GetParameters = Request::getGetParameters();
@@ -41,8 +45,12 @@
             $request_handler->DynamicParameters = Request::getDefinedDynamicParameters();
             $request_handler->Parameters = Request::getParameters();
             $request_handler->PostBody = Request::getPostBody();
+            $request_handler->Cookies = $_COOKIE;
 
-            return $request_handler;
+            DynamicalWeb::activeRequestHandler($request_handler);
+            Localization::setCookie();
+
+            return DynamicalWeb::activeRequestHandler();
         }
 
         /**
@@ -104,6 +112,7 @@
                 'DYNAMICAL_APP_RESOURCES_PATH' => self::getDefinition('DYNAMICAL_APP_RESOURCES_PATH'),
                 'DYNAMICAL_APP_CONFIGURATION_PATH' => self::getDefinition('DYNAMICAL_APP_CONFIGURATION_PATH'),
                 'DYNAMICAL_APP_NAME' => self::getDefinition('DYNAMICAL_APP_NAME'),
+                'DYNAMICAL_APP_NAME_SAFE' => self::getDefinition('DYNAMICAL_APP_NAME_SAFE'),
                 'DYNAMICAL_APP_VERSION' => self::getDefinition('DYNAMICAL_APP_VERSION'),
                 'DYNAMICAL_APP_AUTHOR' => self::getDefinition('DYNAMICAL_APP_AUTHOR'),
                 'DYNAMICAL_APP_ORGANIZATION' => self::getDefinition('DYNAMICAL_APP_ORGANIZATION'),
@@ -212,12 +221,16 @@
          * of a request, allowing the request handler to be modified during runtime
          *
          * @param RequestHandler|null $requestHandler
-         * @return RequestHandler|null
+         * @return RequestHandler
+         * @throws WebApplicationException
          */
-        public static function activeRequestHandler(?RequestHandler $requestHandler=null): ?RequestHandler
+        public static function activeRequestHandler(?RequestHandler $requestHandler=null): RequestHandler
         {
             if($requestHandler !== null)
                 self::setMemoryObject('app_request_handler', $requestHandler);
+            $requestHandler = self::getMemoryObject('app_request_handler');
+            if($requestHandler == null)
+                self::setMemoryObject('app_request_handler', DynamicalWeb::constructRequestHandler());
             return self::getMemoryObject('app_request_handler');
         }
 

@@ -136,11 +136,14 @@
         {
             $LocalizationObject = new Localization();
 
-            if(isset($data['name']))
-                $LocalizationObject->Language = $data['name'];
+            if(isset($data['language']))
+            {
+                if(isset($data['language']['name']))
+                    $LocalizationObject->Language = $data['language']['name'];
 
-            if(isset($data['iso_639-1']))
-                $LocalizationObject->IsoCode = $data['iso_639-1'];
+                if(isset($data['language']['iso_639-1']))
+                    $LocalizationObject->IsoCode = $data['language']['iso_639-1'];
+            }
 
             $LocalizationObject->PageLocalizations = [];
             $LocalizationObject->SectionLocalizations = [];

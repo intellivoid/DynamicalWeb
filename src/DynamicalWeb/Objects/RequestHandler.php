@@ -11,6 +11,7 @@
     use DynamicalWeb\Classes\Utilities;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\RequestHandlerException;
+    use DynamicalWeb\Exceptions\WebApplicationException;
     use Exception;
     use HttpStream\Exceptions\OpenStreamException;
     use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
@@ -115,13 +116,53 @@
          */
         public $PrivateCache;
 
+        /**
+         * An array of cookies given by the client
+         *
+         * @var array
+         */
+        public $Cookies;
+
+        /**
+         * An array of cookies to set
+         *
+         * @var Cookie[]
+         */
+        public $CookiesToSet;
+
+        /**
+         * Indicates that the response is a redirect
+         *
+         * @var bool
+         */
+        public $Redirect;
+
+        /**
+         * The location that the redirect should follow
+         *
+         * @var string|null
+         */
+        public $RedirectLocation;
+
+        /**
+         * The amount of time it takes to redirect
+         *
+         * @var int
+         */
+        public $RedirectTime;
+
         public function __construct()
         {
+            $this->Cookies = [];
+            $this->CookiesToSet = [];
             $this->ResponseHeaders = [];
             $this->ResponseCode = 200;
             $this->CacheResponse = false;
             $this->PrivateCache = false;
             $this->CacheTtl = 86400;
+            $this->Redirect = false;
+            $this->RedirectLocation = null;
+            $this->RedirectTime = 0;
         }
 
         /**
@@ -145,7 +186,10 @@
                 'response_content_type' => $this->ResponseContentType,
                 'cache_response' => $this->CacheResponse,
                 'cache_ttl' => $this->CacheTtl,
-                'private_cache' => $this->PrivateCache
+                'private_cache' => $this->PrivateCache,
+                'redirect' => $this->Redirect,
+                'redirect_location' => $this->RedirectLocation,
+                'redirect_time' => $this->RedirectTime
             ];
         }
 
@@ -201,6 +245,15 @@
 
             if(isset($data['private_cache']))
                 $ClientRequestObject->PrivateCache = $data['private_cache'];
+
+            if(isset($data['redirect']))
+                $ClientRequestObject->Redirect = $data['redirect'];
+
+            if(isset($data['redirect_location']))
+                $ClientRequestObject->RedirectLocation = $data['redirect_location'];
+
+            if(isset($data['redirect_time']))
+                $ClientRequestObject->RedirectTime = $data['redirect_time'];
 
             return $ClientRequestObject;
         }
@@ -385,10 +438,12 @@
         }
 
         /**
-         * @throws UnsupportedStreamException
-         * @throws RequestRangeNotSatisfiableException
-         * @throws RequestHandlerException
+         * @param bool $recursive
          * @throws OpenStreamException
+         * @throws RequestHandlerException
+         * @throws RequestRangeNotSatisfiableException
+         * @throws UnsupportedStreamException
+         * @throws WebApplicationException
          */
         public function execute(bool $recursive=true)
         {
@@ -403,12 +458,15 @@
                 case ResourceSource::Memory:
                     Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
                     Utilities::setContentSize(strlen($this->Source));
-                    print($this->Source);
+
+                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                        print($this->Source);
                     break;
 
                 case ResourceSource::WebAsset:
                     Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                    HttpStream::streamToHttp($this->Source);
+                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                        HttpStream::streamToHttp($this->Source);
                     break;
 
                 case ResourceSource::CompiledWebAsset:
@@ -420,10 +478,11 @@
                         ob_start();
                         PageIndexes::load($this->Source);
                         $body_content = ob_get_clean();
-
                         Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
                         Utilities::setContentSize(strlen($body_content));
-                        print($body_content);
+
+                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                            print($body_content);
                     }
                     catch(Exception $e)
                     {
