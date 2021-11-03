@@ -42,7 +42,7 @@
         public function initialize(WebApplication $webApplication)
         {
             $assetsPath = $this->AssetsPath;
-            $webApplication->getRouter()->map('GET', $this->getRoutePath() . "/[**:path]", function() use ($assetsPath)
+            $webApplication->getRouter()->map('GET', $this->getRoutePath() . "[**:path]", function() use ($assetsPath)
             {
 
                 $requested_path = $assetsPath . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath(Request::getDefinedDynamicParameters()['path']);

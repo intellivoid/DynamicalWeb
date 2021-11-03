@@ -47,6 +47,7 @@
          *
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public function toArray(): array
         {
@@ -64,6 +65,7 @@
          * @param array $data
          * @return LocalizationConfiguration
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public static function fromArray(array $data): LocalizationConfiguration
         {

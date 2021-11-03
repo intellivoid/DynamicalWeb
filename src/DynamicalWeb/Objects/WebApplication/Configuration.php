@@ -7,6 +7,13 @@
     class Configuration
     {
         /**
+         * The root path of the web application
+         *
+         * @var string
+         */
+        public $RootPath;
+
+        /**
          * The configuration for the localization
          *
          * @var LocalizationConfiguration
@@ -56,6 +63,7 @@
         /** @noinspection PhpPureAttributeCanBeAddedInspection */
         public function __construct()
         {
+            $this->RootPath = '/';
             $this->Localization = new LocalizationConfiguration();
             $this->Favicon = null;
             $this->DebuggingMode = true;
@@ -75,6 +83,7 @@
         public function toArray(): array
         {
             return [
+                'root_path' => $this->RootPath,
                 'localization' => $this->Localization->toArray(),
                 'favicon' => $this->Favicon,
                 'debugging_mode' => $this->DebuggingMode,
@@ -94,6 +103,9 @@
         public static function fromArray(array $data): Configuration
         {
             $configurationObject = new Configuration();
+
+            if(isset($data['root_path']))
+                $configurationObject->RootPath = $data['root_path'];
 
             if(isset($data['localization']))
                 $configurationObject->Localization = LocalizationConfiguration::fromArray($data['localization']);

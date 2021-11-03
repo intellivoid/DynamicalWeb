@@ -121,10 +121,11 @@
          * @throws RouterException
          * @noinspection PhpMissingParamTypeInspection
          * @noinspection PhpUnnecessaryCurlyVarSyntaxInspection
+         * @noinspection RedundantSuppression
          */
         public function map(string $method, string $route, $target, string $name=null)
         {
-
+            $route = DYNAMICAL_APP_ROOT_PATH . $route;
             $this->routes[] = array($method, $route, $target, $name);
 
             if($name)
@@ -207,7 +208,7 @@
          * @return array|boolean Array with route information on success, false on failure (no match).
          * @noinspection PhpIssetCanBeReplacedWithCoalesceInspection
          */
-        public function match(?string $requestUrl=null, string $requestMethod = null): bool|array
+        public function match(?string $requestUrl=null, string $requestMethod = null)
         {
 
             $params = array();

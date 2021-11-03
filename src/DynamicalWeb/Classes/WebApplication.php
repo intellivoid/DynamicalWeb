@@ -125,7 +125,6 @@
          * @throws InvalidPackageLockException
          * @throws LocalizationException
          * @throws PackageNotFoundException
-         * @throws RouterException
          * @throws VersionNotFoundException
          * @throws WebApplicationConfigurationException
          * @throws WebApplicationException
@@ -193,7 +192,7 @@
             $this->NameSafe = Converter::toSafeName($this->Name);
 
             // Load the builtin DynamicalWeb Web Assets
-            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets', '/dyn/assets');
+            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets', 'dyn/assets');
 
             if(isset($DecodedConfiguration['web_assets']))
             {
@@ -240,7 +239,6 @@
          * @throws InvalidComponentException
          * @throws InvalidPackageLockException
          * @throws PackageNotFoundException
-         * @throws RouterException
          * @throws VersionNotFoundException
          * @throws WebAssetsConfigurationException
          */
@@ -261,6 +259,8 @@
             if(defined('DYNAMICAL_INITIALIZED'))
                 throw new WebApplicationException('Cannot initialize ' . $this->Name . ', another web application is already initialized');
 
+            define('DYNAMICAL_APP_ROOT_PATH', $this->Configuration->RootPath);
+
             // Initialize the localization engine
             $this->Localization->initialize($this->Router);
 
@@ -275,7 +275,7 @@
 
             $favicon_path = $this->FaviconPath;
             /// Make favicon configurable
-            $this->Router->map("GET", '/favicon.ico', function() use ($favicon_path)
+            $this->Router->map("GET", 'favicon.ico', function() use ($favicon_path)
             {
                 $client_request = DynamicalWeb::constructRequestHandler();
 
@@ -352,6 +352,7 @@
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public static function getApplicationHeaders(): array
         {
@@ -375,6 +376,7 @@
 
         /**
          * @return Configuration
+         * @noinspection PhpUnused
          */
         public function getConfiguration(): Configuration
         {
@@ -383,6 +385,7 @@
 
         /**
          * @return Route[]
+         * @noinspection PhpUnused
          */
         public function getRoutes(): array
         {
@@ -391,6 +394,7 @@
 
         /**
          * @return PageIndexes
+         * @noinspection PhpUnused
          */
         public function getPageIndexes(): PageIndexes
         {
@@ -423,6 +427,7 @@
 
         /**
          * @return string|null
+         * @noinspection PhpUnused
          */
         public function getOrganization(): ?string
         {
@@ -431,6 +436,7 @@
 
         /**
          * @return WebAssets[]
+         * @noinspection PhpUnused
          */
         public function getWebAssets(): array
         {
@@ -439,6 +445,7 @@
 
         /**
          * @return string
+         * @noinspection PhpUnused
          */
         public function getFaviconPath(): string
         {

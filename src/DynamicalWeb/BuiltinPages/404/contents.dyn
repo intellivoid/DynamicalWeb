@@ -5,10 +5,10 @@
     </head>
     <body>
         <div id="main_wrapper">
-            <h1><?php DynamicalWeb\HTML::print('404 Not Found'); ?></h1>
-            <p><?php DynamicalWeb\HTML::print('The resource you requested does not exist'); ?></p>
+            <h1><?php DynamicalWeb\Html::print('404 Not Found'); ?></h1>
+            <p><?php DynamicalWeb\Html::print('The resource you requested does not exist'); ?></p>
             <hr/>
-            <address>DynamicalWeb/<?PHP DynamicalWeb\HTML::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
+            <address>DynamicalWeb/<?PHP DynamicalWeb\Html::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
         </div>
     </body>
 </html>

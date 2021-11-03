@@ -191,7 +191,11 @@
         },
         {
             "required": true,
-            "file": "HTML.php"
+            "file": "Html.php"
+        },
+        {
+            "required": true,
+            "file": "HtmlMarkup.php"
         },
         {
             "required": true,

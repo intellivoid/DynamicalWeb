@@ -141,7 +141,7 @@
             DynamicalWeb::setMemoryObject('app_localization_primary', $this->PrimaryLanguage);
             DynamicalWeb::setMemoryObject('app_localization_selected', $this->SelectedLanguage);
 
-            $router->map('GET|POST', '/dyn/lang', function()
+            $router->map('GET|POST', 'dyn/lang', function()
             {
                 $client_request = DynamicalWeb::constructRequestHandler();
 
@@ -180,6 +180,7 @@
          * @param string $language
          * @param bool $throw_errors
          * @throws LocalizationException
+         * @throws RouterException
          * @throws WebApplicationException
          */
         public static function changeLanguage(string $language, bool $throw_errors=true)
@@ -204,7 +205,26 @@
             DynamicalWeb::setMemoryObject('app_localization_selected', \DynamicalWeb\Objects\Localization::fromFile($selected_localization));
 
             self::setCookie();
-            Actions::redirect('/');
+            Actions::redirect(DynamicalWeb::getRoute(DYNAMICAL_HOME_PAGE));
+        }
+
+        /**
+         * Gets the route for changing the current localization
+         *
+         * @param string $language
+         * @return string
+         * @throws RouterException
+         */
+        public static function getRoute(string $language): string
+        {
+            /** @var Router $router */
+            $router = DynamicalWeb::getMemoryObject('app_router');
+            $url = $router->generate('change_language');
+            $url .= '?' . http_build_query([
+                't'=>hash('crc32', time()),
+                'value' => $language
+            ]);
+            return $url;
         }
 
         /**

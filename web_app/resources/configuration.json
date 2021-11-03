@@ -4,6 +4,7 @@
   "author": "Zi Xing Narrakas",
   "organization": "Intellivoid Technologies",
   "configuration": {
+    "root_path": "/",
     "localization": {
       "enabled": true,
       "primary_language": "en",
@@ -24,10 +25,10 @@
     "headers": {}
   },
   "web_assets": [
-    {"type": "local", "source": "assets", "path": "/assets"}
+    {"type": "local", "source": "assets", "path": "assets"}
   ],
   "router": [
-    {"method": ["GET"], "path": "/", "page": "index", "params": []},
-    {"method": ["GET"], "path": "/debug", "page": "debug", "params": []}
+    {"method": ["GET"], "path": "", "page": "index", "params": []},
+    {"method": ["GET"], "path": "debug", "page": "debug", "params": []}
   ]
 }

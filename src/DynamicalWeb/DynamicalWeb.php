@@ -32,6 +32,7 @@
          * Constructs a request handler with all the pre-defined properties
          *
          * @return RequestHandler
+         * @throws WebApplicationException
          */
         public static function constructRequestHandler(): RequestHandler
         {
@@ -75,9 +76,8 @@
                 {
                     $request_handler = call_user_func_array($match['target'], array_values($match['params']));
                 }
-                catch(Exception)
+                catch(Exception $e)
                 {
-                    // TODO: Pass on error details
                     $request_handler->ResourceSource = ResourceSource::Page;
                     $request_handler->Source = '500';
                     $request_handler->ResponseCode = 500;
@@ -161,6 +161,7 @@
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public static function getServerHeaders(): array
         {
@@ -192,6 +193,7 @@
          * @param $object
          * @return mixed
          * @noinspection PhpMissingReturnTypeInspection
+         * @noinspection RedundantSuppression
          */
         public static function setMemoryObject(string $variable_name, $object)
         {
@@ -205,6 +207,7 @@
          * @param string $variable_name
          * @return mixed|null
          * @noinspection PhpMissingReturnTypeInspection
+         * @noinspection RedundantSuppression
          */
         public static function getMemoryObject(string $variable_name)
         {
@@ -232,6 +235,27 @@
             if($requestHandler == null)
                 self::setMemoryObject('app_request_handler', DynamicalWeb::constructRequestHandler());
             return self::getMemoryObject('app_request_handler');
+        }
+
+        /**
+         * @param string $page
+         * @param array $parameters
+         * @return string
+         * @throws Exceptions\RouterException
+         */
+        public static function getRoute(string $page, array $parameters = []): string
+        {
+            /** @var Router $router */
+            $router = DynamicalWeb::getMemoryObject('app_router');
+            $url = $router->generate($page);
+
+            if(count($parameters) > 0)
+            {
+                $url .= '?' . http_build_query($parameters);
+            }
+
+            var_dump($url);
+            return $url;
         }
 
     }
