@@ -86,6 +86,7 @@
 
             if(isset($_COOKIE['language_' . $this->WebApplicationNameSafe]))
             {
+                // Get saved preference
                 $selected_language = strtolower(stripslashes($_COOKIE['language_' . $this->WebApplicationNameSafe]));
                 $selected_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $selected_language . '.json';
 
@@ -93,6 +94,10 @@
                 {
                     $this->SelectedLanguage = \DynamicalWeb\Objects\Localization::fromFile($selected_localization);
                 }
+            }
+            else
+            {
+                // Auto-detect it
             }
 
             $this->Enabled = true;

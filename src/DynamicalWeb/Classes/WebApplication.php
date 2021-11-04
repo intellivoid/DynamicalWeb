@@ -329,11 +329,16 @@
 
         /**
          * Defines the client's definitions and parses the client user agent
+         * @noinspection PhpCastIsUnnecessaryInspection
          */
         private function defineClientDefinitions()
         {
             $parser = new Parser();
             $parsed_ua = $parser->parse(Client::getUserAgentRaw());
+
+            // Load mobile detection regex
+            $MobileBrowserRegex = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR . 'mobile1.regex');
+            $MobileDeviceRegex = file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Data' . DIRECTORY_SEPARATOR . 'mobile2.regex');
 
             define('DYNAMICAL_CLIENT_IP_ADDRESS', Client::getClientIP());
             define('DYNAMICAL_CLIENT_USER_AGENT', $parsed_ua->originalUserAgent);
@@ -344,6 +349,9 @@
             define('DYNAMICAL_CLIENT_DEVICE_MODEL', ($parsed_ua->device->model == null ? null : $parsed_ua->device->model));
             define('DYNAMICAL_CLIENT_FAMILY', ($parsed_ua->ua->family == null ? null : $parsed_ua->ua->family));
             define('DYNAMICAL_CLIENT_VERSION', ($parsed_ua->ua->toVersion() == null ? null : $parsed_ua->ua->toVersion()));
+            define('DYNAMICAL_CLIENT_IS_MOBILE_BROWSER', (bool)preg_match($MobileBrowserRegex, Client::getUserAgentRaw()));
+            define('DYNAMICAL_CLIENT_IS_MOBILE_DEVICE', (bool)preg_match($MobileDeviceRegex, Client::getUserAgentRaw()));
+            define('DYNAMICAL_CLIENT_IS_MOBILE', (bool)(DYNAMICAL_CLIENT_IS_MOBILE_BROWSER || DYNAMICAL_CLIENT_IS_MOBILE_DEVICE));
         }
 
         /**

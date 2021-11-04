@@ -1,13 +1,17 @@
-<html lang="en">
+<?php
+    use DynamicalWeb\Classes\Localization;
+    use DynamicalWeb\Html;
+?>
+<html lang="<?PHP Html::print(DYNAMICAL_PRIMARY_LOCALIZATION_ISO_CODE); ?>">
     <head>
-        <title><?PHP \DynamicalWeb\Html::print(TEXT_PAGE_TITLE); ?></title>
+        <title><?PHP Html::print(TEXT_PAGE_TITLE); ?></title>
     </head>
     <body>
-        <h1><?PHP \DynamicalWeb\Html::print(TEXT_HEADER); ?></h1>
+        <h1><?PHP Html::print(TEXT_HEADER); ?></h1>
         <hr/>
-        <p><?PHP \DynamicalWeb\Html::print(TEXT_FOOTER); ?></p>
+        <p><?PHP Html::print(TEXT_FOOTER); ?></p>
         <hr/>
-        <a href="<?PHP \DynamicalWeb\Html::print(\DynamicalWeb\Classes\Localization::getRoute('zh')); ?>">Chinese</a>
-        <a href="<?PHP \DynamicalWeb\Html::print(\DynamicalWeb\Classes\Localization::getRoute('en')); ?>">English</a>
+        <a href="<?PHP Html::print(Localization::getRoute('zh')); ?>">Chinese</a>
+        <a href="<?PHP Html::print(Localization::getRoute('en')); ?>">English</a>
     </body>
 </html>
