@@ -1,0 +1,319 @@
+{
+    "package": {
+        "package_name": "net.intellivoid.dynamical_web",
+        "name": "DynamicalWeb",
+        "version": "3.0.0.0",
+        "author": "Zi Xing Narrakas",
+        "organization": "Intellivoid Technologies",
+        "description": "A server-side web application framework",
+        "url": "https://github.com/intellivoid/DynamicalWeb",
+        "dependencies": [
+            {
+                "package": "net.intellivoid.http_stream",
+                "version": "latest",
+                "source": "default@github/intellivoid/HttpStream",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.mimelib",
+                "version": "latest",
+                "source": "default@github/intellivoid/MimeLib",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.markdown_parser",
+                "version": "latest",
+                "source": "default@github/intellivoid/MarkdownParser",
+                "required": true
+            }
+        ],
+        "configuration": {
+            "autoload_method": "generated_spl",
+            "main": null,
+            "post_installation": [],
+            "pre_installation": []
+        }
+    },
+    "components": [
+        {
+            "required": true,
+            "file": "Abstracts/AbstractClient.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractParser.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractSoftware.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/AbstractVersionedSoftware.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/BuiltinMimes.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/LocalizationSection.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/RequestMethod.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/ResourceSource.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/SameSiteRestriction.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/WebAssetType.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Actions.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Client.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Converter.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Localization.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/PageIndexes.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Request.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Router.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/UserAgentParser/DeviceParser.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/UserAgentParser/OperatingSystemParser.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/UserAgentParser/Parser.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/UserAgentParser.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Utilities.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/Validate.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/WebApplication.php"
+        },
+        {
+            "required": true,
+            "file": "Classes/WebAssets.php"
+        },
+        {
+            "required": true,
+            "file": "Cookies.php"
+        },
+        {
+            "required": true,
+            "file": "DynamicalWeb.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/DirectoryNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/FileNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/InvalidCookieException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/JavascriptException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/LocalizationException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/PageNotFoundException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/RequestHandlerException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/RouterException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/UserAgentParserException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/WebApplicationConfigurationException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/WebApplicationException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/WebAssetsConfigurationException.php"
+        },
+        {
+            "required": true,
+            "file": "Html.php"
+        },
+        {
+            "required": true,
+            "file": "HtmlMarkup.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Cookie.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/LanguagePreference.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Localization/LocalizationText.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/Localization.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/PathIndex.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/RequestHandler.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgent.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentClient.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentDevice.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/UserAgentOperatingSystem.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/Configuration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/LocalizationConfiguration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/Route.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/WebAssetConfiguration.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebAssets/Configuration.php"
+        }
+    ],
+    "files": [
+        "BuiltinAssets/assets/css/generic.css",
+        "BuiltinAssets/assets/favicon/android-chrome-144x144.png",
+        "BuiltinAssets/assets/favicon/android-chrome-192x192.png",
+        "BuiltinAssets/assets/favicon/android-chrome-256x256.png",
+        "BuiltinAssets/assets/favicon/android-chrome-36x36.png",
+        "BuiltinAssets/assets/favicon/android-chrome-384x384.png",
+        "BuiltinAssets/assets/favicon/android-chrome-48x48.png",
+        "BuiltinAssets/assets/favicon/android-chrome-512x512.png",
+        "BuiltinAssets/assets/favicon/android-chrome-72x72.png",
+        "BuiltinAssets/assets/favicon/android-chrome-96x96.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-114x114-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-114x114.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-120x120-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-120x120.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-144x144-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-144x144.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-152x152-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-152x152.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-180x180-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-180x180.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-57x57-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-57x57.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-60x60-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-60x60.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-72x72-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-72x72.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-76x76-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-76x76.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon-precomposed.png",
+        "BuiltinAssets/assets/favicon/apple-touch-icon.png",
+        "BuiltinAssets/assets/favicon/browserconfig.xml",
+        "BuiltinAssets/assets/favicon/favicon-16x16.png",
+        "BuiltinAssets/assets/favicon/favicon-194x194.png",
+        "BuiltinAssets/assets/favicon/favicon-32x32.png",
+        "BuiltinAssets/assets/favicon/favicon.ico",
+        "BuiltinAssets/assets/favicon/mstile-144x144.png",
+        "BuiltinAssets/assets/favicon/mstile-150x150.png",
+        "BuiltinAssets/assets/favicon/mstile-310x150.png",
+        "BuiltinAssets/assets/favicon/mstile-310x310.png",
+        "BuiltinAssets/assets/favicon/mstile-70x70.png",
+        "BuiltinAssets/assets/favicon/safari-pinned-tab.svg",
+        "BuiltinAssets/assets/favicon/site.webmanifest",
+        "BuiltinAssets/assets/images/polish_cow.jpg",
+        "BuiltinAssets/assets/js/dynamical.js.dyn",
+        "BuiltinAssets/favicon.ico",
+        "BuiltinLocalization/en.json",
+        "BuiltinPages/404/contents.dyn",
+        "BuiltinPages/500/contents.dyn",
+        "BuiltinSections/dyn_favicon.dyn",
+        "Data/cookie_storage.sql",
+        "Data/mobile1.regex",
+        "Data/mobile2.regex",
+        "Data/regexes.json",
+        "package.json"
+    ]
+}

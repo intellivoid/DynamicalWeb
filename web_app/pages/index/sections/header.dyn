@@ -1,0 +1,7 @@
+<?php
+    use DynamicalWeb\Html;
+?>
+
+<head>
+    <title><?PHP Html::print(TEXT_PAGE_TITLE); ?></title>
+</head>

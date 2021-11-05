@@ -1,0 +1,23 @@
+{
+  "language": {
+    "name": "chinese",
+    "iso_639-1": "zh"
+  },
+  "pages": {
+    "index": {
+      "HEADER": "一切都很好！"
+    }
+  },
+  "sections": {
+    "header": {
+      "PAGE_TITLE": "DynamicalWeb - Web 应用程序"
+    }
+  },
+  "markdown": {
+    "lorem": {
+      "DOCUMENT_TITLE": "Lorem Ipsum",
+      "DOCUMENT_CONTENTS_1": "没有人喜欢痛苦本身，没有人追求它并想要拥有它，仅仅因为它是痛苦......",
+      "DOCUMENT_CONTENTS_2": "Donec eleifend odio vitae sagittis commodo. Cras vitae metus sapien. Quisque euismod felis at velit tincidunt, **a imperdiet est porttitor. Vivamus ultricies risus ac neque fermentum**, id commodo sapien rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vel viverra ligula, ac malesuada urna. Quisque id est non augue luctus finibus nec in diam. "
+    }
+  }
+}

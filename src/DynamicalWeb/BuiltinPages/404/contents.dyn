@@ -1,0 +1,20 @@
+<?php
+
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Html;
+?>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <?PHP Html::importSection('dyn_favicon'); ?>
+        <link href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/css/generic.css')); ?>" rel="stylesheet">
+        <title>404 - Not Found</title>
+    </head>
+    <body>
+        <div id="main_wrapper">
+            <h1><?PHP Html::print('404 Not Found'); ?></h1>
+            <p><?PHP Html::print('The resource you requested does not exist'); ?></p>
+        </div>
+    </body>
+</html>

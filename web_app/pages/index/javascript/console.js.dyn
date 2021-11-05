@@ -1,0 +1,1 @@
+console.log("<?php \DynamicalWeb\Html::print(TEXT_CONSOLE_MESSAGE); ?>");

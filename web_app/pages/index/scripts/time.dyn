@@ -1,0 +1,3 @@
+<?php
+
+    \DynamicalWeb\Html::print(time());

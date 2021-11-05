@@ -1,0 +1,120 @@
+<?php
+
+    use DynamicalWeb\Classes\Utilities;
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Html;
+use ppm\ppm;
+
+?>
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <link href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/css/generic.css')); ?>" rel="stylesheet">
+        <title>500 - Internal Server Error</title>
+    </head>
+    <body>
+        <div id="main_wrapper">
+            <?PHP
+                if(DYNAMICAL_APP_DEBUGGING_MODE)
+                {
+                    ?>
+                    <h1><?PHP Html::print('Uncaught Exception'); ?></h1>
+                    <p><?PHP Html::print('Exception details are available below'); ?></p>
+                    <hr/><br/>
+
+
+                    <ul class="m-d expand-list">
+                        <li data-md-content="200">
+                            <label for="tab1" tabindex="-1" class="tab_lab">Exception Details</label>
+                            <input type="checkbox" class="tab" id="tab1" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <?PHP
+                                    if(DynamicalWeb::getMemoryObject('app_error') == null)
+                                    {
+                                        ?>
+                                        <pre><?PHP Html::print('Exception details aren\'t available'); ?></pre>
+                                        <?PHP
+                                    }
+                                    else
+                                    {
+                                        ?>
+                                        <pre><?PHP Html::print(json_encode(Utilities::exceptionToArray(DynamicalWeb::getMemoryObject('app_error')), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+                                        <?PHP
+                                    }
+                                ?>
+                            </div>
+                        </li>
+
+                        <li data-md-content="200">
+                            <label for="tab2" tabindex="-1" class="tab_lab"><?PHP Html::print('DynamicalWeb Definitions'); ?></label>
+                            <input type="checkbox" class="tab" id="tab2" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <pre><?PHP Html::print(json_encode(DynamicalWeb::getDefinitions(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+                            </div>
+                        </li>
+
+                        <li data-md-content="200">
+                            <label for="tab3" tabindex="-1" class="tab_lab"><?PHP Html::print('PPM Runtime Definitions'); ?></label>
+                            <input type="checkbox" class="tab" id="tab3" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <pre><?PHP Html::print(json_encode(ppm_definitions(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+                            </div>
+                        </li>
+
+                        <li data-md-content="200">
+                            <label for="tab4" tabindex="-1" class="tab_lab"><?PHP Html::print('PPM Imported Packages'); ?></label>
+                            <input type="checkbox" class="tab" id="tab4" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <pre><?PHP Html::print(json_encode(ppm::getImportedPackages(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)) ?></pre>
+                            </div>
+                        </li>
+
+                        <li data-md-content="200">
+                            <label for="tab6" tabindex="-1" class="tab_lab"><?PHP Html::print('DynamicalWeb Router'); ?></label>
+                            <input type="checkbox" class="tab" id="tab6" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <pre><?PHP var_dump(DynamicalWeb::getMemoryObject('app_router')); ?></pre>
+                            </div>
+                        </li>
+
+                        <li data-md-content="200">
+                            <label for="tab5" tabindex="-1" class="tab_lab"><?PHP Html::print('DynamicalWeb Memory'); ?></label>
+                            <input type="checkbox" class="tab" id="tab5" tabindex="0" />
+                            <span class="open-close-icon">
+                                <i>+</i>
+                            </span>
+                            <div class="content">
+                                <pre><?PHP var_dump(DynamicalWeb::$globalObjects); ?></pre>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <?PHP
+                }
+                else
+                {
+                    ?>
+                    <h1><?PHP Html::print('500 Internal Server Error'); ?></h1>
+                    <p><?PHP Html::print('There was an error while trying to process your request'); ?></p>
+                    <?PHP
+                }
+            ?>
+        </div>
+    </body>
+</html>

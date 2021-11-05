@@ -1,0 +1,28 @@
+{
+  "language": {
+    "name": "english",
+    "iso_639-1": "en"
+  },
+  "pages": {
+    "index": {
+      "HEADER": "All is good!"
+    }
+  },
+  "sections": {
+    "header": {
+      "PAGE_TITLE": "DynamicalWeb - Web Application"
+    }
+  },
+  "markdown": {
+    "lorem": {
+      "DOCUMENT_TITLE": "Lorem Ipsum",
+      "DOCUMENT_CONTENTS_1": "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain...",
+      "DOCUMENT_CONTENTS_2": "Donec eleifend odio vitae sagittis commodo. Cras vitae metus sapien. Quisque euismod felis at velit tincidunt, **a imperdiet est porttitor. Vivamus ultricies risus ac neque fermentum**, id commodo sapien rutrum. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vel viverra ligula, ac malesuada urna. Quisque id est non augue luctus finibus nec in diam. "
+    }
+  },
+  "custom": {
+    "javascript_console": {
+      "CONSOLE_MESSAGE": "Hello World!"
+    }
+  }
+}

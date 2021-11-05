@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title><?PHP print("Debugging information"); ?></title>
+    </head>
+    <body>
+        <h1><?PHP print("Debugging information"); ?></h1>
+        <hr/>
+        <pre><?PHP print(json_encode(\DynamicalWeb\DynamicalWeb::getDefinitions(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+        <hr/>
+        <pre><?PHP print(json_encode(\DynamicalWeb\DynamicalWeb::getMemoryObject('app_configuration')->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+        <hr/>
+        <?PHP
+            $results = [];
+            foreach(\DynamicalWeb\Classes\Localization::detectPreferredClientLanguages() as $language)
+                $results[] = $language->toArray();
+        ?>
+        <pre><?PHP print(json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+        <hr/>
+        <pre><?PHP var_dump(\DynamicalWeb\DynamicalWeb::getMemoryObject('app_router')); ?></pre>
+    </body>
+</html>

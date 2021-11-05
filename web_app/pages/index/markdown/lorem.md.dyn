@@ -1,0 +1,6 @@
+# <?PHP \DynamicalWeb\Html::print(TEXT_DOCUMENT_TITLE); ?>
+
+<?PHP \DynamicalWeb\Html::print(TEXT_DOCUMENT_CONTENTS_1); ?>
+
+
+<?PHP \DynamicalWeb\Html::print(TEXT_DOCUMENT_CONTENTS_2); ?>

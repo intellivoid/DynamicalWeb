@@ -1,0 +1,38 @@
+{
+  "name": "DynamicalWeb Application",
+  "version": "1.0.0.0",
+  "author": "Zi Xing Narrakas",
+  "organization": "Intellivoid Technologies",
+  "configuration": {
+    "root_path": "/",
+    "localization": {
+      "enabled": true,
+      "primary_localization": "en",
+      "auto_detect_preference": true,
+      "localizations": {
+        "en": "localization/en.json",
+        "zh": "localization/zh.json",
+        "zh-cn": "localization/zh.json"
+      }
+    },
+    "sessions": {
+      "enabled": true,
+      "configuration_name": "Example Web Application"
+    },
+    "cache_operations": true,
+    "favicon": null,
+    "localization_enabled": true,
+    "debugging_mode": true,
+    "framework_signature": true,
+    "application_signature": true,
+    "security_headers": true,
+    "headers": {}
+  },
+  "web_assets": [
+    {"type": "local", "name": "primary_assets", "source": "assets", "path": "assets"}
+  ],
+  "router": [
+    {"method": ["GET"], "path": "", "page": "index", "params": []},
+    {"method": ["GET"], "path": "debug", "page": "debug", "params": []}
+  ]
+}

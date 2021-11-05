@@ -1,86 +1,68 @@
 # DynamicalWeb
-Written by Zi Xing Narrakas (Intellivoid Developer)
+Written by Zi Xing Narrakas (Intellivoid Developer) & Contributed by Kasper Medvedkov 
+(Intellivoid System Administrator) 
 
-Contributed by Kasper Medvedkov (Intellivoid System Administrator) 
+DynamicalWeb is a Web Application Framework written in PHP 7.+  for Apache & Nginx Web 
+Servers, this framework is designed for creating and hosting Web Applications. As of
+version 3.* DynamicalWeb is designed to work with PPM, if you are looking for the legacy
+version without PPM support (only partial) see the
+[`legacy`](https://github.com/intellivoid/DynamicalWeb/tree/legacy) branch, the legacy
+version and the PPM version are not compatible at all, while DynamicalWeb is designed
+with the same idea and same structure, the codebase and functionality is entirely
+different and will not work with legacy versions. 
 
-DynamicalWeb is a Web Application Handler written in PHP 7.+
-for Apache Web Servers, this Library is designed for
-creating and hosting Web Applications
+The goal of this new version of DynamicalWeb is to simply pack the distribution of a web
+application into a redistributable binary file which can allow for much easier deployments
+by simply using a bootstrap script to load in your web application, for example;
 
-## How it works
-DynamicalWeb is a "Framework" written in PHP for PHP, it auto-defines
-parts of your web application making it easy to create pages which
-displays dynamic information without having to create complicated
-source codes which repeats a lot of the functionality which has already
-been established.
+```php
+<?php
+    require('ppm'); // Require PPM Runtime
+    import('com.example.web_application'); // Import the web application, that's all!
+```
 
-In the source code (`/src` directory) you will see two directories
-and two files.
 
-`/src/assets` are public assets which are retrievable via HTTP Requests.
-This directory should not contain any php files or any hidden source
-files. This directory typically contains js, css and images.
+## File Types
 
-`/src/resources` are internal assets which are not retrievable via
-HTTP Requests but rather internal functions. This documentation
-will go into details what each file & directory does.
+Due to how PPM is designed, anything with a `.php` extension will be compiled, this
+can cause issues when importing the web application as a package since most files
+in a DynamicalWeb project are not classes but simple procedural scripts. So PPM cannot
+build a autoloader for these types of files and instead imports them right away which
+causes unwanted code to execute. A way around this issue is to avoid compiling these
+components, so a `.dyn` extension is used in replacement of a `.php` extension. And for
+compiled assets such as `.css` and `.js` it will be `.css.dyn` and `.js.dyn`
 
-`/src/.htaccess` is a configuration file for apache web server, this
-basically routes all "404" requests to `/src/index.php` so it 
-can properly display the pages you have in your web application.
-For example visiting will `http://localhost/example_page` route
-the request internally to index.php, therefore the actual resulting
-url becomes `http://localhost/index.php?c_view_point=example_page`
-but the user will never see this nor know this. One of the ideas
-behind DynamicalWeb is that it hides the fact that your web
-application is written in PHP, it will not expose any .php file
-extensions in the url or request headers.
+This causes the final binary output to be more bloated due to .dyn files not being
+compiled, but in the future this could be fixed with custom compiler extensions. But right
+now this is not considered to be a big issue bot performance or disk size.
 
-## Resources Directory
 
-`/src/resources/DynamicalWeb` is the core library for DynamicalWeb,
-which auto-defines some variables, loads scripts, routes pages, etc.
-It's not meant to be altered. Just know that this is the library
-that drives this whole framework.
+## Web Application Structure
 
-`/src/resources/languages` are language files if you plan to add
-multi-languages to your web application, this directory only contains
-.json files that are named by ISO 639-1 codes for the language
-(eg; en, cn, kr, es, ...) to switch between languages you simply
-make a `GET` request to any page within this web application
-eg; `http://localhost/index` with `set_language` as one of the
-parameters followed by a value which is the file name of the language
-file. For example, to change to chinese your request would be
-`http://localhost/index?set_language=zh`, this will attempt to load
-`/src/resources/languages/zh.json`, if it fails it will attempt to load
-the primary language. There is no response code or errors if the
-language file doesn't exist or it cannot be loaded. The web application
-will try to correct itself if it cannot find a particular resource.
+Below is a tree view of an example
 
-`/src/reesources/libraries` Is a directory that would contain all the
-PHP Libraries that your web application requires to function correctly.
-Each library is configured manually before it can be used properly.
 
-`/src/resources/markdown` Is a directory that contains markdown files
-that you can import in pages which will convert into compatible 
-HTML code once imported. This is designed to work with multi-languages
-so each markdown file contains it's own directory that contains the
-actual markdown file which like the language files in the language
-directory is named after ISO 639-1 codes for the language. If
-no particular resource for that language is available it will
-load the markdown file that represents the primary language. For example
-the markdown file called `docs` would have it's own directory in
-`/src/resources/markdown/docs` which contains `en.md`, `es.md` and
-`zh.md`, if the current language is set to `zh` it will
-attempt to load `/src/resources/markdown/docs/zh.md` if it cannot
-be found it will attempt to load the file that represents the primary
-language for your web application `en` which would be
-`/src/resources/markdown/docs/en.md` an exception will be thrown if no 
-such directory or file exists.
-
-`/src/resources/pages` Contains all the pages that are available in
-your web application which are represented in directories for example
-`http://localhost/index` would load
-`/src/resources/pages/index/contents.php`, print out the HTML code
-that you have in that file and also execute any php code that is
-in that file.
+```
+web_app
+|-- assets
+|   |-- css
+|   |   `-- file.txt
+|   `-- images
+|       `-- me-weeb-shit-nya-3-39415496.png
+|-- configuration.json
+|-- localization
+|   |-- en.json
+|   `-- zh.json
+|-- markdown
+|   `-- lorem.md.dyn
+|-- package.json
+|-- pages
+|   |-- debug
+|   |   `-- contents.dyn
+|   `-- index
+|       |-- contents.dyn
+|       `-- sections
+|           `-- header.dyn
+`-- sections
+    `-- copyright.dyn
+``
