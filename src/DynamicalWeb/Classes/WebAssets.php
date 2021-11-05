@@ -52,6 +52,7 @@
             {
 
                 $requested_path = $assetsPath . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath(Request::getDefinedDynamicParameters()['path']);
+                $original_path = $assetsPath . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath(Request::getDefinedDynamicParameters()['path']);
                 $alternative_path = $requested_path . '.dyn'; // Compiled asset
 
                 $client_request = DynamicalWeb::constructRequestHandler();
@@ -80,7 +81,7 @@
                 $client_request->Source = $requested_path;
 
                 /** @noinspection PhpSwitchCanBeReplacedWithMatchExpressionInspection PHP 7.1+ Compatibility */
-                switch(strtolower(pathinfo($requested_path)['extension']))
+                switch(strtolower(pathinfo($original_path)['extension']))
                 {
                     case 'css':
                         $client_request->ResponseContentType = BuiltinMimes::Css;

@@ -63,11 +63,12 @@
         }
 
         /**
-         * Imports a executable markdown file
+         * Imports an executable markdown file
          *
          * @param string $document_name
          * @throws Exceptions\LocalizationException
          * @throws WebApplicationException
+         * @noinspection DuplicatedCode
          */
         public static function importMarkdown(string $document_name)
         {
@@ -108,6 +109,140 @@
             $markdown_content = ob_get_clean();
             $markdown_parser = new MarkdownParser();
             print($markdown_parser->parse($markdown_content));
+        }
+
+        /**
+         * Imports a pure PHP script
+         *
+         * @param string $script_name
+         * @throws Exceptions\LocalizationException
+         * @throws WebApplicationException
+         * @noinspection PhpUnused
+         */
+        public static function importScript(string $script_name)
+        {
+            // Search in the page first
+            $path = 'scripts' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.dyn';
+
+            if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
+            {
+                Localization::loadLocalization(LocalizationSection::Custom, 'script_' . $script_name, false);
+                include(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path);
+                return;
+            }
+
+            if(defined('DYNAMICAL_APP_RESOURCES_PATH') && file_exists(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path))
+            {
+                Localization::loadLocalization(LocalizationSection::Custom, 'script_' . $script_name, false);
+                include(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path);
+                return;
+            }
+
+            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . $path))
+            {
+                Localization::loadLocalization(LocalizationSection::Custom, 'script_' . $script_name, false);
+                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . $path);
+                return;
+            }
+
+            throw new WebApplicationException('Cannot import script \'' . $script_name . '\', the file was not found');
+        }
+
+        /**
+         * Imports and executes compiled javascript code
+         *
+         * @param string $script_name
+         * @throws Exceptions\LocalizationException
+         * @throws WebApplicationException
+         * @noinspection PhpUnused
+         * @noinspection DuplicatedCode
+         */
+        public static function importJavascript(string $script_name)
+        {
+            // Search in the page first
+            $path = 'javascript' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.js.dyn';
+
+            $selected_path = null;
+            if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
+            {
+                $selected_path = DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path;
+            }
+
+            if($selected_path == null)
+            {
+                if(defined('DYNAMICAL_APP_RESOURCES_PATH') && file_exists(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path))
+                {
+                    $selected_path = DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path;
+                }
+            }
+
+            if($selected_path == null)
+            {
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . $path))
+                {
+                    Localization::loadLocalization(LocalizationSection::Section, $script_name, false);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . $path);
+                    return;
+                }
+            }
+
+            if($selected_path == null)
+                throw new WebApplicationException('Cannot import javascript \'' . $script_name . '\', the file was not found');
+
+            Localization::loadLocalization(LocalizationSection::Custom, 'javascript_' . $script_name, false);
+
+            ob_start();
+            include($selected_path);
+            print(ob_get_clean());
+        }
+
+
+        /**
+         * Imports and executes compiled javascript code
+         *
+         * @param string $script_name
+         * @throws Exceptions\LocalizationException
+         * @throws WebApplicationException
+         * @noinspection PhpUnused
+         * @noinspection DuplicatedCode
+         */
+        public static function importCss(string $script_name)
+        {
+            // Search in the page first
+            $path = 'css' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.css.dyn';
+
+            $selected_path = null;
+            if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
+            {
+                $selected_path = DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path;
+            }
+
+            if($selected_path == null)
+            {
+                if(defined('DYNAMICAL_APP_RESOURCES_PATH') && file_exists(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path))
+                {
+                    $selected_path = DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path;
+                }
+            }
+
+            if($selected_path == null)
+            {
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . $path))
+                {
+                    Localization::loadLocalization(LocalizationSection::Section, $script_name, false);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . $path);
+                    return;
+                }
+            }
+
+            if($selected_path == null)
+                throw new WebApplicationException('Cannot import CSS \'' . $script_name . '\', the file was not found');
+
+            Localization::loadLocalization(LocalizationSection::Custom, 'css_' . $script_name, false);
+
+            ob_start();
+            include($selected_path);
+            print(ob_get_clean());
         }
 
 

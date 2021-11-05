@@ -37,26 +37,32 @@ compiled, but in the future this could be fixed with custom compiler extensions.
 now this is not considered to be a big issue bot performance or disk size.
 
 
-## Runtime Definitions
+## Web Application Structure
 
-DynamicalWeb will create various definitions once initialized, here is a table of
-definitions your Application can access during runtime.
+Below is a tree view of an example
 
-| Definition Name                    | Description                                                                                                                                           |
-|------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `DYNAMICAL_INITIALIZED`            | Indicates that DynamicalWeb has been initialized, this will prevent DynamicalWeb from initializing again and allow static functions to work correctly |
-| `DYNAMICAL_FRAMEWORK_VERSION`      | The version of the DynamicalWeb Framework build                                                                                                       |
-| `DYNAMICAL_FRAMEWORK_AUTHOR`       | The author of the DynamicalWeb Framework build                                                                                                        |
-| `DYNAMICAL_FRAMEWORK_ORGANIZATION` | The organization that manages the DynamicalWeb Framework build                                                                                        |
-| `DYNAMICAL_APP_RESOURCES_PATH`     | The path for the resources directory that your Web Application is housed in                                                                           |
-| `DYNAMICAL_APP_CONFIGURATION_PATH` | The path for the main configuration file that your Web Application is defined in                                                                      |
-| `DYNAMICAL_APP_NAME`               | The name of your initialized web application                                                                                                          |
-| `DYNAMICAL_CLIENT_IP_ADDRESS`      | The IP Address of the client that's making the request                                                                                                |
-| `DYNAMICAL_CLIENT_USER_AGENT`      | The user agent of the client that's making the request                                                                                                |
-| `DYNAMICAL_CLIENT_OS_FAMILY`       | The operating system family of the client that's making the request                                                                                   |
-| `DYNAMICAL_CLIENT_OS_VERSION`      | The operating system version of the client that's making the request                                                                                  |
-| `DYNAMICAL_CLIENT_DEVICE_FAMILY`   | The device family of the client that's making the request                                                                                             |
-| `DYNAMICAL_CLIENT_DEVICE_BRAND`    | The brand of the client's device that's making the request                                                                                            |
-| `DYNAMICAL_CLIENT_DEVICE_MODEL`    | The model of the client's device that's making the request                                                                                            |
-| `DYNAMICAL_CLIENT_FAMILY`          | The client's browser family that's making the request                                                                                                 |
-| `DYNAMICAL_CLIENT_VERSION`         | The client's browser version that's making the request                                                                                                |
+
+```
+web_app
+|-- assets
+|   |-- css
+|   |   `-- file.txt
+|   `-- images
+|       `-- me-weeb-shit-nya-3-39415496.png
+|-- configuration.json
+|-- localization
+|   |-- en.json
+|   `-- zh.json
+|-- markdown
+|   `-- lorem.md.dyn
+|-- package.json
+|-- pages
+|   |-- debug
+|   |   `-- contents.dyn
+|   `-- index
+|       |-- contents.dyn
+|       `-- sections
+|           `-- header.dyn
+`-- sections
+    `-- copyright.dyn
+``

@@ -12,6 +12,7 @@
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\RequestHandlerException;
     use DynamicalWeb\Exceptions\WebApplicationException;
+    use DynamicalWeb\Html;
     use Exception;
     use HttpStream\Exceptions\OpenStreamException;
     use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
@@ -495,8 +496,31 @@
                     break;
 
                 case ResourceSource::CompiledWebAsset:
-                    Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                    print($this->Source);
+                    try
+                    {
+                        Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+                        ob_start();
+                        include($this->Source);
+                        $results = ob_get_clean();
+                        Utilities::setContentSize(strlen($results));
+                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                            print($results);
+                    }
+                    catch(Exception $e)
+                    {
+                        ob_get_clean();
+                        DynamicalWeb::setMemoryObject('app_error', $e);
+                        if($recursive)
+                        {
+                            $request_handler = DynamicalWeb::activeRequestHandler();
+                            $request_handler->ResourceSource = ResourceSource::Page;
+                            $request_handler->Source = '500';
+                            $request_handler->ResponseCode = 500;
+                            $request_handler->ResponseContentType = BuiltinMimes::Html;
+                            $request_handler->execute(false);
+                        }
+                    }
+
                     break;
 
                 case ResourceSource::Page:

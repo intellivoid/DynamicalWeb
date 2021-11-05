@@ -22,7 +22,7 @@
     "cache_operations": true,
     "favicon": null,
     "localization_enabled": true,
-    "debugging_mode": false,
+    "debugging_mode": true,
     "framework_signature": true,
     "application_signature": true,
     "security_headers": true,
