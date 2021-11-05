@@ -1,5 +1,6 @@
 <?php
     use DynamicalWeb\Classes\Localization;
+    use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Html;
 ?>
 <html lang="<?PHP Html::print(DYNAMICAL_PRIMARY_LOCALIZATION_ISO_CODE); ?>">
@@ -7,6 +8,7 @@
     <body>
         <h1><?PHP Html::print(TEXT_HEADER); ?></h1>
         <hr/>
+        <img src="<?PHP Html::print(DynamicalWeb::getAssetRoute('primary_assets', '/images/me-weeb-shit-nya-3-39415496.png')); ?>" />
         <?PHP Html::importMarkdown('lorem'); ?>
         <hr/>
         <?PHP Html::importSection('copyright'); ?>
