@@ -38,6 +38,13 @@
         public $SectionLocalizations;
 
         /**
+         * The markdown localizations
+         *
+         * @var LocalizationText[]|string
+         */
+        public $MarkdownLocalizations;
+
+        /**
          * Custom localizations for other assets
          *
          * @var LocalizationText[]|array
@@ -58,6 +65,7 @@
         {
             $this->SectionLocalizations = [];
             $this->PageLocalizations = [];
+            $this->MarkdownLocalizations = [];
             $this->CustomLocalizations = [];
         }
 
@@ -102,6 +110,46 @@
         }
 
         /**
+         * Returns the localization text for a markdown document, returns null if not set.
+         *
+         * @param string $section
+         * @param string $name
+         * @return string|null
+         * @noinspection PhpUnused
+         */
+        public function getMarkdownLocalization(string $section, string $name): ?string
+        {
+            if(isset($this->MarkdownLocalizations[$section]) == false)
+                return null;
+
+            if(isset($this->MarkdownLocalizations[$section][$name]) == false)
+                return null;
+
+            /** @var LocalizationText $name */
+            return $this->MarkdownLocalizations[$section][$name]->Text;
+        }
+
+        /**
+         * Returns the localization text for a custom asset, returns null if not set.
+         *
+         * @param string $section
+         * @param string $name
+         * @return string|null
+         * @noinspection PhpUnused
+         */
+        public function getCustomLocalization(string $section, string $name): ?string
+        {
+            if(isset($this->CustomLocalizations[$section]) == false)
+                return null;
+
+            if(isset($this->CustomLocalizations[$section][$name]) == false)
+                return null;
+
+            /** @var LocalizationText $name */
+            return $this->CustomLocalizations[$section][$name]->Text;
+        }
+
+        /**
          * Returns an array representation of the object
          *
          * @return array
@@ -135,6 +183,18 @@
                 }
             }
 
+            $markdown_localizations = [];
+            foreach($this->MarkdownLocalizations as $section => $localization)
+            {
+                $markdown_localizations[$section] = [];
+                /** @var LocalizationText $datum */
+                /** @noinspection PhpUnusedLocalVariableInspection */
+                foreach($localization as $name => $datum)
+                {
+                    $markdown_localizations[$section][] = $datum->toArray();
+                }
+            }
+
             $custom_localizations = [];
             foreach($this->CustomLocalizations as $section => $localization)
             {
@@ -152,6 +212,7 @@
                 'iso_639-1' => $this->IsoCode,
                 'pages' => $page_localizations,
                 'sections' => $section_localizations,
+                'markdown' => $markdown_localizations,
                 'custom' => $custom_localizations,
                 'source_path' => $this->SourcePath
             ];
@@ -201,6 +262,19 @@
                     {
                         $localized_text = LocalizationText::fromInput($name, $value);
                         $LocalizationObject->SectionLocalizations[$section][$localized_text->Name] = $localized_text;
+                    }
+                }
+            }
+
+            if(isset($data['markdown']))
+            {
+                foreach($data['markdown'] as $section => $datum)
+                {
+                    $LocalizationObject->MarkdownLocalizations[$section] = [];
+                    foreach($datum as $name => $value)
+                    {
+                        $localized_text = LocalizationText::fromInput($name, $value);
+                        $LocalizationObject->MarkdownLocalizations[$section][$localized_text->Name] = $localized_text;
                     }
                 }
             }

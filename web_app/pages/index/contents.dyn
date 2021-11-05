@@ -7,6 +7,8 @@
     <body>
         <h1><?PHP Html::print(TEXT_HEADER); ?></h1>
         <hr/>
+        <?PHP Html::importMarkdown('lorem'); ?>
+        <hr/>
         <?PHP Html::importSection('copyright'); ?>
         <hr/>
         <a href="<?PHP Html::print(Localization::getRoute('zh')); ?>">Chinese</a>

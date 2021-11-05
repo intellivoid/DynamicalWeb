@@ -21,6 +21,7 @@
         "configuration.json",
         "localization/en.json",
         "localization/zh.json",
+        "markdown/lorem.md.dyn",
         "package.json",
         "pages/debug/contents.dyn",
         "pages/index/contents.dyn",

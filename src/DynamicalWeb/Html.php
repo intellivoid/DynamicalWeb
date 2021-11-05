@@ -4,7 +4,10 @@
 
     use DynamicalWeb\Abstracts\LocalizationSection;
     use DynamicalWeb\Classes\Localization;
+    use DynamicalWeb\Classes\PageIndexes;
     use DynamicalWeb\Exceptions\WebApplicationException;
+    use MarkdownParser\MarkdownParser;
+    use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
 
     class Html
     {
@@ -49,5 +52,43 @@
             }
 
             throw new WebApplicationException('Cannot import section \'' . $section_name . '\', the file was not found');
+        }
+
+        /**
+         * Imports a executable markdown file
+         *
+         * @param string $document_name
+         * @throws Exceptions\LocalizationException
+         * @throws WebApplicationException
+         */
+        public static function importMarkdown(string $document_name)
+        {
+            // Search in the page first
+            $path = 'markdown' . DIRECTORY_SEPARATOR . $document_name . '.md.dyn';
+
+            $selected_path = null;
+            if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
+            {
+                $selected_path = DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path;
+            }
+
+            if($selected_path == null)
+            {
+                if(defined('DYNAMICAL_APP_RESOURCES_PATH') && file_exists(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path))
+                {
+                    $selected_path = DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path;
+                }
+            }
+
+            if($selected_path == null)
+                throw new WebApplicationException('Cannot import markdown \'' . $document_name . '\', the file was not found');
+
+            Localization::loadLocalization(LocalizationSection::Markdown, $document_name, false);
+
+            ob_start();
+            include($selected_path);
+            $markdown_content = ob_get_clean();
+            $markdown_parser = new MarkdownParser();
+            print($markdown_parser->parse($markdown_content));
         }
     }

@@ -397,6 +397,11 @@
                     $PrimarySection = $PrimaryLanguage->SectionLocalizations;
                     break;
 
+                case LocalizationSection::Markdown:
+                    $SelectedSection = $SelectedLanguage->MarkdownLocalizations;
+                    $PrimarySection = $PrimaryLanguage->MarkdownLocalizations;
+                    break;
+
                 case LocalizationSection::Custom:
                     $SelectedSection = $SelectedLanguage->CustomLocalizations;
                     $PrimarySection = $PrimaryLanguage->CustomLocalizations;

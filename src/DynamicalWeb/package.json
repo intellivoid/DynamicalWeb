@@ -19,6 +19,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/MimeLib",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.markdown_parser",
+                "version": "latest",
+                "source": "default@github/intellivoid/MarkdownParser",
+                "required": true
             }
         ],
         "configuration": {

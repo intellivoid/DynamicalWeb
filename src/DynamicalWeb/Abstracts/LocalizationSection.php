@@ -8,5 +8,7 @@
 
         const Section = 'section';
 
+        const Markdown = 'markdown';
+
         const Custom = 'custom';
     }
