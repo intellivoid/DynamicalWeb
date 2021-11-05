@@ -306,6 +306,7 @@
         "BuiltinAssets/favicon.ico",
         "BuiltinLocalization/en.json",
         "BuiltinPages/404/contents.dyn",
+        "BuiltinPages/500/contents.dyn",
         "BuiltinSections/favicon.dyn",
         "Data/cookie_storage.sql",
         "Data/mobile1.regex",

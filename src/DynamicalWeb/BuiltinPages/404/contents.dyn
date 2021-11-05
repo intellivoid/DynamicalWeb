@@ -1,14 +1,25 @@
+<?php
+
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Html;
+?>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8"/>
+        <link href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/css/generic.css')); ?>" rel="stylesheet">
         <title>404</title>
     </head>
     <body>
         <div id="main_wrapper">
-            <h1><?php DynamicalWeb\Html::print('404 Not Found'); ?></h1>
-            <p><?php DynamicalWeb\Html::print('The resource you requested does not exist'); ?></p>
+            <h1>
+                <?PHP Html::print('404 Not Found'); ?>
+            </h1>
+            <p>
+                <?PHP Html::print('The resource you requested does not exist'); ?>
+            </p>
             <hr/>
-            <address>DynamicalWeb/<?PHP DynamicalWeb\Html::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
+            <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
         </div>
     </body>
 </html>

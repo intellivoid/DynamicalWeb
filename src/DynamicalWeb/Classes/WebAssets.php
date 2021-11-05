@@ -8,7 +8,6 @@
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\RouterException;
-    use DynamicalWeb\Exceptions\WebAssetsConfigurationException;
     use MimeLib\MimeLib;
 
     class WebAssets
@@ -24,12 +23,18 @@
         private $RoutePath;
 
         /**
-         * @param string $assets_path
-         * @throws WebAssetsConfigurationException
+         * @var string
          */
-        public function __construct(string $assets_path, string $route_path)
+        private $Name;
+
+        /**
+         * @param string $assets_path
+         * @param string $route_path
+         */
+        public function __construct(string $assets_path, string $name, string $route_path)
         {
             $this->AssetsPath = $assets_path;
+            $this->Name = $name;
             $this->RoutePath = $route_path;
         }
         /**
@@ -38,6 +43,7 @@
          * @param WebApplication $webApplication
          * @throws RouterException
          * @noinspection DuplicatedCode
+         * @noinspection RedundantSuppression
          */
         public function initialize(WebApplication $webApplication)
         {
@@ -51,6 +57,7 @@
                 $client_request = DynamicalWeb::constructRequestHandler();
                 $client_request->ResourceSource = ResourceSource::WebAsset;
                 $client_request->CacheResponse = true;
+                $client_request->DetectMime = false;
 
                 if(file_exists($requested_path) == false)
                 {
@@ -91,6 +98,7 @@
                         $client_request->ResponseContentType = MimeLib::detectFileType($requested_path)->getMime();
                         break;
                 }
+
                 return $client_request;
 
             }, $this->AssetsPath);
@@ -106,6 +114,7 @@
 
         /**
          * @param string $RoutePath
+         * @noinspection PhpUnused
          */
         public function setRoutePath(string $RoutePath): void
         {
@@ -122,9 +131,18 @@
 
         /**
          * @param string $AssetsPath
+         * @noinspection PhpUnused
          */
         public function setAssetsPath(string $AssetsPath): void
         {
             $this->AssetsPath = $AssetsPath;
+        }
+
+        /**
+         * @return string
+         */
+        public function getName(): string
+        {
+            return $this->Name;
         }
     }

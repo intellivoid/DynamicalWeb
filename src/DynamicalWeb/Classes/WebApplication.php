@@ -128,7 +128,6 @@
          * @throws VersionNotFoundException
          * @throws WebApplicationConfigurationException
          * @throws WebApplicationException
-         * @throws WebAssetsConfigurationException
          */
         public function __construct(string $resources_path)
         {
@@ -192,7 +191,7 @@
             $this->NameSafe = Converter::toSafeName($this->Name);
 
             // Load the builtin DynamicalWeb Web Assets
-            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets', 'dyn/assets');
+            $this->loadLocalWebAsset(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinAssets' . DIRECTORY_SEPARATOR . 'assets',  'dyn_builtin', 'dyn/assets');
 
             if(isset($DecodedConfiguration['web_assets']))
             {
@@ -202,11 +201,11 @@
                     switch($webAssetConfiguration->Type)
                     {
                         case WebAssetType::Local:
-                            $this->loadLocalWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Path);
+                            $this->loadLocalWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Name, $webAssetConfiguration->Path);
                             break;
 
                         case WebAssetType::PPM:
-                            $this->loadPpmWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Path);
+                            $this->loadPpmWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Name, $webAssetConfiguration->Path);
                             break;
                     }
                 }
@@ -217,15 +216,15 @@
          * Loads a local web asset
          *
          * @param string $path
+         * @param string $name
          * @param string $route_path
          * @throws DirectoryNotFoundException
-         * @throws WebAssetsConfigurationException
          */
-        public function loadLocalWebAsset(string $path, string $route_path)
+        public function loadLocalWebAsset(string $path, string $name, string $route_path)
         {
             if(file_exists($path) == false || is_dir($path) == false)
                 throw new DirectoryNotFoundException('The web assets directory \'' . $path . '\' was not found');
-            $WebAsset = new WebAssets(realpath($path), $route_path);
+            $WebAsset = new WebAssets(realpath($path), $name, $route_path);
             $this->WebAssets[$WebAsset->getAssetsPath()] = $WebAsset;
         }
 
@@ -233,6 +232,7 @@
          * Loads a web asset from PPM
          *
          * @param string $package
+         * @param string $name
          * @param string $route_path
          * @throws AutoloaderException
          * @throws DirectoryNotFoundException
@@ -240,16 +240,15 @@
          * @throws InvalidPackageLockException
          * @throws PackageNotFoundException
          * @throws VersionNotFoundException
-         * @throws WebAssetsConfigurationException
          */
-        public function loadPpmWebAsset(string $package, string $route_path)
+        public function loadPpmWebAsset(string $package, string $name, string $route_path)
         {
             $decoded = explode('==', $package);
             if($decoded[1] == 'latest')
                 $decoded[1] = ppm::getPackageLock()->getPackage($decoded[0])->getLatestVersion();
             $path = ppm::getPackageLock()->getPackage($decoded[0])->getPackagePath($decoded[1]); // Find the package path
             ppm::import($decoded[0], $decoded[1]); // Import dependencies
-            $this->loadLocalWebAsset($path, $route_path); // Load it as a local web asset
+            $this->loadLocalWebAsset($path, $name, $route_path); // Load it as a local web asset
         }
 
         /**
@@ -295,6 +294,7 @@
 
             // Define the router
             DynamicalWeb::setMemoryObject('app_router', $this->Router);
+            DynamicalWeb::setMemoryObject('app_web_assets', $this->WebAssets);
 
             // Define the resources
             DynamicalWeb::setMemoryObject('app_configuration', $this->Configuration);

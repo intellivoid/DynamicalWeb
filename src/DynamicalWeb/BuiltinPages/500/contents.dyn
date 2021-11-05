@@ -1,0 +1,14 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>404</title>
+    </head>
+    <body>
+        <div id="main_wrapper">
+            <h1><?php DynamicalWeb\Html::print('500 Internal Server Error'); ?></h1>
+            <p><?php DynamicalWeb\Html::print('There was an error while trying to process your request'); ?></p>
+            <hr/>
+            <address>DynamicalWeb/<?PHP DynamicalWeb\Html::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
+        </div>
+    </body>
+</html>

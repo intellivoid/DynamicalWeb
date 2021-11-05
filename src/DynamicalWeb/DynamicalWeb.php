@@ -10,6 +10,8 @@
     use DynamicalWeb\Classes\Request;
     use DynamicalWeb\Classes\Router;
     use DynamicalWeb\Classes\WebApplication;
+    use DynamicalWeb\Classes\WebAssets;
+    use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\RequestHandler;
     use Exception;
@@ -312,8 +314,32 @@
                 $url .= '?' . http_build_query($parameters);
             }
 
-            var_dump($url);
             return $url;
         }
 
+
+        /**
+         * Fetches the asset route
+         *
+         * @param string $name
+         * @param string $path
+         * @return string
+         * @throws RouterException
+         * @noinspection PhpUnused
+         */
+        public static function getAssetRoute(string $name, string $path): string
+        {
+            /** @var WebAssets[] $web_assets */
+            $web_assets = DynamicalWeb::getMemoryObject('app_web_assets');
+
+            foreach($web_assets as $asset_path => $asset)
+            {
+                if($name == $asset->getName())
+                {
+                    return DYNAMICAL_APP_ROOT_PATH . $asset->getRoutePath() . $path;
+                }
+            }
+
+            throw new RouterException('Cannot find asset \'' . $name . '\'');
+        }
     }

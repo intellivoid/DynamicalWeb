@@ -151,6 +151,20 @@
          */
         public $RedirectTime;
 
+        /**
+         * Indicates if the request handler should detect the mime
+         *
+         * @var bool
+         */
+        public $DetectMime;
+
+        /**
+         * Indicates if the response should be returned as a file attachment
+         *
+         * @var bool
+         */
+        public $AsAttachment;
+
         public function __construct()
         {
             $this->Cookies = [];
@@ -163,6 +177,8 @@
             $this->Redirect = false;
             $this->RedirectLocation = null;
             $this->RedirectTime = 0;
+            $this->DetectMime = true;
+            $this->AsAttachment = false;
         }
 
         /**
@@ -189,7 +205,9 @@
                 'private_cache' => $this->PrivateCache,
                 'redirect' => $this->Redirect,
                 'redirect_location' => $this->RedirectLocation,
-                'redirect_time' => $this->RedirectTime
+                'redirect_time' => $this->RedirectTime,
+                'detect_mime' => $this->DetectMime,
+                'as_attachment' => $this->AsAttachment
             ];
         }
 
@@ -199,6 +217,7 @@
          * @param array $data
          * @return RequestHandler
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public static function fromArray(array $data): RequestHandler
         {
@@ -255,6 +274,12 @@
             if(isset($data['redirect_time']))
                 $ClientRequestObject->RedirectTime = $data['redirect_time'];
 
+            if(isset($data['detect_mime']))
+                $ClientRequestObject->DetectMime = $data['detect_mime'];
+
+            if(isset($data['as_attachment']))
+                $ClientRequestObject->AsAttachment = $data['as_attachment'];
+
             return $ClientRequestObject;
         }
 
@@ -262,7 +287,7 @@
          * @return RequestMethod|string
          * @noinspection PhpUnused
          */
-        public function getRequestMethod(): RequestMethod|string
+        public function getRequestMethod()
         {
             return $this->RequestMethod;
         }
@@ -324,7 +349,7 @@
          * @return ResourceSource|string
          * @noinspection PhpUnused
          */
-        public function getResourceSource(): string|ResourceSource
+        public function getResourceSource()
         {
             return $this->ResourceSource;
         }
@@ -466,7 +491,7 @@
                 case ResourceSource::WebAsset:
                     Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
                     if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                        HttpStream::streamToHttp($this->Source);
+                        HttpStream::streamToHttp($this->Source, $this->AsAttachment, $this->DetectMime);
                     break;
 
                 case ResourceSource::CompiledWebAsset:

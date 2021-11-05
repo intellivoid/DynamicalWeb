@@ -29,7 +29,7 @@
     "headers": {}
   },
   "web_assets": [
-    {"type": "local", "source": "assets", "path": "assets"}
+    {"type": "local", "name": "primary_assets", "source": "assets", "path": "assets"}
   ],
   "router": [
     {"method": ["GET"], "path": "", "page": "index", "params": []},

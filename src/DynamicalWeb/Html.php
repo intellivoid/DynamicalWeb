@@ -4,10 +4,10 @@
 
     use DynamicalWeb\Abstracts\LocalizationSection;
     use DynamicalWeb\Classes\Localization;
-    use DynamicalWeb\Classes\PageIndexes;
+    use DynamicalWeb\Classes\Utilities;
+    use DynamicalWeb\Classes\WebAssets;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use MarkdownParser\MarkdownParser;
-    use SocialvoidLib\Abstracts\Modes\Standard\ParseMode;
 
     class Html
     {
@@ -35,7 +35,8 @@
         public static function importSection(string $section_name)
         {
             // Search in the page first
-            $path = 'sections' . DIRECTORY_SEPARATOR . $section_name . '.dyn';
+
+            $path = 'sections' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($section_name) . '.dyn';
 
             if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
             {
@@ -48,6 +49,13 @@
             {
                 Localization::loadLocalization(LocalizationSection::Section, $section_name, false);
                 include(DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR . $path);
+                return;
+            }
+
+            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . $path))
+            {
+                Localization::loadLocalization(LocalizationSection::Section, $section_name, false);
+                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . $path);
                 return;
             }
 
@@ -64,7 +72,7 @@
         public static function importMarkdown(string $document_name)
         {
             // Search in the page first
-            $path = 'markdown' . DIRECTORY_SEPARATOR . $document_name . '.md.dyn';
+            $path = 'markdown' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($document_name) . '.md.dyn';
 
             $selected_path = null;
             if(defined('DYNAMICAL_CURRENT_PAGE_PATH') && file_exists(DYNAMICAL_CURRENT_PAGE_PATH . DIRECTORY_SEPARATOR . $path))
@@ -81,6 +89,16 @@
             }
 
             if($selected_path == null)
+            {
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . $path))
+                {
+                    Localization::loadLocalization(LocalizationSection::Section, $document_name, false);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . $path);
+                    return;
+                }
+            }
+
+            if($selected_path == null)
                 throw new WebApplicationException('Cannot import markdown \'' . $document_name . '\', the file was not found');
 
             Localization::loadLocalization(LocalizationSection::Markdown, $document_name, false);
@@ -91,4 +109,6 @@
             $markdown_parser = new MarkdownParser();
             print($markdown_parser->parse($markdown_content));
         }
+
+
     }
