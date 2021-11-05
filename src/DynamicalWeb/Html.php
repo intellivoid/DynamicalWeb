@@ -5,7 +5,6 @@
     use DynamicalWeb\Abstracts\LocalizationSection;
     use DynamicalWeb\Classes\Localization;
     use DynamicalWeb\Classes\Utilities;
-    use DynamicalWeb\Classes\WebAssets;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use MarkdownParser\MarkdownParser;
 
@@ -52,10 +51,10 @@
                 return;
             }
 
-            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . $path))
+            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($section_name) . '.dyn'))
             {
                 Localization::loadLocalization(LocalizationSection::Section, $section_name, false);
-                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . $path);
+                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinSections' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($section_name) . '.dyn');
                 return;
             }
 
@@ -69,6 +68,7 @@
          * @throws Exceptions\LocalizationException
          * @throws WebApplicationException
          * @noinspection DuplicatedCode
+         * @noinspection PhpIncludeInspection
          */
         public static function importMarkdown(string $document_name)
         {
@@ -91,10 +91,10 @@
 
             if($selected_path == null)
             {
-                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . $path))
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($document_name) . '.md.dyn'))
                 {
                     Localization::loadLocalization(LocalizationSection::Section, $document_name, false);
-                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . $path);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinMarkdown' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($document_name) . '.md.dyn');
                     return;
                 }
             }
@@ -118,6 +118,7 @@
          * @throws Exceptions\LocalizationException
          * @throws WebApplicationException
          * @noinspection PhpUnused
+         * @noinspection PhpIncludeInspection
          */
         public static function importScript(string $script_name)
         {
@@ -138,10 +139,10 @@
                 return;
             }
 
-            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . $path))
+            if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.dyn'))
             {
                 Localization::loadLocalization(LocalizationSection::Custom, 'script_' . $script_name, false);
-                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . $path);
+                include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinScripts' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.dyn');
                 return;
             }
 
@@ -156,6 +157,7 @@
          * @throws WebApplicationException
          * @noinspection PhpUnused
          * @noinspection DuplicatedCode
+         * @noinspection PhpIncludeInspection
          */
         public static function importJavascript(string $script_name)
         {
@@ -178,10 +180,10 @@
 
             if($selected_path == null)
             {
-                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . $path))
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.js.dyn'))
                 {
                     Localization::loadLocalization(LocalizationSection::Section, $script_name, false);
-                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . $path);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinJavascript' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.js.dyn');
                     return;
                 }
             }
@@ -205,6 +207,7 @@
          * @throws WebApplicationException
          * @noinspection PhpUnused
          * @noinspection DuplicatedCode
+         * @noinspection PhpIncludeInspection
          */
         public static function importCss(string $script_name)
         {
@@ -227,10 +230,10 @@
 
             if($selected_path == null)
             {
-                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . $path))
+                if(file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.css.dyn'))
                 {
                     Localization::loadLocalization(LocalizationSection::Section, $script_name, false);
-                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . $path);
+                    include(__DIR__ . DIRECTORY_SEPARATOR . 'BuiltinCss' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.css.dyn');
                     return;
                 }
             }

@@ -1,0 +1,20 @@
+<?php
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Html;
+?>
+
+<link rel="apple-touch-icon" sizes="180x180" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/apple-touch-icon.png')); ?>">
+<link rel="icon" type="image/png" sizes="32x32" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/favicon-32x32.png')); ?>">
+<link rel="icon" type="image/png" sizes="194x194" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/favicon-194x194.png')); ?>">
+<link rel="icon" type="image/png" sizes="192x192" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/android-chrome-192x192.png')); ?>">
+<link rel="icon" type="image/png" sizes="16x16" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/favicon-16x16.png')); ?>">
+<link rel="manifest" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/site.webmanifest')); ?>">
+<link rel="mask-icon" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/safari-pinned-tab.svg')); ?>" color="#4d91bb">
+<link rel="shortcut icon" href="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/favicon.ico')); ?>">
+<meta name="apple-mobile-web-app-title" content="DynamicalWeb">
+<meta name="application-name" content="DynamicalWeb">
+<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileImage" content="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/mstile-144x144.png')); ?>">
+<meta name="msapplication-config" content="<?PHP Html::print(DynamicalWeb::getAssetRoute('dyn_builtin', '/favicon/browserconfig.xml')); ?>">
+<meta name="theme-color" content="#ffffff">
+
