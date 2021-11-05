@@ -150,7 +150,11 @@
                 'DYNAMICAL_SELECTED_LOCALIZATION_PATH' => self::getDefinition('DYNAMICAL_SELECTED_LOCALIZATION_PATH'),
                 'DYNAMICAL_SELECTED_LOCALIZATION_ISO_CODE' => self::getDefinition('DYNAMICAL_SELECTED_LOCALIZATION_ISO_CODE'),
                 'DYNAMICAL_PAGES_PATH' => self::getDefinition('DYNAMICAL_PAGES_PATH'),
-                'DYNAMICAL_HOME_PAGE' => self::getDefinition('DYNAMICAL_HOME_PAGE')
+                'DYNAMICAL_HOME_PAGE' => self::getDefinition('DYNAMICAL_HOME_PAGE'),
+                'DYNAMICAL_CURRENT_PAGE' => self::getDefinition('DYNAMICAL_CURRENT_PAGE'),
+                'DYNAMICAL_CURRENT_PAGE_PATH' => self::getDefinition('DYNAMICAL_CURRENT_PAGE_PATH'),
+                'DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT' => self::getDefinition('DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT'),
+                'DYNAMICAL_CURRENT_PAGE_ROUTE_PATH' => self::getDefinition('DYNAMICAL_CURRENT_PAGE_ROUTE_PATH'),
             ];
         }
 

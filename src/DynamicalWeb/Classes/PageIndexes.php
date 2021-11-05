@@ -238,6 +238,13 @@
             if($page_index == null)
                 throw new PageNotFoundException('The requested page \'' . $page . '\' was not found');
 
+
+            // Set the definitions for the page
+            define('DYNAMICAL_CURRENT_PAGE', $page);
+            define('DYNAMICAL_CURRENT_PAGE_PATH', $page_index->PagePath);
+            define('DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT', $page_index->PageExecutionPoint);
+            define('DYNAMICAL_CURRENT_PAGE_ROUTE_PATH', $page_index->Route->Path);
+
             // Load the localization for the page
             Localization::loadLocalization(LocalizationSection::Page, $page, false);
             include($page_index->PageExecutionPoint);
