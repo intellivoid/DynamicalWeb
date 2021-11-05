@@ -1,6 +1,6 @@
 <?php
 
     require('ppm');
-    import('com.example.web_application');
+    import('net.intellivoid.dynamical_web');
 
-    // That's all folks!
+    \DynamicalWeb\DynamicalWeb::exec('com.example.web_application==latest');

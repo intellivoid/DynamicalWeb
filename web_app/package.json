@@ -15,21 +15,16 @@
             "pre_installation": []
         }
     },
-    "components": [
-        {
-            "required": true,
-            "file": "main.php"
-        }
-    ],
+    "components": [],
     "files": [
+        "assets/css/file.txt",
+        "configuration.json",
+        "localization/en.json",
+        "localization/zh.json",
         "package.json",
-        "resources/assets/css/file.txt",
-        "resources/configuration.json",
-        "resources/localization/en.json",
-        "resources/localization/zh.json",
-        "resources/pages/debug/contents.dyn",
-        "resources/pages/index/contents.dyn",
-        "resources/pages/index/css/style.css.dyn",
-        "resources/pages/index/javascript/script.js.dyn"
+        "pages/debug/contents.dyn",
+        "pages/index/contents.dyn",
+        "pages/index/css/style.css.dyn",
+        "pages/index/javascript/script.js.dyn"
     ]
 }

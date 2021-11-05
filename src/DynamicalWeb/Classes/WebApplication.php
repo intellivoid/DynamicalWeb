@@ -245,6 +245,8 @@
         public function loadPpmWebAsset(string $package, string $route_path)
         {
             $decoded = explode('==', $package);
+            if($decoded[1] == 'latest')
+                $decoded[1] = ppm::getPackageLock()->getPackage($decoded[0])->getLatestVersion();
             $path = ppm::getPackageLock()->getPackage($decoded[0])->getPackagePath($decoded[1]); // Find the package path
             ppm::import($decoded[0], $decoded[1]); // Import dependencies
             $this->loadLocalWebAsset($path, $route_path); // Load it as a local web asset

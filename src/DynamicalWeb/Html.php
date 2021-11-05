@@ -17,4 +17,9 @@
                 $input = htmlspecialchars($input, ENT_QUOTES, $encoding);
             print($input);
         }
+
+        public static function importSection(string $section_name)
+        {
+
+        }
     }

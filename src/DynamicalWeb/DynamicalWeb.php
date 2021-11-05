@@ -9,9 +9,19 @@
     use DynamicalWeb\Classes\Localization;
     use DynamicalWeb\Classes\Request;
     use DynamicalWeb\Classes\Router;
+    use DynamicalWeb\Classes\WebApplication;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\RequestHandler;
     use Exception;
+    use HttpStream\Exceptions\OpenStreamException;
+    use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
+    use HttpStream\Exceptions\UnsupportedStreamException;
+    use ppm\Exceptions\AutoloaderException;
+    use ppm\Exceptions\InvalidComponentException;
+    use ppm\Exceptions\InvalidPackageLockException;
+    use ppm\Exceptions\PackageNotFoundException;
+    use ppm\Exceptions\VersionNotFoundException;
+    use ppm\ppm;
 
     /**
      * DynamicalWeb Library
@@ -156,6 +166,44 @@
             if(defined($definition))
                 return constant($definition);
             return null;
+        }
+
+        /**
+         * Loads a PPM Web application and executes it
+         *
+         * @param string $package
+         * @param string $version
+         * @param bool $import_dependencies
+         * @param bool $throw_error
+         * @throws Exceptions\DirectoryNotFoundException
+         * @throws Exceptions\FileNotFoundException
+         * @throws Exceptions\LocalizationException
+         * @throws Exceptions\RequestHandlerException
+         * @throws Exceptions\RouterException
+         * @throws Exceptions\WebApplicationConfigurationException
+         * @throws Exceptions\WebAssetsConfigurationException
+         * @throws WebApplicationException
+         * @throws OpenStreamException
+         * @throws RequestRangeNotSatisfiableException
+         * @throws UnsupportedStreamException
+         * @throws AutoloaderException
+         * @throws InvalidComponentException
+         * @throws InvalidPackageLockException
+         * @throws PackageNotFoundException
+         * @throws VersionNotFoundException
+         */
+        public static function exec(string $package, bool $import_dependencies=true, bool $throw_error=true)
+        {
+            $decoded = explode('==', $package);
+            if($decoded[1] == 'latest')
+                $decoded[1] = ppm::getPackageLock()->getPackage($decoded[0])->getLatestVersion();
+            $path = ppm::getPackageLock()->getPackage($decoded[0])->getPackagePath($decoded[1]); // Find the package path
+            ppm::import($decoded[0], $decoded[1], $import_dependencies, $throw_error); // Import dependencies
+            $WebApplication = new WebApplication($path);
+
+            $WebApplication->initialize();
+            $request_handler = DynamicalWeb::getRequestHandler();
+            $request_handler->execute();
         }
 
         /**
