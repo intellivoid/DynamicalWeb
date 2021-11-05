@@ -79,15 +79,16 @@
             if($configuration->Localization->Enabled == false)
                 return;
 
+            $this->ResourcesPath = $resources_path;
+            $this->WebApplicationName = $web_application_name;
+            $this->WebApplicationNameSafe = Converter::toSafeName($web_application_name);
+
             $primary_localization = $this->ResourcesPath . DIRECTORY_SEPARATOR . $configuration->Localization->Localizations[$configuration->Localization->PirmaryLocalization];
             if(file_exists($primary_localization) == false)
                 throw new LocalizationException('The primary localization file \'' . $this->ResourcesPath . DIRECTORY_SEPARATOR . $configuration->Localization->Localizations[$configuration->Localization->PirmaryLocalization]. ' was not found');
 
-            $this->WebApplicationName = $web_application_name;
-            $this->WebApplicationNameSafe = Converter::toSafeName($web_application_name);
             $this->PrimaryLanguage = \DynamicalWeb\Objects\Localization::fromFile($primary_localization);
             $this->SelectedLanguage = $this->PrimaryLanguage; // Set the selected as the primary, the primary will be the fallback.
-            $this->ResourcesPath = $resources_path;
             $this->LocalizationConfiguration = $configuration->Localization;
 
             // If the client is returning a set language
@@ -134,6 +135,7 @@
          * @param string $language
          * @return \DynamicalWeb\Objects\Localization
          * @throws LocalizationException
+         * @noinspection PhpUnused
          */
         public function getLocalization(string $language): \DynamicalWeb\Objects\Localization
         {
@@ -151,6 +153,7 @@
          * Detects the client's preferred client languages
          *
          * @return LanguagePreference[]
+         * @noinspection PhpUnusedLocalVariableInspection
          */
         public static function detectPreferredClientLanguages(): array
         {
@@ -196,7 +199,6 @@
             if($this->Enabled == false)
             {
                 define('DYNAMICAL_LOCALIZATION_ENABLED', false);
-                define('DYNAMICAL_LOCALIZATION_PATH', null);
                 define('DYNAMICAL_LOCALIZATION_COOKIE', null);
                 define('DYNAMICAL_PRIMARY_LOCALIZATION', null);
                 define('DYNAMICAL_PRIMARY_LOCALIZATION_PATH', null);
@@ -221,6 +223,7 @@
             // Set the global variables
             DynamicalWeb::setMemoryObject('app_localization_primary', $this->PrimaryLanguage);
             DynamicalWeb::setMemoryObject('app_localization_selected', $this->SelectedLanguage);
+            DynamicalWeb::setMemoryObject('app_localization_configuration', $this->LocalizationConfiguration);
 
             $router->map('GET|POST', 'dyn/lang', function()
             {
@@ -270,20 +273,30 @@
             {
                 if ($throw_errors)
                     throw new WebApplicationException('Localization::changeLanguage() can only execute if the Web Application is initialized');
-
                 return;
             }
 
             $selected_language = strtolower(stripslashes($language));
-            $selected_localization = DYNAMICAL_LOCALIZATION_PATH . DIRECTORY_SEPARATOR . $selected_language . '.json';
+            /** @var WebApplication\LocalizationConfiguration $localization_configuration */
+            $localization_configuration = DynamicalWeb::getMemoryObject('app_localization_configuration');
 
-            if(file_exists($selected_localization) == false)
+            if(isset($localization_configuration->Localizations[$selected_language]) == false)
             {
                 if($throw_errors)
-                    throw new LocalizationException('The requested localization \'' . $selected_language . '\' does not exist');
+                    throw new LocalizationException('The requested localization \'' . $selected_language . '\' is not defined');
+                return;
             }
 
-            DynamicalWeb::setMemoryObject('app_localization_selected', \DynamicalWeb\Objects\Localization::fromFile($selected_localization));
+            $path = DYNAMICAL_APP_RESOURCES_PATH . DIRECTORY_SEPARATOR .  $localization_configuration->Localizations[$selected_language];
+
+            if(file_exists($path) == false)
+            {
+                if($throw_errors)
+                    throw new LocalizationException('The localization file \'' . $path . '\' was not found');
+                return;
+            }
+
+            DynamicalWeb::setMemoryObject('app_localization_selected', \DynamicalWeb\Objects\Localization::fromFile($path));
 
             self::setCookie();
             Actions::redirect(DynamicalWeb::getRoute(DYNAMICAL_HOME_PAGE));
@@ -404,6 +417,7 @@
 
         /**
          * @return WebApplication\LocalizationConfiguration
+         * @noinspection PhpUnused
          */
         public function getLocalizationConfiguration(): WebApplication\LocalizationConfiguration
         {

@@ -470,7 +470,9 @@
                     break;
 
                 case ResourceSource::CompiledWebAsset:
-
+                    Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+                    print($this->Source);
+                    break;
 
                 case ResourceSource::Page:
                     try

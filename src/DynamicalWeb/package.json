@@ -83,10 +83,6 @@
         },
         {
             "required": true,
-            "file": "Classes/Javascript.php"
-        },
-        {
-            "required": true,
             "file": "Classes/Localization.php"
         },
         {
@@ -300,6 +296,7 @@
         "BuiltinAssets/assets/favicon/mstile-70x70.png",
         "BuiltinAssets/assets/favicon/safari-pinned-tab.svg",
         "BuiltinAssets/assets/favicon/site.webmanifest",
+        "BuiltinAssets/assets/js/dynamical.js.dyn",
         "BuiltinAssets/favicon.ico",
         "BuiltinLocalization/en.json",
         "BuiltinPages/404/contents.dyn",
