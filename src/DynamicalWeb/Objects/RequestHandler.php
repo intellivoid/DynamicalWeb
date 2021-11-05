@@ -491,20 +491,28 @@
 
                 case ResourceSource::WebAsset:
                     Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                        HttpStream::streamToHttp($this->Source, $this->AsAttachment, $this->DetectMime);
+                    if(DynamicalWeb::activeRequestHandler()->getResponseCode() !== 304)
+                    {
+                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                            HttpStream::streamToHttp($this->Source, $this->AsAttachment, $this->DetectMime);
+                    }
                     break;
 
                 case ResourceSource::CompiledWebAsset:
                     try
                     {
                         Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                        ob_start();
-                        include($this->Source);
-                        $results = ob_get_clean();
-                        Utilities::setContentSize(strlen($results));
-                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                            print($results);
+
+                        if(DynamicalWeb::activeRequestHandler()->getResponseCode() !== 304)
+                        {
+                            ob_start();
+                            include($this->Source);
+                            $results = ob_get_clean();
+                            Utilities::setContentSize(strlen($results));
+                            if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                                print($results);
+                        }
+
                     }
                     catch(Exception $e)
                     {

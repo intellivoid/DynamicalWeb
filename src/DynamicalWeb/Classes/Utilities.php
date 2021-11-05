@@ -139,8 +139,26 @@
 
                 $FinalHeaders = array_merge($FinalHeaders, Utilities::getCacheControl(true, $Public,  $handler->getCacheTtl(), $FilePath));
 
+                if(isset($FinalHeaders['ETag']))
+                {
+                    $if_none_match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ? stripslashes($_SERVER['HTTP_IF_NONE_MATCH']) : null;
+                    if($if_none_match !== null)
+                    {
+                        $tags = explode( ", ", $if_none_match);
+                        foreach( $tags as $tag )
+                        {
+                            if( $tag == $FinalHeaders['ETag'] )
+                            {
+                                $handler->setResponseCode(304);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if(isset($FinalHeaders['ETag']) && isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $FinalHeaders['ETag'])
-                    $handler->ResponseCode = 304;
+                    $handler->setResponseCode(304);
+
             }
 
             if($handler->ResourceSource == ResourceSource::Page || $handler->ResourceSource == ResourceSource::Memory)
@@ -162,13 +180,15 @@
                 }
             }
 
-            Localization::setCookie();
+            // Finally, set the response code
+            http_response_code($handler->getResponseCode());
+
+            if($handler->ResourceSource == ResourceSource::Page)
+                Localization::setCookie();
 
             // Process and overwrite any headers set by the web application's configuration file
             $FinalHeaders = array_merge($FinalHeaders, $WebAppConfiguration->Headers);
 
-            // Finally, set the response code
-            http_response_code($handler->getResponseCode());
 
             // Return all the headers
             foreach($FinalHeaders as $header => $value)
