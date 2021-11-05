@@ -13,6 +13,7 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\Cookie;
+    use DynamicalWeb\Objects\LanguagePreference;
     use DynamicalWeb\Objects\Localization\LocalizationText;
     use DynamicalWeb\Objects\WebApplication;
 
@@ -47,18 +48,25 @@
         private $SelectedLanguage;
 
         /**
-         * The path of the localization directory
-         *
-         * @var string
-         */
-        private $LocalizationPath;
-
-        /**
          * Indicates if this class is enabled or not
          *
          * @var bool
          */
         private $Enabled = false;
+
+        /**
+         * The resources path of the web application
+         *
+         * @var string
+         */
+        private $ResourcesPath;
+
+        /**
+         * The localization configuration
+         *
+         * @var WebApplication\LocalizationConfiguration
+         */
+        private $LocalizationConfiguration;
 
         /**
          * @param string $web_application_name
@@ -71,25 +79,25 @@
             if($configuration->Localization->Enabled == false)
                 return;
 
-            $this->LocalizationPath = $resources_path . DIRECTORY_SEPARATOR . str_ireplace('/', DIRECTORY_SEPARATOR, $configuration->Localization->LocalizationPath);
-            if(is_dir($this->LocalizationPath) == false)
-                throw new LocalizationException('The localization \'' . $this->LocalizationPath . '\' directory does not exist in the resources path');
-
-            $primary_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $configuration->Localization->PirmaryLanguage . '.json';
+            $primary_localization = $this->ResourcesPath . DIRECTORY_SEPARATOR . $configuration->Localization->Localizations[$configuration->Localization->PirmaryLocalization];
             if(file_exists($primary_localization) == false)
-                throw new LocalizationException('The primary localization file \'' . $configuration->Localization->PirmaryLanguage. '.json\' was not found in \'' . $this->LocalizationPath . '\'');
+                throw new LocalizationException('The primary localization file \'' . $this->ResourcesPath . DIRECTORY_SEPARATOR . $configuration->Localization->Localizations[$configuration->Localization->PirmaryLocalization]. ' was not found');
 
             $this->WebApplicationName = $web_application_name;
             $this->WebApplicationNameSafe = Converter::toSafeName($web_application_name);
             $this->PrimaryLanguage = \DynamicalWeb\Objects\Localization::fromFile($primary_localization);
-            $this->SelectedLanguage = $this->PrimaryLanguage;
+            $this->SelectedLanguage = $this->PrimaryLanguage; // Set the selected as the primary, the primary will be the fallback.
+            $this->ResourcesPath = $resources_path;
+            $this->LocalizationConfiguration = $configuration->Localization;
 
+            // If the client is returning a set language
             if(isset($_COOKIE['language_' . $this->WebApplicationNameSafe]))
             {
                 // Get saved preference
                 $selected_language = strtolower(stripslashes($_COOKIE['language_' . $this->WebApplicationNameSafe]));
-                $selected_localization = $this->LocalizationPath . DIRECTORY_SEPARATOR . $selected_language . '.json';
+                $selected_localization = $this->ResourcesPath . DIRECTORY_SEPARATOR . $this->LocalizationConfiguration->Localizations[$selected_language];
 
+                // Load the selected localization if it exists.
                 if(file_exists($selected_localization))
                 {
                     $this->SelectedLanguage = \DynamicalWeb\Objects\Localization::fromFile($selected_localization);
@@ -97,10 +105,79 @@
             }
             else
             {
-                // Auto-detect it
+                // Or try to detect the client's preference
+                foreach(self::detectPreferredClientLanguages() as $languagePreference)
+                {
+                    if(isset($this->LocalizationConfiguration->Localizations[$languagePreference->Language]))
+                    {
+                        $selected_localization = $this->ResourcesPath . DIRECTORY_SEPARATOR . $this->LocalizationConfiguration->Localizations[$languagePreference->Language];
+
+                        // Load the selected localization if it exists.
+                        if(file_exists($selected_localization))
+                        {
+                            $this->SelectedLanguage = \DynamicalWeb\Objects\Localization::fromFile($selected_localization);
+                        }
+
+                        break;
+                    }
+                }
+
             }
 
             $this->Enabled = true;
+        }
+
+
+        /**
+         * Gets an existing localization from the web application
+         *
+         * @param string $language
+         * @return \DynamicalWeb\Objects\Localization
+         * @throws LocalizationException
+         */
+        public function getLocalization(string $language): \DynamicalWeb\Objects\Localization
+        {
+            if(isset($this->LocalizationConfiguration->Localizations[$language]) == false)
+                throw new LocalizationException('The requested localization \'' . $language . '\' is not defined');
+
+            $path = $this->ResourcesPath . DIRECTORY_SEPARATOR .  $this->LocalizationConfiguration->Localizations[$language];
+
+            if(file_exists($path) == false)
+                throw new LocalizationException('The localization file \'' . $path . '\' was not found');
+            return \DynamicalWeb\Objects\Localization::fromFile($path);
+        }
+
+        /**
+         * Detects the client's preferred client languages
+         *
+         * @return LanguagePreference[]
+         */
+        public static function detectPreferredClientLanguages(): array
+        {
+            preg_match_all('~([\w-]+)(?:[^,\d]+([\d.]+))?~', strtolower($_SERVER["HTTP_ACCEPT_LANGUAGE"]), $matches, PREG_SET_ORDER);
+            $return_values = [];
+            $detected = [];
+            foreach($matches as $match)
+            {
+
+                list($a, $b) = explode('-', $match[1]) + array('', '');
+                $value = isset($match[2]) ? (float) $match[2] : 1.0;
+
+                if(in_array($match[1], $detected) == false)
+                {
+                    $return_values[] = LanguagePreference::parse($match[1] . '=' . $value);
+                    $detected[] = $match[1];
+                }
+
+                if(in_array($a, $detected) == false)
+                {
+                    $return_values[] = LanguagePreference::parse($a . '=' . ($value - 0.1));
+                    $detected[] = $a;
+                }
+            }
+
+            arsort($return_values);
+            return $return_values;
         }
 
         /**
@@ -133,7 +210,6 @@
 
             // Create the runtime definitions
             define('DYNAMICAL_LOCALIZATION_ENABLED', true);
-            define('DYNAMICAL_LOCALIZATION_PATH', $this->LocalizationPath);
             define('DYNAMICAL_LOCALIZATION_COOKIE', 'language_' . $this->WebApplicationNameSafe);
             define('DYNAMICAL_PRIMARY_LOCALIZATION', $this->PrimaryLanguage->Language);
             define('DYNAMICAL_PRIMARY_LOCALIZATION_PATH', $this->PrimaryLanguage->SourcePath);
@@ -324,5 +400,13 @@
         public function isEnabled(): bool
         {
             return $this->Enabled;
+        }
+
+        /**
+         * @return WebApplication\LocalizationConfiguration
+         */
+        public function getLocalizationConfiguration(): WebApplication\LocalizationConfiguration
+        {
+            return $this->LocalizationConfiguration;
         }
     }

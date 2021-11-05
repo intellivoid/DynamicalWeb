@@ -203,6 +203,10 @@
         },
         {
             "required": true,
+            "file": "Objects/LanguagePreference.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Localization/LocalizationText.php"
         },
         {

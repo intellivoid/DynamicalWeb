@@ -18,7 +18,7 @@
          *
          * @var string|null
          */
-        public $PirmaryLanguage;
+        public $PirmaryLocalization;
 
         /**
          * Indicates if DynamicalWeb should automatically detect the client's preferred language
@@ -28,18 +28,19 @@
         public $AutoDetectPreference;
 
         /**
-         * The path of the localization data
+         * An array of supported localizations and their paths
          *
-         * @var string|null
+         * @var array
          */
-        public $LocalizationPath;
+        public $Localizations;
+
 
         public function __construct()
         {
             $this->Enabled = false;
-            $this->PirmaryLanguage = 'en';
-            $this->AutoDetectPreference = false;
-            $this->LocalizationPath = null;
+            $this->PirmaryLocalization = 'en';
+            $this->AutoDetectPreference = true;
+            $this->Localizations = [];
         }
 
         /**
@@ -53,9 +54,9 @@
         {
             return [
                 'enabled' => $this->Enabled,
-                'primary_language' => $this->PirmaryLanguage,
+                'primary_language' => $this->PirmaryLocalization,
                 'auto_detect_preference' => $this->AutoDetectPreference,
-                'localization_path' => $this->LocalizationPath
+                'localizations' => $this->Localizations
             ];
         }
 
@@ -74,14 +75,14 @@
             if(isset($data['enabled']))
                 $LocalizationConfigurationObject->Enabled = $data['enabled'];
 
-            if(isset($data['primary_language']))
-                $LocalizationConfigurationObject->PirmaryLanguage = $data['primary_language'];
+            if(isset($data['primary_localization']))
+                $LocalizationConfigurationObject->PirmaryLocalization = $data['primary_localization'];
 
             if(isset($data['auto_detect_preference']))
                 $LocalizationConfigurationObject->AutoDetectPreference = $data['auto_detect_preference'];
 
-            if(isset($data['localization_path']))
-                $LocalizationConfigurationObject->LocalizationPath = $data['localization_path'];
+            if(isset($data['localizations']))
+                $LocalizationConfigurationObject->Localizations = $data['localizations'];
 
             return $LocalizationConfigurationObject;
 
