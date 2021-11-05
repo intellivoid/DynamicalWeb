@@ -220,6 +220,39 @@
             define('DYNAMICAL_SELECTED_LOCALIZATION_PATH', $this->SelectedLanguage->SourcePath);
             define('DYNAMICAL_SELECTED_LOCALIZATION_ISO_CODE', $this->SelectedLanguage->IsoCode);
 
+            $preferred_language = null;
+            $preferred_alt_language = null;
+            $secondary_preference = null;
+            $secondary_alt_preference = null;
+
+            foreach(self::detectPreferredClientLanguages() as $languagePreference)
+            {
+                if($preferred_language == null)
+                {
+                    $preferred_language = $languagePreference->Language;
+                    $preferred_alt_language = $languagePreference->LanguageCode;
+                    continue;
+                }
+
+                if($secondary_preference == null && $languagePreference->Language !== $preferred_language)
+                {
+                    $secondary_preference = $languagePreference->Language;
+                    $secondary_alt_preference = $languagePreference->LanguageCode;
+                    break;
+                }
+            }
+
+            if($secondary_preference == null)
+            {
+                $secondary_preference = $preferred_language;
+                $secondary_alt_preference = $preferred_alt_language;
+            }
+
+            define('DYNAMICAL_CLIENT_PREFERRED_PRIMARY_LOCALIZATION', $preferred_language);
+            define('DYNAMICAL_CLIENT_PREFERRED_PRIMARY_ALT_LOCALIZATION', $preferred_alt_language);
+            define('DYNAMICAL_CLIENT_PREFERRED_SECONDARY_LOCALIZATION', $secondary_preference);
+            define('DYNAMICAL_CLIENT_PREFERRED_SECONDARY_ALT_LOCALIZATION', $secondary_alt_preference);
+
             // Set the global variables
             DynamicalWeb::setMemoryObject('app_localization_primary', $this->PrimaryLanguage);
             DynamicalWeb::setMemoryObject('app_localization_selected', $this->SelectedLanguage);
