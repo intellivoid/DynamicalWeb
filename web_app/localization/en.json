@@ -5,9 +5,12 @@
   },
   "pages": {
     "index": {
-      "PAGE_TITLE": "DynamicalWeb - Web Application",
-      "HEADER": "All is good!",
-      "FOOTER": "Copyright goes here"
+      "HEADER": "All is good!"
+    }
+  },
+  "sections": {
+    "header": {
+      "PAGE_TITLE": "DynamicalWeb - Web Application"
     }
   }
 }

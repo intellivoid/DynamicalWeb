@@ -7,4 +7,6 @@
         const Page = 'page';
 
         const Section = 'section';
+
+        const Custom = 'custom';
     }

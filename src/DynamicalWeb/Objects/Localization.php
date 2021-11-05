@@ -38,11 +38,28 @@
         public $SectionLocalizations;
 
         /**
+         * Custom localizations for other assets
+         *
+         * @var LocalizationText[]|array
+         */
+        public $CustomLocalizations;
+
+        /**
          * The source of the localization object
          *
          * @var string|null
          */
         public $SourcePath;
+
+        /**
+         * Public Constructor
+         */
+        public function __construct()
+        {
+            $this->SectionLocalizations = [];
+            $this->PageLocalizations = [];
+            $this->CustomLocalizations = [];
+        }
 
         /**
          * Returns the localization text for a page, returns null if not set.
@@ -90,6 +107,7 @@
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public function toArray(): array
         {
@@ -117,11 +135,24 @@
                 }
             }
 
+            $custom_localizations = [];
+            foreach($this->CustomLocalizations as $section => $localization)
+            {
+                $custom_localizations[$section] = [];
+                /** @var LocalizationText $datum */
+                /** @noinspection PhpUnusedLocalVariableInspection */
+                foreach($localization as $name => $datum)
+                {
+                    $custom_localizations[$section][] = $datum->toArray();
+                }
+            }
+
             return [
                 'name' => $this->Language,
                 'iso_639-1' => $this->IsoCode,
                 'pages' => $page_localizations,
                 'sections' => $section_localizations,
+                'custom' => $custom_localizations,
                 'source_path' => $this->SourcePath
             ];
         }
@@ -170,6 +201,19 @@
                     {
                         $localized_text = LocalizationText::fromInput($name, $value);
                         $LocalizationObject->SectionLocalizations[$section][$localized_text->Name] = $localized_text;
+                    }
+                }
+            }
+
+            if(isset($data['custom']))
+            {
+                foreach($data['custom'] as $section => $datum)
+                {
+                    $LocalizationObject->CustomLocalizations[$section] = [];
+                    foreach($datum as $name => $value)
+                    {
+                        $localized_text = LocalizationText::fromInput($name, $value);
+                        $LocalizationObject->CustomLocalizations[$section][$localized_text->Name] = $localized_text;
                     }
                 }
             }

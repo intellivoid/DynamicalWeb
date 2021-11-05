@@ -394,7 +394,12 @@
 
                 case LocalizationSection::Section:
                     $SelectedSection = $SelectedLanguage->SectionLocalizations;
-                    $PrimarySection = $SelectedLanguage->SectionLocalizations;
+                    $PrimarySection = $PrimaryLanguage->SectionLocalizations;
+                    break;
+
+                case LocalizationSection::Custom:
+                    $SelectedSection = $SelectedLanguage->CustomLocalizations;
+                    $PrimarySection = $PrimaryLanguage->CustomLocalizations;
                     break;
 
                 default:

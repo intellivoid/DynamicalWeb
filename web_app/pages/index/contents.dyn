@@ -3,13 +3,11 @@
     use DynamicalWeb\Html;
 ?>
 <html lang="<?PHP Html::print(DYNAMICAL_PRIMARY_LOCALIZATION_ISO_CODE); ?>">
-    <head>
-        <title><?PHP Html::print(TEXT_PAGE_TITLE); ?></title>
-    </head>
+    <?PHP Html::importSection('header'); ?>
     <body>
         <h1><?PHP Html::print(TEXT_HEADER); ?></h1>
         <hr/>
-        <p><?PHP Html::print(TEXT_FOOTER); ?></p>
+        <?PHP Html::importSection('copyright'); ?>
         <hr/>
         <a href="<?PHP Html::print(Localization::getRoute('zh')); ?>">Chinese</a>
         <a href="<?PHP Html::print(Localization::getRoute('en')); ?>">English</a>

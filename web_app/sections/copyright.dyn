@@ -1,0 +1,1 @@
+<p>Copyright 2017-<?PHP \DynamicalWeb\Html::print(date('Y')); ?></p>

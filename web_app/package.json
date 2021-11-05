@@ -23,6 +23,8 @@
         "localization/zh.json",
         "package.json",
         "pages/debug/contents.dyn",
-        "pages/index/contents.dyn"
+        "pages/index/contents.dyn",
+        "pages/index/sections/header.dyn",
+        "sections/copyright.dyn"
     ]
 }
