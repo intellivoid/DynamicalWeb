@@ -8,6 +8,8 @@
     <body>
         <h1><?PHP Html::print(TEXT_HEADER); ?></h1>
         <hr/>
+        <?PHP throw new Exception('test'); ?>
+
         <img src="<?PHP Html::print(DynamicalWeb::getAssetRoute('primary_assets', '/images/me-weeb-shit-nya-3-39415496.png')); ?>" />
         <?PHP Html::importMarkdown('lorem'); ?>
         <hr/>

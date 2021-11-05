@@ -12,12 +12,8 @@
     </head>
     <body>
         <div id="main_wrapper">
-            <h1>
-                <?PHP Html::print('404 Not Found'); ?>
-            </h1>
-            <p>
-                <?PHP Html::print('The resource you requested does not exist'); ?>
-            </p>
+            <h1><?PHP Html::print('404 Not Found'); ?></h1>
+            <p><?PHP Html::print('The resource you requested does not exist'); ?></p>
             <hr/>
             <address>DynamicalWeb/<?PHP HTML::print(DYNAMICAL_FRAMEWORK_VERSION); ?></address>
         </div>

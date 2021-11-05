@@ -7,6 +7,7 @@
     use DynamicalWeb\Exceptions\FileNotFoundException;
     use DynamicalWeb\Objects\RequestHandler;
     use DynamicalWeb\Objects\WebApplication\Configuration;
+    use Exception;
 
     class Utilities
     {
@@ -185,5 +186,30 @@
         public static function setContentSize(int $size)
         {
             header('Content-Length: ' . $size);
+        }
+
+        /**
+         * Converts an exception to an array representation
+         *
+         * @param Exception $e
+         * @return array
+         */
+        public static function exceptionToArray(Exception $e): array
+        {
+            $return_results = [
+                'file_path' => $e->getFile(),
+                'line' => $e->getLine(),
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace()
+            ];
+
+            if($e->getPrevious() !== null)
+            {
+                /** @noinspection PhpParamsInspection */
+                $return_results['previous'] = self::exceptionToArray($e->getPrevious());
+            }
+
+            return $return_results;
         }
     }

@@ -128,6 +128,7 @@
                 'DYNAMICAL_APP_VERSION' => self::getDefinition('DYNAMICAL_APP_VERSION'),
                 'DYNAMICAL_APP_AUTHOR' => self::getDefinition('DYNAMICAL_APP_AUTHOR'),
                 'DYNAMICAL_APP_ORGANIZATION' => self::getDefinition('DYNAMICAL_APP_ORGANIZATION'),
+                'DYNAMICAL_APP_DEBUGGING_MODE' => self::getDefinition('DYNAMICAL_APP_DEBUGGING_MODE'),
                 'DYNAMICAL_FRAMEWORK_VERSION' => self::getDefinition('DYNAMICAL_FRAMEWORK_VERSION'),
                 'DYNAMICAL_FRAMEWORK_AUTHOR' => self::getDefinition('DYNAMICAL_FRAMEWORK_AUTHOR'),
                 'DYNAMICAL_FRAMEWORK_ORGANIZATION' => self::getDefinition('DYNAMICAL_FRAMEWORK_ORGANIZATION'),

@@ -305,6 +305,7 @@
             define('DYNAMICAL_APP_VERSION', $this->Version);
             define('DYNAMICAL_APP_AUTHOR', $this->Author);
             define('DYNAMICAL_APP_ORGANIZATION', $this->Organization);
+            define('DYNAMICAL_APP_DEBUGGING_MODE', $this->Configuration->DebuggingMode);
 
             // Finally, define it as initialized
             define('DYNAMICAL_INITIALIZED', 1);

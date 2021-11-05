@@ -513,6 +513,8 @@
                     }
                     catch(Exception $e)
                     {
+                        ob_get_clean();
+                        DynamicalWeb::setMemoryObject('app_error', $e);
                         if($recursive)
                         {
                             $request_handler = DynamicalWeb::activeRequestHandler();

@@ -60,7 +60,10 @@
          */
         public $Favicon;
 
-        /** @noinspection PhpPureAttributeCanBeAddedInspection */
+        /**
+         * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
+         */
         public function __construct()
         {
             $this->RootPath = '/';
@@ -79,6 +82,7 @@
          * @return array
          * @noinspection PhpArrayShapeAttributeCanBeAddedInspection
          * @noinspection PhpPureAttributeCanBeAddedInspection
+         * @noinspection RedundantSuppression
          */
         public function toArray(): array
         {

@@ -67,7 +67,8 @@
             ];
 
             $builtin_pages = [
-                '404'
+                '404',
+                '500'
             ];
 
             foreach($routes as $route)
@@ -111,8 +112,8 @@
                 $PathIndex = new PathIndex();
                 $PathIndex->Route = new Route();
                 $PathIndex->Route->RequestMethods = ['GET'];
-                $PathIndex->Route->Path = '/404';
-                $PathIndex->Route->Page = '404';
+                $PathIndex->Route->Path = $page;
+                $PathIndex->Route->Page = $page;
                 $PathIndex->Route->InlineParameters = [];
                 $PathIndex->PagePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinPages' . DIRECTORY_SEPARATOR . $page);
                 $PathIndex->PageExecutionPoint = realpath($PathIndex->PagePath . DIRECTORY_SEPARATOR . 'contents.dyn');
