@@ -232,4 +232,17 @@
 
             return $return_results;
         }
+
+        /**
+         * Returns a unique identifier for a cookie storage ID
+         *
+         * @param string $web_application_name
+         * @param string $cookie_name
+         * @param string $cookie_value
+         * @return string
+         */
+        public static function cookieIdentifier(string $web_application_name, string $cookie_name, string $cookie_value): string
+        {
+            return $web_application_name . '_' . $cookie_name . '_' . $cookie_value;
+        }
     }

@@ -25,6 +25,30 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/MarkdownParser",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.ziproto",
+                "version": "latest",
+                "source": "default@github/intellivoid/ziproto",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.msqg",
+                "version": "latest",
+                "source": "default@github/intellivoid/msqg",
+                "required": true
+            },
+            {
+                "package": "com.symfony.uid",
+                "version": "latest",
+                "source": "symfony@composer/uid",
+                "required": true
+            },
+            {
+                "package": "net.intellivoid.acm2",
+                "version": "latest",
+                "source": "default@github/intellivoid/acm2",
+                "required": true
             }
         ],
         "configuration": {
@@ -141,7 +165,19 @@
         },
         {
             "required": true,
+            "file": "CookieStorage/MySqlCookieStorage.php"
+        },
+        {
+            "required": true,
+            "file": "CookieStorage/RedisCookieStorage.php"
+        },
+        {
+            "required": true,
             "file": "DynamicalWeb.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/CookieStorageNotFoundException.php"
         },
         {
             "required": true,
@@ -177,6 +213,14 @@
         },
         {
             "required": true,
+            "file": "Exceptions/StorageDriverException.php"
+        },
+        {
+            "required": true,
+            "file": "Exceptions/UnsupportedDriverException.php"
+        },
+        {
+            "required": true,
             "file": "Exceptions/UserAgentParserException.php"
         },
         {
@@ -201,7 +245,15 @@
         },
         {
             "required": true,
+            "file": "Interfaces/CookieStorageDriver.php"
+        },
+        {
+            "required": true,
             "file": "Objects/Cookie.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/CookieStorage.php"
         },
         {
             "required": true,

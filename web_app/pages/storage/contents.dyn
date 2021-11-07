@@ -1,0 +1,48 @@
+<?php
+    use DynamicalWeb\Classes\Localization;
+    use DynamicalWeb\DynamicalWeb;
+    use DynamicalWeb\Html;
+
+    try
+    {
+        $CookieStorage = \DynamicalWeb\Cookies::getCookieStorage('storage_test');
+    }
+    catch(\DynamicalWeb\Exceptions\CookieStorageNotFoundException $e)
+    {
+        $Cookie = new \DynamicalWeb\Objects\Cookie('storage_test');
+        $CookieStorage = \DynamicalWeb\Cookies::createCookieStorage($Cookie, false);
+        $CookieStorage->Data['name'] = null;
+        \DynamicalWeb\Cookies::updateCookieStorage($CookieStorage);
+    }
+
+    if(isset($_GET['name']))
+    {
+        $CookieStorage->Data['name'] = $_GET['name'];
+        \DynamicalWeb\Cookies::updateCookieStorage($CookieStorage);
+    }
+
+?>
+<html lang="<?PHP Html::print(DYNAMICAL_PRIMARY_LOCALIZATION_ISO_CODE); ?>">
+    <title>Storage Test</title>
+    <body>
+        <h1>Storage test</h1>
+        <hr/>
+        <p>Cookie storage identifier is <?PHP Html::print($CookieStorage->Token); ?></p>
+        <pre><?PHP Html::print(json_encode($CookieStorage->toArray(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)); ?></pre>
+        <hr/>
+        <?PHP
+            if($CookieStorage->Data['name'] == null)
+            {
+                ?>
+                <p>You aren't authenticated! Use the <code>GET</code> parameter <code>name</code> to authenticate!</p>
+                <?PHP
+            }
+            else
+            {
+                ?>
+                <p>Hello, <?PHP Html::print($CookieStorage->Data['name']); ?></p>
+                <?PHP
+            }
+        ?>
+    </body>
+</html>

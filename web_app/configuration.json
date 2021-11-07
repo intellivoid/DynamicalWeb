@@ -33,6 +33,7 @@
   ],
   "router": [
     {"method": ["GET"], "path": "", "page": "index", "params": []},
-    {"method": ["GET"], "path": "debug", "page": "debug", "params": []}
+    {"method": ["GET"], "path": "debug", "page": "debug", "params": []},
+    {"method": ["GET"], "path": "storage", "page": "storage", "params": []}
   ]
 }
