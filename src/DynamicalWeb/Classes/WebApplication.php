@@ -248,6 +248,8 @@
                 $decoded[1] = ppm::getPackageLock()->getPackage($decoded[0])->getLatestVersion();
             $path = ppm::getPackageLock()->getPackage($decoded[0])->getPackagePath($decoded[1]); // Find the package path
             ppm::import($decoded[0], $decoded[1]); // Import dependencies
+            if(file_exists($path . DIRECTORY_SEPARATOR . 'assets'))
+                $path = $path . DIRECTORY_SEPARATOR . 'assets';
             $this->loadLocalWebAsset($path, $name, $route_path); // Load it as a local web asset
         }
 
