@@ -30,6 +30,7 @@
         "pages/index/markdown/lorem.md.dyn",
         "pages/index/scripts/time.dyn",
         "pages/index/sections/copyright.dyn",
-        "pages/index/sections/header.dyn"
+        "pages/index/sections/header.dyn",
+        "pages/storage/contents.dyn"
     ]
 }

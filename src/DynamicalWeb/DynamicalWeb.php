@@ -4,6 +4,9 @@
 
     namespace DynamicalWeb;
 
+    use acm2\acm2;
+    use acm2\Exceptions\ConfigurationNotDefinedException;
+    use acm2\Objects\Schema;
     use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\Classes\Localization;
@@ -39,6 +42,11 @@
          * @var array
          */
         public static $globalObjects = [];
+
+        /**
+         * @var acm2
+         */
+        private static $acm;
 
         /**
          * Constructs a request handler with all the pre-defined properties
@@ -342,5 +350,36 @@
             }
 
             throw new RouterException('Cannot find asset \'' . $name . '\'');
+        }
+
+        /**
+         * Gets a configuration for DynamicalWeb
+         *
+         * @param string $configuration_name
+         * @return array
+         * @throws ConfigurationNotDefinedException
+         */
+        public static function getConfiguration(string $configuration_name): array
+        {
+            if(self::$acm == null)
+            {
+                self::$acm = new acm2('DynamicalWeb');
+
+                $CookieStorageSchema = new Schema();
+                $CookieStorageSchema->setName('CookieStorage');
+                $CookieStorageSchema->setDefinition('Enabled', true);
+                $CookieStorageSchema->setDefinition('Driver', 'mysql');
+                $CookieStorageSchema->setDefinition('Host', '127.0.0.1');
+                $CookieStorageSchema->setDefinition('Port', 3306);
+                $CookieStorageSchema->setDefinition('AuthenticationEnabled', true);
+                $CookieStorageSchema->setDefinition('Username', 'admin');
+                $CookieStorageSchema->setDefinition('Password', 'admin');
+                $CookieStorageSchema->setDefinition('Name', 'cookie_storage');
+                self::$acm->defineSchema($CookieStorageSchema);
+
+                self::$acm->updateConfiguration();
+            }
+
+            return self::$acm->getConfiguration($configuration_name);
         }
     }
