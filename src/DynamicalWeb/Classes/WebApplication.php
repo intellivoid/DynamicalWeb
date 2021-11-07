@@ -205,7 +205,7 @@
                             break;
 
                         case WebAssetType::PPM:
-                            $this->loadPpmWebAsset($this->ResourcesPath . DIRECTORY_SEPARATOR . $webAssetConfiguration->Source, $webAssetConfiguration->Name, $webAssetConfiguration->Path);
+                            $this->loadPpmWebAsset($webAssetConfiguration->Source, $webAssetConfiguration->Name, $webAssetConfiguration->Path);
                             break;
                     }
                 }
