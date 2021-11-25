@@ -15,11 +15,6 @@
         "zh-cn": "localization/zh.json"
       }
     },
-    "sessions": {
-      "enabled": true,
-      "configuration_name": "Example Web Application"
-    },
-    "cache_operations": true,
     "favicon": null,
     "localization_enabled": true,
     "debugging_mode": true,

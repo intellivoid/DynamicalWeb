@@ -18,4 +18,4 @@
         <hr/>
         <pre><?PHP var_dump(\DynamicalWeb\DynamicalWeb::getMemoryObject('app_router')); ?></pre>
     </body>
-</html>
+</html>`q
