@@ -23,6 +23,11 @@
     "security_headers": true,
     "headers": {}
   },
+  "runtime": [
+    {"event": "pre_request", "script": "scripts/runtime_test.dyn"},
+    {"event": "post_request", "script": "scripts/runtime_test.dyn"},
+    {"event": "executio"}
+  ],
   "web_assets": [
     {"type": "local", "name": "primary_assets", "source": "assets", "path": "assets"}
   ],
