@@ -15,7 +15,6 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Exceptions\WebAssetsConfigurationException;
     use DynamicalWeb\Objects\WebApplication\Configuration;
     use DynamicalWeb\Objects\WebApplication\Route;
     use DynamicalWeb\Objects\WebApplication\WebAssetConfiguration;
@@ -268,7 +267,7 @@
             $this->Localization->initialize($this->Router);
 
             // Initialize the page indexing engine
-            $this->PageIndexes->initialize($this->Routes, $this->Router);
+            $this->PageIndexes->initialize($this->Router);
 
             // Detect and define the client (UserLand)
             $this->defineClientDefinitions();
