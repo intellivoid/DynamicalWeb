@@ -190,25 +190,23 @@
          * Loads a PPM Web application and executes it
          *
          * @param string $package
-         * @param string $version
          * @param bool $import_dependencies
          * @param bool $throw_error
+         * @throws AutoloaderException
          * @throws Exceptions\DirectoryNotFoundException
          * @throws Exceptions\FileNotFoundException
          * @throws Exceptions\LocalizationException
          * @throws Exceptions\RequestHandlerException
-         * @throws Exceptions\RouterException
          * @throws Exceptions\WebApplicationConfigurationException
-         * @throws Exceptions\WebAssetsConfigurationException
-         * @throws WebApplicationException
-         * @throws OpenStreamException
-         * @throws RequestRangeNotSatisfiableException
-         * @throws UnsupportedStreamException
-         * @throws AutoloaderException
          * @throws InvalidComponentException
          * @throws InvalidPackageLockException
+         * @throws OpenStreamException
          * @throws PackageNotFoundException
+         * @throws RequestRangeNotSatisfiableException
+         * @throws RouterException
+         * @throws UnsupportedStreamException
          * @throws VersionNotFoundException
+         * @throws WebApplicationException
          */
         public static function exec(string $package, bool $import_dependencies=true, bool $throw_error=true)
         {

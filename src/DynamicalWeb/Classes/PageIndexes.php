@@ -13,7 +13,6 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Objects\RequestHandler;
     use DynamicalWeb\Objects\PathIndex;
     use DynamicalWeb\Objects\WebApplication\Route;
 
