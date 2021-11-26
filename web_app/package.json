@@ -31,6 +31,7 @@
         "pages/index/scripts/time.dyn",
         "pages/index/sections/copyright.dyn",
         "pages/index/sections/header.dyn",
-        "pages/storage/contents.dyn"
+        "pages/storage/contents.dyn",
+        "scripts/runtime_test.dyn"
     ]
 }

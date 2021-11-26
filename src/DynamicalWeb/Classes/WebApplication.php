@@ -15,9 +15,9 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Exceptions\WebAssetsConfigurationException;
     use DynamicalWeb\Objects\WebApplication\Configuration;
     use DynamicalWeb\Objects\WebApplication\Route;
+    use DynamicalWeb\Objects\WebApplication\RuntimeScript;
     use DynamicalWeb\Objects\WebApplication\WebAssetConfiguration;
     use ppm\Exceptions\AutoloaderException;
     use ppm\Exceptions\InvalidComponentException;
@@ -93,6 +93,11 @@
          * @var WebAssets[]
          */
         private $WebAssets;
+
+        /**
+         * @var RuntimeScript[]
+         */
+        private $RuntimeScripts;
 
         /**
          * @var string|null
@@ -210,6 +215,22 @@
                     }
                 }
             }
+
+            if(isset($DecodedConfiguration['runtime_scripts']))
+            {
+                foreach($DecodedConfiguration['runtime_scripts'] as $runtime_script)
+                {
+                    $runtimeScript = RuntimeScript::fromArray($runtime_script);
+                    $runtimeScript->ExecutionPoint = $this->ResourcesPath . DIRECTORY_SEPARATOR . $runtimeScript->Script;
+
+                    if(file_exists($runtimeScript->ExecutionPoint) == false)
+                    {
+                        throw new FileNotFoundException('The runtime script \'' . $runtimeScript->ExecutionPoint . '\' was not found');
+                    }
+
+                    $this->RuntimeScripts[] = $runtimeScript;
+                }
+            }
         }
 
         /**
@@ -268,7 +289,7 @@
             $this->Localization->initialize($this->Router);
 
             // Initialize the page indexing engine
-            $this->PageIndexes->initialize($this->Routes, $this->Router);
+            $this->PageIndexes->initialize($this->Router);
 
             // Detect and define the client (UserLand)
             $this->defineClientDefinitions();
@@ -297,6 +318,7 @@
             // Define the router
             DynamicalWeb::setMemoryObject('app_router', $this->Router);
             DynamicalWeb::setMemoryObject('app_web_assets', $this->WebAssets);
+            DynamicalWeb::setMemoryObject('app_runtime_scripts', $this->RuntimeScripts);
 
             // Define the resources
             DynamicalWeb::setMemoryObject('app_configuration', $this->Configuration);

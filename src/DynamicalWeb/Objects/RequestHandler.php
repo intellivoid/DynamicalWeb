@@ -7,12 +7,13 @@
     use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\Abstracts\RequestMethod;
+    use DynamicalWeb\Abstracts\RuntimeEvent;
     use DynamicalWeb\Classes\PageIndexes;
     use DynamicalWeb\Classes\Utilities;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\RequestHandlerException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Html;
+    use DynamicalWeb\Objects\WebApplication\RuntimeScript;
     use Exception;
     use HttpStream\Exceptions\OpenStreamException;
     use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
@@ -479,6 +480,13 @@
              */
             DynamicalWeb::activeRequestHandler($this);
 
+            /** @var RuntimeScript $runtime_script */
+            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            {
+                if($runtime_script->Event == RuntimeEvent::PreRequest)
+                    $runtime_script->execute();
+            }
+
             switch($this->ResourceSource)
             {
                 case ResourceSource::Memory:
@@ -561,6 +569,13 @@
 
                 default:
                     throw new RequestHandlerException('The resource source \'' . $this->ResourceSource . '\' cannot be processed');
+            }
+
+            /** @var RuntimeScript $runtime_script */
+            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            {
+                if($runtime_script->Event == RuntimeEvent::PostRequest)
+                    $runtime_script->execute();
             }
         }
     }

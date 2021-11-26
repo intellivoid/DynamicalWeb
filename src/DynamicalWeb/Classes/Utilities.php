@@ -5,6 +5,7 @@
     use DynamicalWeb\Abstracts\ResourceSource;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\FileNotFoundException;
+    use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\RequestHandler;
     use DynamicalWeb\Objects\WebApplication\Configuration;
     use Exception;
@@ -105,7 +106,7 @@
          * Transmits all the headers from the request handler
          *
          * @param RequestHandler $handler
-         * @throws \DynamicalWeb\Exceptions\WebApplicationException
+         * @throws WebApplicationException
          */
         public static function processHeaders(RequestHandler $handler)
         {
@@ -183,8 +184,10 @@
             // Finally, set the response code
             http_response_code($handler->getResponseCode());
 
-            if($handler->ResourceSource == ResourceSource::Page)
+            if(Utilities::isExecutableResource($handler->ResourceSource) && $handler->ResourceSource == ResourceSource::Page)
+            {
                 Localization::setCookie();
+            }
 
             // Process and overwrite any headers set by the web application's configuration file
             $FinalHeaders = array_merge($FinalHeaders, $WebAppConfiguration->Headers);
@@ -194,8 +197,13 @@
             foreach($FinalHeaders as $header => $value)
                 header("$header: $value");
 
-            foreach($handler->CookiesToSet as $cookie)
-                setcookie($cookie->Name, $cookie->Value, $cookie->ExpiryTime, $cookie->Path, $cookie->Domain, $cookie->SecureOnly, $cookie->HttpOnly);
+            if(Utilities::isExecutableResource($handler->ResourceSource))
+            {
+                foreach($handler->CookiesToSet as $cookie)
+                {
+                    setcookie($cookie->Name, $cookie->Value, $cookie->ExpiryTime, $cookie->Path, $cookie->Domain, $cookie->SecureOnly, $cookie->HttpOnly);
+                }
+            }
         }
 
         /**
@@ -244,5 +252,27 @@
         public static function cookieIdentifier(string $web_application_name, string $cookie_name, string $cookie_value): string
         {
             return $web_application_name . '_' . $cookie_name . '_' . $cookie_value;
+        }
+
+        /**
+         * Helper function that determines if the resource's source is executed by DynamicalWeb or not
+         *
+         * @param string $resource_source
+         * @return bool
+         */
+        public static function isExecutableResource(string $resource_source): bool
+        {
+            switch($resource_source)
+            {
+                case ResourceSource::CompiledWebAsset:
+                case ResourceSource::Page:
+                case ResourceSource::Memory:
+                    return true;
+
+                case ResourceSource::WebAsset:
+                    return false;
+            }
+
+            return false;
         }
     }

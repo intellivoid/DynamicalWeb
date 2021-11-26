@@ -13,7 +13,6 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationConfigurationException;
     use DynamicalWeb\Exceptions\WebApplicationException;
-    use DynamicalWeb\Objects\RequestHandler;
     use DynamicalWeb\Objects\PathIndex;
     use DynamicalWeb\Objects\WebApplication\Route;
 
@@ -68,7 +67,8 @@
 
             $builtin_pages = [
                 '404',
-                '500'
+                '500',
+                'dynamical'
             ];
 
             foreach($routes as $route)
@@ -77,6 +77,7 @@
                     throw new WebApplicationConfigurationException('Duplicate route for \'' . $route->Page . '\' (\'' . $route->Path . '\')');
 
                 $route_path = $this->PagesPath . DIRECTORY_SEPARATOR . stripslashes($route->Page);
+
                 $execution_point = null;
                 if(is_dir($route_path) == false)
                     throw new WebApplicationConfigurationException('The route for \'' . $route->Page . '\' (\'' . $route->Path . '\'), does not exist in \'' . $route_path . '\'');
@@ -107,8 +108,7 @@
             foreach($builtin_pages as $page)
             {
                 if(in_array($page, $ProcessedPages))
-                    continue; // Skip, don't overwrite app apges with builtin pages.
-
+                    continue; // Skip, don't overwrite app pages with builtin pages.
                 $PathIndex = new PathIndex();
                 $PathIndex->Route = new Route();
                 $PathIndex->Route->RequestMethods = ['GET'];
@@ -117,7 +117,6 @@
                 $PathIndex->Route->InlineParameters = [];
                 $PathIndex->PagePath = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'BuiltinPages' . DIRECTORY_SEPARATOR . $page);
                 $PathIndex->PageExecutionPoint = realpath($PathIndex->PagePath . DIRECTORY_SEPARATOR . 'contents.dyn');
-
                 $this->Index[] = $PathIndex;
                 $ProcessedPages[] = $page;
             }
@@ -126,14 +125,13 @@
         /**
          * Initializes the page index for the web application
          *
-         * @param array $routes
          * @param Router $router
          * @throws RouterException
          * @throws WebApplicationException
          * @author Kasper Medvedkov <@AntiEngineer>
          * @noinspection DuplicatedCode
          */
-        public function initialize(array $routes, Router &$router)
+        public function initialize(Router &$router)
         {
             if(defined('DYNAMICAL_INITIALIZED'))
                 throw new WebApplicationException('Cannot initialize ' . $this->WebApplicationName . ', another web application is already initialized');
@@ -144,8 +142,9 @@
             define('DYNAMICAL_HOME_PAGE', $this->Index[0]->Route->Page);
 
             // Map the routes
-            foreach($routes as $Route)
+            foreach($this->Index as $index)
             {
+                $Route = $index->Route;
                 $URI = $Route->Path;
                 preg_match_all("/%.+?/", $URI, $Para, PREG_PATTERN_ORDER);
                 $FinalURI = $URI;

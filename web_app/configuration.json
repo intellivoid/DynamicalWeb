@@ -15,11 +15,6 @@
         "zh-cn": "localization/zh.json"
       }
     },
-    "sessions": {
-      "enabled": true,
-      "configuration_name": "Example Web Application"
-    },
-    "cache_operations": true,
     "favicon": null,
     "localization_enabled": true,
     "debugging_mode": true,
@@ -28,6 +23,10 @@
     "security_headers": true,
     "headers": {}
   },
+  "runtime_scripts": [
+    {"event": "pre_request", "script": "scripts/runtime_test.dyn"},
+    {"event": "post_request", "script": "scripts/runtime_test.dyn"}
+  ],
   "web_assets": [
     {"type": "local", "name": "primary_assets", "source": "assets", "path": "assets"}
   ],
