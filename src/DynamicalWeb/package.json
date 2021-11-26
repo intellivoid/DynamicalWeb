@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.dynamical_web",
         "name": "DynamicalWeb",
-        "version": "3.0.0.0",
+        "version": "3.0.0.1",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid Technologies",
         "description": "A server-side web application framework",
@@ -90,6 +90,10 @@
         {
             "required": true,
             "file": "Abstracts/ResourceSource.php"
+        },
+        {
+            "required": true,
+            "file": "Abstracts/RuntimeEvent.php"
         },
         {
             "required": true,
@@ -302,6 +306,10 @@
         {
             "required": true,
             "file": "Objects/WebApplication/Route.php"
+        },
+        {
+            "required": true,
+            "file": "Objects/WebApplication/RuntimeScript.php"
         },
         {
             "required": true,
