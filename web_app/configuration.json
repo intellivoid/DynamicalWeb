@@ -23,10 +23,9 @@
     "security_headers": true,
     "headers": {}
   },
-  "runtime": [
+  "runtime_scripts": [
     {"event": "pre_request", "script": "scripts/runtime_test.dyn"},
-    {"event": "post_request", "script": "scripts/runtime_test.dyn"},
-    {"event": "executio"}
+    {"event": "post_request", "script": "scripts/runtime_test.dyn"}
   ],
   "web_assets": [
     {"type": "local", "name": "primary_assets", "source": "assets", "path": "assets"}
