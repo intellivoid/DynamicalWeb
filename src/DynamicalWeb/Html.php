@@ -153,13 +153,14 @@
          * Imports and executes compiled javascript code
          *
          * @param string $script_name
+         * @param bool $include_tags
          * @throws Exceptions\LocalizationException
          * @throws WebApplicationException
          * @noinspection PhpUnused
          * @noinspection DuplicatedCode
          * @noinspection PhpIncludeInspection
          */
-        public static function importJavascript(string $script_name)
+        public static function importJavascript(string $script_name, bool $include_tags=true)
         {
             // Search in the page first
             $path = 'javascript' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.js.dyn';
@@ -195,7 +196,14 @@
 
             ob_start();
             include($selected_path);
-            print(ob_get_clean());
+            if($include_tags)
+            {
+                print('<script>' . ob_get_clean() . '</script>');
+            }
+            else
+            {
+                print(ob_get_clean());
+            }
         }
 
 
@@ -203,13 +211,14 @@
          * Imports and executes compiled javascript code
          *
          * @param string $script_name
+         * @param bool $include_tags
          * @throws Exceptions\LocalizationException
          * @throws WebApplicationException
          * @noinspection PhpUnused
          * @noinspection DuplicatedCode
          * @noinspection PhpIncludeInspection
          */
-        public static function importCss(string $script_name)
+        public static function importCss(string $script_name, bool $include_tags=true)
         {
             // Search in the page first
             $path = 'css' . DIRECTORY_SEPARATOR . Utilities::getAbsolutePath($script_name) . '.css.dyn';
@@ -245,7 +254,14 @@
 
             ob_start();
             include($selected_path);
-            print(ob_get_clean());
+            if($include_tags)
+            {
+                print('<style>' . ob_get_clean() . '</style>');
+            }
+            else
+            {
+                print(ob_get_clean());
+            }
         }
 
 
