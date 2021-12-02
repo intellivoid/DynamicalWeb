@@ -5,6 +5,7 @@
     namespace DynamicalWeb\Objects\WebApplication;
 
     use DynamicalWeb\Abstracts\RuntimeEvent;
+    use DynamicalWeb\DynamicalWeb;
 
     class RuntimeScript
     {
@@ -34,7 +35,24 @@
          */
         public function execute()
         {
+            DynamicalWeb::recordExecutionEvent($this);
             include($this->ExecutionPoint);
+        }
+
+        /**
+         * Determines if the runtime script has executed or not
+         *
+         * @return bool
+         */
+        public function hasExecuted(): bool
+        {
+            if(DynamicalWeb::getMemoryObject('executed_runtime_scripts') == null)
+                return false;
+
+            if(in_array($this->ExecutionPoint, DynamicalWeb::getMemoryObject('executed_runtime_scripts')))
+                return true;
+
+            return false;
         }
 
         /**

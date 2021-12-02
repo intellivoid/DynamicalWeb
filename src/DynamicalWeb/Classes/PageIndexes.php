@@ -234,16 +234,31 @@
             if(defined('DYNAMICAL_INITIALIZED') == false)
                 throw new WebApplicationException('The function PageIndexes::load() cannot be invoked without a initialized web application');
 
+            $define_page = true;
+            if(defined('DYNAMICAL_CURRENT_PAGE'))
+            {
+                if($page == '500' || $page == '404')
+                {
+                    $define_page = false;
+                }
+                else
+                {
+                    throw new WebApplicationException('The function PageIndexes::load() cannot be invoked twice');
+                }
+            }
+
             $page_index = self::get($page);
             if($page_index == null)
                 throw new PageNotFoundException('The requested page \'' . $page . '\' was not found');
 
-
             // Set the definitions for the page
-            define('DYNAMICAL_CURRENT_PAGE', $page);
-            define('DYNAMICAL_CURRENT_PAGE_PATH', $page_index->PagePath);
-            define('DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT', $page_index->PageExecutionPoint);
-            define('DYNAMICAL_CURRENT_PAGE_ROUTE_PATH', $page_index->Route->Path);
+            if($define_page)
+            {
+                define('DYNAMICAL_CURRENT_PAGE', $page);
+                define('DYNAMICAL_CURRENT_PAGE_PATH', $page_index->PagePath);
+                define('DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT', $page_index->PageExecutionPoint);
+                define('DYNAMICAL_CURRENT_PAGE_ROUTE_PATH', $page_index->Route->Path);
+            }
 
             // Load the localization for the page
             Localization::loadLocalization(LocalizationSection::Page, $page, false);

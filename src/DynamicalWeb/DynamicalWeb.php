@@ -17,6 +17,7 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\RequestHandler;
+    use DynamicalWeb\Objects\WebApplication\RuntimeScript;
     use Exception;
     use HttpStream\Exceptions\OpenStreamException;
     use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
@@ -305,6 +306,24 @@
         }
 
         /**
+         * Records an execution event
+         *
+         * @param RuntimeScript $runtimeScript
+         */
+        public static function recordExecutionEvent(RuntimeScript $runtimeScript)
+        {
+            if(self::getMemoryObject('executed_runtime_scripts') == null)
+                self::setMemoryObject('executed_runtime_scripts', []);
+
+            $executed_scripts = self::getMemoryObject('executed_runtime_scripts');
+            if(in_array($runtimeScript->ExecutionPoint, $executed_scripts) == false)
+            {
+                $executed_scripts[] = $runtimeScript->ExecutionPoint;
+                self::setMemoryObject('executed_runtime_scripts', $executed_scripts);
+            }
+        }
+
+        /**
          * @param string $page
          * @param array $parameters
          * @return string
@@ -379,5 +398,26 @@
             }
 
             return self::$acm->getConfiguration($configuration_name);
+        }
+
+        /**
+         * Tells DynamicalWeb that there's an uncaught exception
+         *
+         * @param Exception|null $e
+         * @throws Exceptions\RequestHandlerException
+         * @throws OpenStreamException
+         * @throws RequestRangeNotSatisfiableException
+         * @throws UnsupportedStreamException
+         * @throws WebApplicationException
+         */
+        public static function handleException(?Exception $e=null)
+        {
+            DynamicalWeb::setMemoryObject('app_error', $e);
+            $request_handler = DynamicalWeb::activeRequestHandler();
+            $request_handler->ResourceSource = ResourceSource::Page;
+            $request_handler->Source = '500';
+            $request_handler->ResponseCode = 500;
+            $request_handler->ResponseContentType = BuiltinMimes::Html;
+            $request_handler->execute(false);
         }
     }
