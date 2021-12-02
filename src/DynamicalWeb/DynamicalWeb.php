@@ -399,4 +399,25 @@
 
             return self::$acm->getConfiguration($configuration_name);
         }
+
+        /**
+         * Tells DynamicalWeb that there's an uncaught exception
+         *
+         * @param Exception|null $e
+         * @throws Exceptions\RequestHandlerException
+         * @throws OpenStreamException
+         * @throws RequestRangeNotSatisfiableException
+         * @throws UnsupportedStreamException
+         * @throws WebApplicationException
+         */
+        public static function handleException(?Exception $e=null)
+        {
+            DynamicalWeb::setMemoryObject('app_error', $e);
+            $request_handler = DynamicalWeb::activeRequestHandler();
+            $request_handler->ResourceSource = ResourceSource::Page;
+            $request_handler->Source = '500';
+            $request_handler->ResponseCode = 500;
+            $request_handler->ResponseContentType = BuiltinMimes::Html;
+            $request_handler->execute(false);
+        }
     }
