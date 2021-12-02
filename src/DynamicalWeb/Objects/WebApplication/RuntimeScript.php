@@ -35,8 +35,8 @@
          */
         public function execute()
         {
-            include($this->ExecutionPoint);
             DynamicalWeb::recordExecutionEvent($this);
+            include($this->ExecutionPoint);
         }
 
         /**

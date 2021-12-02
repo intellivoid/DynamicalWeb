@@ -316,9 +316,9 @@
                 self::setMemoryObject('executed_runtime_scripts', []);
 
             $executed_scripts = self::getMemoryObject('executed_runtime_scripts');
-            if(in_array($runtimeScript->ExecutionPoint, $executed_scripts))
+            if(in_array($runtimeScript->ExecutionPoint, $executed_scripts) == false)
             {
-                $executed_scripts[$runtimeScript->ExecutionPoint] = $runtimeScript;
+                $executed_scripts[] = $runtimeScript->ExecutionPoint;
                 self::setMemoryObject('executed_runtime_scripts', $executed_scripts);
             }
         }
