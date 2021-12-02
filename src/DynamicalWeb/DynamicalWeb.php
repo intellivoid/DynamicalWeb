@@ -17,6 +17,7 @@
     use DynamicalWeb\Exceptions\RouterException;
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\RequestHandler;
+    use DynamicalWeb\Objects\WebApplication\RuntimeScript;
     use Exception;
     use HttpStream\Exceptions\OpenStreamException;
     use HttpStream\Exceptions\RequestRangeNotSatisfiableException;
@@ -302,6 +303,24 @@
             if($requestHandler == null)
                 self::setMemoryObject('app_request_handler', DynamicalWeb::constructRequestHandler());
             return self::getMemoryObject('app_request_handler');
+        }
+
+        /**
+         * Records an execution event
+         *
+         * @param RuntimeScript $runtimeScript
+         */
+        public static function recordExecutionEvent(RuntimeScript $runtimeScript)
+        {
+            if(self::getMemoryObject('executed_runtime_scripts') == null)
+                self::setMemoryObject('executed_runtime_scripts', []);
+
+            $executed_scripts = self::getMemoryObject('executed_runtime_scripts');
+            if(in_array($runtimeScript->ExecutionPoint, $executed_scripts))
+            {
+                $executed_scripts[$runtimeScript->ExecutionPoint] = $runtimeScript;
+                self::setMemoryObject('executed_runtime_scripts', $executed_scripts);
+            }
         }
 
         /**

@@ -483,8 +483,10 @@
             /** @var RuntimeScript $runtime_script */
             foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
             {
-                if($runtime_script->Event == RuntimeEvent::PreRequest)
+                if($runtime_script->Event == RuntimeEvent::PreRequest && $runtime_script->hasExecuted() == false)
+                {
                     $runtime_script->execute();
+                }
             }
 
             switch($this->ResourceSource)
@@ -574,8 +576,10 @@
             /** @var RuntimeScript $runtime_script */
             foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
             {
-                if($runtime_script->Event == RuntimeEvent::PostRequest)
+                if($runtime_script->Event == RuntimeEvent::PostRequest && $runtime_script->hasExecuted() == false)
+                {
                     $runtime_script->execute();
+                }
             }
         }
     }
