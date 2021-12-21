@@ -19,6 +19,8 @@
     use DynamicalWeb\Objects\WebApplication\Route;
     use DynamicalWeb\Objects\WebApplication\RuntimeScript;
     use DynamicalWeb\Objects\WebApplication\WebAssetConfiguration;
+    use khm\Exceptions\DatabaseException;
+    use khm\khm;
     use ppm\Exceptions\AutoloaderException;
     use ppm\Exceptions\InvalidComponentException;
     use ppm\Exceptions\InvalidPackageLockException;
@@ -379,6 +381,49 @@
             define('DYNAMICAL_CLIENT_IS_MOBILE_BROWSER', (bool)preg_match($MobileBrowserRegex, Client::getUserAgentRaw()));
             define('DYNAMICAL_CLIENT_IS_MOBILE_DEVICE', (bool)preg_match($MobileDeviceRegex, Client::getUserAgentRaw()));
             define('DYNAMICAL_CLIENT_IS_MOBILE', (bool)(DYNAMICAL_CLIENT_IS_MOBILE_BROWSER || DYNAMICAL_CLIENT_IS_MOBILE_DEVICE));
+
+            if($this->getConfiguration()->KhmEnabled)
+            {
+                $khm = new khm();
+
+                try
+                {
+                    $IdentifiedClient = $khm->identify();
+
+                    DynamicalWeb::setMemoryObject('khm_client', $khm);
+                    DynamicalWeb::setMemoryObject('khm_identification', $IdentifiedClient);
+
+                    define('DYNAMICAL_KHM_ENABLED', true);
+                    define('DYNAMICAL_KHM_FIREWALL', $this->Configuration->FirewallDeny);
+                    define('DYNAMICAL_KHM_FLAGS', $IdentifiedClient->Flags);
+
+                    foreach($this->getConfiguration()->FirewallDeny as $item)
+                    {
+                        if(in_array($item, $IdentifiedClient->Flags))
+                        {
+                            print("Connection Blocked (khm): Your host is blocked by the firewall (" . $item . ")");
+                            exit(1);
+                        }
+                    }
+                }
+                catch (DatabaseException $e)
+                {
+                    print("Error: (khm): db exception");
+                    exit(1);
+                }
+
+                if($IdentifiedClient->Device == null)
+                {
+                    print("Error: (khm): unable to identify device, please provide an user-agent in your request.");
+                    exit(1);
+                }
+            }
+            else
+            {
+                define('DYNAMICAL_KHM_ENABLED', false);
+                define('DYNAMICAL_KHM_FIREWALL', null);
+                define('DYNAMICAL_KHM_FLAGS', null);
+            }
         }
 
         /**

@@ -49,6 +49,12 @@
                 "version": "latest",
                 "source": "default@github/intellivoid/acm2",
                 "required": true
+            },
+            {
+                "package": "net.intellivoid.khm",
+                "version": "latest",
+                "source": "default@github/intellivoid/khm",
+                "required": true
             }
         ],
         "configuration": {
