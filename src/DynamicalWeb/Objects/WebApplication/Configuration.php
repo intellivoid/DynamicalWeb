@@ -4,6 +4,8 @@
 
     namespace DynamicalWeb\Objects\WebApplication;
 
+    use khm\Abstracts\HostFlags;
+
     class Configuration
     {
         /**
@@ -61,6 +63,20 @@
         public $Favicon;
 
         /**
+         * Indicates if KHM's firewall is enabled or not
+         *
+         * @var bool
+         */
+        public $KhmEnabled;
+
+        /**
+         * An array of flags to deny if detected by KHM
+         *
+         * @var string[]|HostFlags[]
+         */
+        public $FirewallDeny;
+
+        /**
          * @noinspection PhpPureAttributeCanBeAddedInspection
          * @noinspection RedundantSuppression
          */
@@ -73,6 +89,8 @@
             $this->FrameworkSignature = true;
             $this->ApplicationSignature = true;
             $this->SecurityHeaders = true;
+            $this->KhmEnabled = false;
+            $this->FirewallDeny = [];
             $this->Headers = [];
         }
 
@@ -94,6 +112,8 @@
                 'framework_signature' => $this->FrameworkSignature,
                 'application_signature' => $this->ApplicationSignature,
                 'security_headers' => $this->SecurityHeaders,
+                'enable_khm' => $this->KhmEnabled,
+                'firewall_deny' => $this->FirewallDeny,
                 'headers' => $this->Headers
             ];
         }
@@ -128,6 +148,12 @@
 
             if(isset($data['security_headers']))
                 $configurationObject->SecurityHeaders = $data['security_headers'];
+
+            if(isset($data['enable_khm']))
+                $configurationObject->KhmEnabled = (bool)$data['enable_khm'];
+
+            if(isset($data['firewall_deny']))
+                $configurationObject->FirewallDeny = $data['firewall_deny'];
 
             if(isset($data['headers']))
                 $configurationObject->Headers = $data['headers'];
