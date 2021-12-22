@@ -7,6 +7,7 @@
     use DynamicalWeb\Abstracts\BuiltinMimes;
     use DynamicalWeb\Abstracts\LocalizationSection;
     use DynamicalWeb\Abstracts\ResourceSource;
+    use DynamicalWeb\Abstracts\RuntimeEvent;
     use DynamicalWeb\DynamicalWeb;
     use DynamicalWeb\Exceptions\LocalizationException;
     use DynamicalWeb\Exceptions\PageNotFoundException;
@@ -15,6 +16,7 @@
     use DynamicalWeb\Exceptions\WebApplicationException;
     use DynamicalWeb\Objects\PathIndex;
     use DynamicalWeb\Objects\WebApplication\Route;
+    use DynamicalWeb\Objects\WebApplication\RuntimeScript;
 
     class PageIndexes
     {
@@ -262,7 +264,26 @@
 
             // Load the localization for the page
             Localization::loadLocalization(LocalizationSection::Page, $page, false);
+
+            /** @var RuntimeScript $runtime_script */
+            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            {
+                if($runtime_script->Event == RuntimeEvent::PrePageLoad && $runtime_script->hasExecuted() == false)
+                {
+                    $runtime_script->execute();
+                }
+            }
+
             include($page_index->PageExecutionPoint);
+
+            /** @var RuntimeScript $runtime_script */
+            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            {
+                if($runtime_script->Event == RuntimeEvent::PostPageLoad && $runtime_script->hasExecuted() == false)
+                {
+                    $runtime_script->execute();
+                }
+            }
         }
 
     }
