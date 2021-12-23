@@ -349,11 +349,12 @@
          *
          * @param string $name
          * @param string $path
+         * @param array $parameters
          * @return string
          * @throws RouterException
          * @noinspection PhpUnused
          */
-        public static function getAssetRoute(string $name, string $path): string
+        public static function getAssetRoute(string $name, string $path, array $parameters = []): string
         {
             /** @var WebAssets[] $web_assets */
             $web_assets = DynamicalWeb::getMemoryObject('app_web_assets');
@@ -362,7 +363,14 @@
             {
                 if($name == $asset->getName())
                 {
-                    return DYNAMICAL_APP_ROOT_PATH . $asset->getRoutePath() . $path;
+                    $url = DYNAMICAL_APP_ROOT_PATH . $asset->getRoutePath() . $path;
+
+                    if(count($parameters) > 0)
+                    {
+                        $url .= '?' . http_build_query($parameters);
+                    }
+
+                    return $url;
                 }
             }
 
