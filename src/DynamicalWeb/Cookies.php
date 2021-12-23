@@ -48,9 +48,11 @@
             if(defined('DYNAMICAL_INITIALIZED') == false)
                 throw new WebApplicationException('Cookies::getCookie() can only execute if the Web Application is initialized');
 
-            if(isset(DynamicalWeb::activeRequestHandler()->Cookies[$name]) == false)
-                return null;
-            return DynamicalWeb::activeRequestHandler()->Cookies[$name];
+            if(isset($_COOKIE[$name]))
+                return $_COOKIE[$name];
+            if(isset(DynamicalWeb::activeRequestHandler()->Cookies[$name]))
+                return DynamicalWeb::activeRequestHandler()->Cookies[$name];
+            return null;
         }
 
         /**
