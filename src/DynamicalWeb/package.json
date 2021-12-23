@@ -2,7 +2,7 @@
     "package": {
         "package_name": "net.intellivoid.dynamical_web",
         "name": "DynamicalWeb",
-        "version": "3.0.0.6",
+        "version": "3.0.0.7",
         "author": "Zi Xing Narrakas",
         "organization": "Intellivoid Technologies",
         "description": "A server-side web application framework",
