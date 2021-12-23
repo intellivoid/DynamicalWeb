@@ -356,7 +356,6 @@
             Html::print(self::getRoute($page, $parameters));
         }
 
-
         /**
          * Fetches the asset route
          *
@@ -388,6 +387,20 @@
             }
 
             throw new RouterException('Cannot find asset \'' . $name . '\'');
+        }
+
+        /**
+         * Prints the output of the method getAssetRoute
+         *
+         * @param string $name
+         * @param string $path
+         * @param array $parameters
+         * @return void
+         * @throws RouterException
+         */
+        public static function printAssetRoute(string $name, string $path, array $parameters=[])
+        {
+            Html::print(self::getAssetRoute($name, $path, $parameters));
         }
 
         /**
