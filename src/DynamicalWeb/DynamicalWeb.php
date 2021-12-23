@@ -351,7 +351,7 @@
          * @return void
          * @throws RouterException
          */
-        public static function printRoute(string $page, array $parameters)
+        public static function printRoute(string $page, array $parameters=[])
         {
             Html::print(self::getRoute($page, $parameters));
         }
