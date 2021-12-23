@@ -272,6 +272,9 @@
                     Localization::changeLanguage(Request::getParameter('value'), false);
                 }
 
+                $client_request->RedirectLocation = DynamicalWeb::getRoute(DYNAMICAL_HOME_PAGE);
+                $client_request->Redirect = true;
+
                 return DynamicalWeb::activeRequestHandler();
             }, 'change_language');
         }
