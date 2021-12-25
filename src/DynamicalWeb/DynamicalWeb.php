@@ -400,7 +400,7 @@
          */
         public static function printAssetRoute(string $name, string $path, array $parameters=[])
         {
-            Html::print(self::getAssetRoute($name, $path, $parameters));
+            Html::print(self::getAssetRoute($name, $path, $parameters), false);
         }
 
         /**
