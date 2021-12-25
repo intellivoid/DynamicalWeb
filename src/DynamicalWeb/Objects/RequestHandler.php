@@ -489,88 +489,95 @@
                 }
             }
 
-            switch($this->ResourceSource)
+            if($this->Redirect)
             {
-                case ResourceSource::Memory:
-                    Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                    Utilities::setContentSize(strlen($this->Source));
-
-                    if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                        print($this->Source);
-                    break;
-
-                case ResourceSource::WebAsset:
-                    Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                    if(DynamicalWeb::activeRequestHandler()->getResponseCode() !== 304)
-                    {
-                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                            HttpStream::streamToHttp($this->Source, $this->AsAttachment, $this->DetectMime);
-                    }
-                    break;
-
-                case ResourceSource::CompiledWebAsset:
-                    try
-                    {
+                Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+            }
+            else
+            {
+                switch($this->ResourceSource)
+                {
+                    case ResourceSource::Memory:
                         Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+                        Utilities::setContentSize(strlen($this->Source));
 
+                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                            print($this->Source);
+                        break;
+
+                    case ResourceSource::WebAsset:
+                        Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
                         if(DynamicalWeb::activeRequestHandler()->getResponseCode() !== 304)
                         {
-                            ob_start();
-                            include($this->Source);
-                            $results = ob_get_clean();
-                            Utilities::setContentSize(strlen($results));
                             if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                                print($results);
+                                HttpStream::streamToHttp($this->Source, $this->AsAttachment, $this->DetectMime);
                         }
+                        break;
 
-                    }
-                    catch(Exception $e)
-                    {
-                        ob_get_clean();
-                        DynamicalWeb::setMemoryObject('app_error', $e);
-                        if($recursive)
+                    case ResourceSource::CompiledWebAsset:
+                        try
                         {
-                            $request_handler = DynamicalWeb::activeRequestHandler();
-                            $request_handler->ResourceSource = ResourceSource::Page;
-                            $request_handler->Source = '500';
-                            $request_handler->ResponseCode = 500;
-                            $request_handler->ResponseContentType = BuiltinMimes::Html;
-                            $request_handler->execute(false);
+                            Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+
+                            if(DynamicalWeb::activeRequestHandler()->getResponseCode() !== 304)
+                            {
+                                ob_start();
+                                include($this->Source);
+                                $results = ob_get_clean();
+                                Utilities::setContentSize(strlen($results));
+                                if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                                    print($results);
+                            }
+
                         }
-                    }
-
-                    break;
-
-                case ResourceSource::Page:
-                    try
-                    {
-                        ob_start();
-                        PageIndexes::load($this->Source);
-                        $body_content = ob_get_clean();
-                        Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
-                        Utilities::setContentSize(strlen($body_content));
-
-                        if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
-                            print($body_content);
-                    }
-                    catch(Exception $e)
-                    {
-                        ob_get_clean();
-                        DynamicalWeb::setMemoryObject('app_error', $e);
-                        if($recursive)
+                        catch(Exception $e)
                         {
-                            $request_handler = DynamicalWeb::activeRequestHandler();
-                            $request_handler->ResourceSource = ResourceSource::Page;
-                            $request_handler->Source = '500';
-                            $request_handler->ResponseCode = 500;
-                            $request_handler->ResponseContentType = BuiltinMimes::Html;
-                            $request_handler->execute(false);
+                            ob_get_clean();
+                            DynamicalWeb::setMemoryObject('app_error', $e);
+                            if($recursive)
+                            {
+                                $request_handler = DynamicalWeb::activeRequestHandler();
+                                $request_handler->ResourceSource = ResourceSource::Page;
+                                $request_handler->Source = '500';
+                                $request_handler->ResponseCode = 500;
+                                $request_handler->ResponseContentType = BuiltinMimes::Html;
+                                $request_handler->execute(false);
+                            }
                         }
-                    }
-                    break;
 
-                default:
-                    throw new RequestHandlerException('The resource source \'' . $this->ResourceSource . '\' cannot be processed');
+                        break;
+
+                    case ResourceSource::Page:
+                        try
+                        {
+                            ob_start();
+                            PageIndexes::load($this->Source);
+                            $body_content = ob_get_clean();
+                            Utilities::processHeaders(DynamicalWeb::activeRequestHandler());
+                            Utilities::setContentSize(strlen($body_content));
+
+                            if($_SERVER['REQUEST_METHOD'] !== 'HEAD')
+                                print($body_content);
+                        }
+                        catch(Exception $e)
+                        {
+                            ob_get_clean();
+                            DynamicalWeb::setMemoryObject('app_error', $e);
+                            if($recursive)
+                            {
+                                $request_handler = DynamicalWeb::activeRequestHandler();
+                                $request_handler->ResourceSource = ResourceSource::Page;
+                                $request_handler->Source = '500';
+                                $request_handler->ResponseCode = 500;
+                                $request_handler->ResponseContentType = BuiltinMimes::Html;
+                                $request_handler->execute(false);
+                            }
+                        }
+                        break;
+
+                    default:
+                        throw new RequestHandlerException('The resource source \'' . $this->ResourceSource . '\' cannot be processed');
+                }
             }
 
             /** @var RuntimeScript $runtime_script */
@@ -581,5 +588,7 @@
                     $runtime_script->execute();
                 }
             }
+
+            exit();
         }
     }
