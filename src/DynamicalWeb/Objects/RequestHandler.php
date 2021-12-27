@@ -480,14 +480,18 @@
              */
             DynamicalWeb::activeRequestHandler($this);
 
-            /** @var RuntimeScript $runtime_script */
-            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            if(DynamicalWeb::getMemoryObject('app_runtime_scripts') !== null)
             {
-                if($runtime_script->Event == RuntimeEvent::PreRequest && $runtime_script->hasExecuted() == false)
+                /** @var RuntimeScript $runtime_script */
+                foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
                 {
-                    $runtime_script->execute();
+                    if($runtime_script->Event == RuntimeEvent::PreRequest && $runtime_script->hasExecuted() == false)
+                    {
+                        $runtime_script->execute();
+                    }
                 }
             }
+
 
             if($this->Redirect)
             {
@@ -580,12 +584,15 @@
                 }
             }
 
-            /** @var RuntimeScript $runtime_script */
-            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            if(DynamicalWeb::getMemoryObject('app_runtime_scripts') !== null)
             {
-                if($runtime_script->Event == RuntimeEvent::PostRequest && $runtime_script->hasExecuted() == false)
+                /** @var RuntimeScript $runtime_script */
+                foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
                 {
-                    $runtime_script->execute();
+                    if($runtime_script->Event == RuntimeEvent::PostRequest && $runtime_script->hasExecuted() == false)
+                    {
+                        $runtime_script->execute();
+                    }
                 }
             }
 

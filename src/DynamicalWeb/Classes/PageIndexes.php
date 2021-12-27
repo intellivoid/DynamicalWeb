@@ -233,29 +233,24 @@
          */
         public static function load(string $page)
         {
-            if(defined('DYNAMICAL_INITIALIZED') == false)
+            if (defined('DYNAMICAL_INITIALIZED') == false)
                 throw new WebApplicationException('The function PageIndexes::load() cannot be invoked without a initialized web application');
 
             $define_page = true;
-            if(defined('DYNAMICAL_CURRENT_PAGE'))
-            {
-                if($page == '500' || $page == '404')
-                {
+            if (defined('DYNAMICAL_CURRENT_PAGE')) {
+                if ($page == '500' || $page == '404') {
                     $define_page = false;
-                }
-                else
-                {
+                } else {
                     throw new WebApplicationException('The function PageIndexes::load() cannot be invoked twice');
                 }
             }
 
             $page_index = self::get($page);
-            if($page_index == null)
+            if ($page_index == null)
                 throw new PageNotFoundException('The requested page \'' . $page . '\' was not found');
 
             // Set the definitions for the page
-            if($define_page)
-            {
+            if ($define_page) {
                 define('DYNAMICAL_CURRENT_PAGE', $page);
                 define('DYNAMICAL_CURRENT_PAGE_PATH', $page_index->PagePath);
                 define('DYNAMICAL_CURRENT_PAGE_EXECUTION_POINT', $page_index->PageExecutionPoint);
@@ -265,25 +260,32 @@
             // Load the localization for the page
             Localization::loadLocalization(LocalizationSection::Page, $page, false);
 
-            /** @var RuntimeScript $runtime_script */
-            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            if (DynamicalWeb::getMemoryObject('app_runtime_scripts') !== null)
             {
-                if($runtime_script->Event == RuntimeEvent::PrePageLoad && $runtime_script->hasExecuted() == false)
+                /** @var RuntimeScript $runtime_script */
+                foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
                 {
-                    $runtime_script->execute();
+                    if($runtime_script->Event == RuntimeEvent::PrePageLoad && $runtime_script->hasExecuted() == false)
+                    {
+                        $runtime_script->execute();
+                    }
                 }
             }
 
             include($page_index->PageExecutionPoint);
 
-            /** @var RuntimeScript $runtime_script */
-            foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
+            if(DynamicalWeb::getMemoryObject('app_runtime_scripts') !== null)
             {
-                if($runtime_script->Event == RuntimeEvent::PostPageLoad && $runtime_script->hasExecuted() == false)
+                /** @var RuntimeScript $runtime_script */
+                foreach(DynamicalWeb::getMemoryObject('app_runtime_scripts') as $runtime_script)
                 {
-                    $runtime_script->execute();
+                    if($runtime_script->Event == RuntimeEvent::PostPageLoad && $runtime_script->hasExecuted() == false)
+                    {
+                        $runtime_script->execute();
+                    }
                 }
             }
+
         }
 
     }
