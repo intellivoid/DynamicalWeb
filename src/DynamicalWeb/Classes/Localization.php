@@ -157,6 +157,9 @@
          */
         public static function detectPreferredClientLanguages(): array
         {
+            if(isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) == false)
+                return [];
+
             preg_match_all('~([\w-]+)(?:[^,\d]+([\d.]+))?~', strtolower($_SERVER["HTTP_ACCEPT_LANGUAGE"]), $matches, PREG_SET_ORDER);
             $return_values = [];
             $detected = [];
